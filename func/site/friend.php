@@ -3,72 +3,58 @@
 require_once("func/conn.php");
 require_once("func/settings.php");
 
-function acceptFriend($id)
-{
-    global $conn;
-    $stmt = $conn->prepare("UPDATE friends SET status = 'ACCEPTED' WHERE id = :id");
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-}
 
-function addFriend($id)
-{
-    global $conn;
-    // Your add friend logic here
-    if(isset($_GET['id'])) {
-        $userId = $_GET['id'];
-    
-        // Prepare and execute a query to select the user
-        $stmt = $conn->prepare("SELECT * FROM `users` WHERE id = ?");
-        $stmt->execute(array($userId));
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        if(!$user) exit('User does not exist.');
-        
-        if($user['username'] == $_SESSION['user']) {
-            exit("stop trying to friend yourself");
-        } else {
-            // Check if the friendship already exists
-            $stmt = $conn->prepare("SELECT * FROM `friends` WHERE receiver = ? AND sender = ?");
-            $stmt->execute(array($user['username'], $_SESSION['user']));
-            if($stmt->fetch(PDO::FETCH_ASSOC)) exit('You are already friends');
-    
-            // Insert new friendship
-            $stmt = $conn->prepare("INSERT INTO friends (sender, receiver) VALUES (?, ?)");
-            $stmt->execute(array($_SESSION['user'], $user['username']));
-    
-            header("Location: friends.php");
-        }
+function addFriend($pdo, $senderId, $receiverId) {
+    // Check if the users are trying to friend themselves
+    if ($senderId == $receiverId) {
+        exit("You cannot friend yourself.");
     }
+
+    $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM `friends` WHERE (sender = :senderId AND receiver = :receiverId) OR (sender = :receiverId AND receiver = :senderId)");
+    $checkStmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
+    $exists = $checkStmt->fetchColumn() > 0;
+
+    if ($exists) {
+        exit('You are already friends.');
+    }
+
+    $insertStmt = $pdo->prepare("INSERT INTO friends (sender, receiver, status) VALUES (:senderId, :receiverId, 'PENDING')");
+    $insertStmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
+
+    header("Location: requests.php");
 }
 
-function revokeFriend($id)
+function acceptFriend($pdo, $senderId, $receiverId) {
+    $stmt = $pdo->prepare("UPDATE friends SET status = 'ACCEPTED' WHERE sender = :senderId AND receiver = :receiverId AND status = 'PENDING'");
+    $stmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
+
+    header("Location: requests.php");
+}
+
+function revokeFriend($pdo, $senderId, $receiverId) {
+    $stmt = $pdo->prepare("DELETE FROM friends WHERE sender = :senderId AND receiver = :receiverId AND status = 'PENDING'");
+    $stmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
+}
+
+function removeFriend($pdo, $senderId, $receiverId) {
+    $stmt = $pdo->prepare("DELETE FROM friends WHERE (sender = :senderId AND receiver = :receiverId) OR (sender = :receiverId AND receiver = :senderId) AND status = 'ACCEPTED'");
+    $stmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
+}
+
+
+function fetchFriends($pdo, $status, $column, $userId)
 {
-    global $conn;
-    $stmt = $conn->prepare("UPDATE friends SET status = 'REVOKED' WHERE id = ?");
-    $stmt->bindValue(1, $id, PDO::PARAM_INT);
-    $stmt->execute();
-}
-
-function removeFriend($id) {
-    global $conn;
-    $stmt = $conn->prepare("UPDATE friends SET status = 'REMOVED' WHERE id = ?");
-    $stmt->bindParam(1, $id, PDO::PARAM_INT);
-    $stmt->execute();
-}
-
-function fetchFriends($pdo, $status, $column, $user)
-{
-    // Avoid directly inserting variables into SQL to prevent SQL injection
-    // IMPORTANT: Validate or sanitize $column since it cannot be parameterized
     $allowedColumns = array('receiver', 'sender');
     if (!in_array($column, $allowedColumns)) {
         throw new InvalidArgumentException("Invalid column name");
     }
 
-    $query = "SELECT * FROM `friends` WHERE `$column` = :user AND status = :status";
+    $query = "SELECT * FROM `friends` WHERE `$column` = :userId AND status = :status";
+    
     $stmt = $pdo->prepare($query);
-    $stmt->execute(array(':user' => $user, ':status' => $status));
+    // Execute the statement with the provided user ID and status
+    $stmt->execute(array(':userId' => $userId, ':status' => $status));
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

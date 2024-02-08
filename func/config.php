@@ -1,12 +1,12 @@
 <?php 
 // Database configuration 
 $host = 'localhost';
-$dbname = 'mspace';
-$username = 'myspace';
-$password = 'myspace';
+$dbname = 'anyspace';
+$username = 'anyspace';
+$password = 'sdz88smR93zehuaa';
 
 // Site localization
 $siteName = "AnySpace";
-$domainName = "localhost";
+$domainName = "anyspace.3to.moe";
 
 ?>

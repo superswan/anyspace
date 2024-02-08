@@ -13,12 +13,11 @@ if (!isset($_SESSION['user'])) {
 
 // Fetch user information
 $userInfo = fetchUserInfoByUsername($conn, $_SESSION['user']);
-$user = $userInfo ? $userInfo['username'] : ''; 
+$user = $userInfo ? $userInfo['username'] : '';
 $userId = $userInfo['id'];
 
 // Fetch blogs and friends using the user's username
 $blogs = fetchUserBlogs($conn, $user);
-$friends = fetchUserFriends($conn, $user);
 
 // Fetch comments
 $comments = fetchComments($conn, $_SESSION['user']);
@@ -26,15 +25,21 @@ $comments = fetchComments($conn, $_SESSION['user']);
 // Fetch users for the users list
 $users = fetchUsers($conn);
 
-// Friend counter
-$stmt = $conn->prepare("SELECT COUNT(*) FROM friends WHERE (receiver = :id OR sender = :id) AND status = 'ACCEPTED'");
-$stmt->execute(array(':id' => $userId));
-$friendCount = $stmt->fetchColumn();
+// FRIENDS
+$pendingRequests = fetchFriends($conn, 'PENDING', 'receiver', $userId);
+
+$friends = array_merge(
+    fetchFriends($conn, 'ACCEPTED', 'receiver', $userId),
+    fetchFriends($conn, 'ACCEPTED', 'sender', $userId)
+);
+
+$friendCount = count($friends);
+
 
 $dateJoined = new DateTime($userInfo['date']);
 $formattedDate = $dateJoined->format('M j, Y'); // Formats the date as "Feb 6, 2024"
-$now = new DateTime();
-$sinceJoined = $dateJoined->diff($now)->format('%y years, %m months, %d days');
+
+$sinceJoined = time_elapsed_string($userInfo['date']);
 
 $profileViews = 0;
 
@@ -80,19 +85,20 @@ $profileViews = 0;
                                 <img width='235px;' src='pfp/<?= htmlspecialchars($userInfo['pfp']); ?>'>
                             </div>
                             <div class="details">
-                                <p><a href="/myspace/manage.php">Edit Profile</a>
+                                <p><a href="manage.php">Edit Profile</a>
                             </div>
                             <div class="more-options"></div>
                         </div>
                     </div>
                     <div class="url-info view-full-profile">
-                        <p><a href="/myspace/profile.php?id=<?= htmlspecialchars($userInfo['id']) ?>"><b>View Your
+                        <p><a href="profile.php?id=<?= htmlspecialchars($userInfo['id']) ?>"><b>View Your
                                     Profile</b></p>
                     </div>
                     <!-- sidebar -->
                     <div class="indie-box">
                         <p>
-                            <?= htmlspecialchars(SITE_NAME); ?> is an open source social network. Check out the code and host your own instance!
+                            <?= htmlspecialchars(SITE_NAME); ?> is an open source social network. Check out the code and
+                            host your own instance!
                         </p>
                         <p>
                             <a href="https://github.com" class="more-details">[more details]</a>
@@ -100,7 +106,9 @@ $profileViews = 0;
                     </div>
                     <div class="specials">
                         <div class="heading">
-                            <h4><?= htmlspecialchars(SITE_NAME); ?> Announcements</h4>
+                            <h4>
+                                <?= htmlspecialchars(SITE_NAME); ?> Announcements
+                            </h4>
                         </div>
                         <div class="inner">
                             <div class="image">
@@ -132,13 +140,16 @@ $profileViews = 0;
                                 <div class="heading">
                                     <h4>
                                         <?= htmlspecialchars($userInfo['username']) ?>'s Statistics
-                                    </h4><br><h4><?= htmlspecialchars($formattedDate) ?></h4>
+                                    </h4><br>
+                                    <h4>
+                                        <?= htmlspecialchars($formattedDate) ?>
+                                    </h4>
                                 </div>
                                 <div class="inner">
                                     <div class="m-row">
                                         <div class="m-col">
                                             <p>Your Friends: <br> <a
-                                                    href="/friends?id=<?= htmlspecialchars($userId) ?>"><span
+                                                    href="/friends.php?id=<?= htmlspecialchars($userId) ?>"><span
                                                         class="count">
                                                         <?= $friendCount ?>
                                                     </span></a></p>
@@ -149,7 +160,9 @@ $profileViews = 0;
                                                 </span></p>
                                         </div>
                                         <div class="m-col">
-                                            <p>Joined: </p> <i><?= $sinceJoined ?></i> ago
+                                            <p>Joined: </p> <i>
+                                                <?= $sinceJoined ?>
+                                            </i> ago
                                         </div>
                                     </div>
                                 </div>
@@ -201,14 +214,51 @@ $profileViews = 0;
                             <h4>Friend Requests</h4>
                         </div>
                         <div class="inner">
-                            <p><b><span class="count">0</span> Open Friend Requests</b></p>
-                            <a href="friends.php">
+                            <p><b><span class="count">
+                                        <?= htmlspecialchars(count($pendingRequests)); ?>
+                                    </span> Open Friend Requests</b></p>
+                            <a href="requests.php">
                                 <button>View All Requests</button>
                             </a>
                             <br>
+                            <table class="comments-table" cellspacing="0" cellpadding="3" bordercolor="ffffff"
+                                border="1">
+                                <tbody>
+                                    <?php foreach ($pendingRequests as $request): ?>
+                                        <tr>
+                                            <td>
+                                                <a href="profile.php?id=<?= $request['sender'] ?>">
+                                                    <p>
+                                                        <?= htmlspecialchars(getName($request['sender'], $conn)) ?>
+                                                    </p>
+                                                </a>
+                                                <a href="profile.php?id=<?= $request['sender'] ?>">
+                                                    <img class="pfp-fallback"
+                                                        src="pfp/<?= (getPFP(getName($request['sender'], $conn), $conn) ?: 'default.png') ?>"
+                                                        alt="profile picture" loading="lazy" width="50px">
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <p><b>Friend Request</b></p>
+                                                <form method="post">
+                                                    <input type="hidden" name="type" value="friend-request">
+                                                    <input type="hidden" name="request_id"
+                                                        value="<?= htmlspecialchars($request['id']) ?>">
+                                                    <button
+                                                        onclick="location.href='friends.php?action=accept&id=<?= $request['sender'] ?>'"
+                                                        name="decision" value="accept" type="button">Accept</button>
+                                                    <button
+                                                        onclick="location.href='friends.php?action=revoke&id=<?= $request['sender'] ?>'"
+                                                        type="button" name="decision" value="decline">Decline</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
-<?php require_once("footer.php") ?>
+            <?php require_once("footer.php") ?>

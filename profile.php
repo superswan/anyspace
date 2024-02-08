@@ -9,20 +9,24 @@ require("func/site/friend.php");
 $userInfo = fetchUserInfo($conn, $_GET['id']);
 $user = $userInfo ? $userInfo['username'] : '';
 $userId = $userInfo['id'];
+$id = $userId;
+
+
+$userInterests = $userInfo['interests'];
+$interests = json_decode($userInterests, true);
 
 // Fetch blogs and friends using the user's username
 $blogs = fetchUserBlogs($conn, $user);
-$friends = fetchUserFriends($conn, $user);
 
+$friends = array_merge(
+    fetchFriends($conn, 'ACCEPTED', 'receiver', $userId),
+    fetchFriends($conn, 'ACCEPTED', 'sender', $userId)
+);
 // Fetch comments
-$comments = fetchComments($conn, $_GET['id']);
+$limitedComments = fetchComments($conn, $id, 20);
+$countComments = count($limitedComments);
+$countTotalComments = count(fetchComments($conn, $id));
 
-// Fetch users for the users list
-$users = fetchUsers($conn);
-
-$userInterests = $userInfo['interests'];
-
-$interests = json_decode($userInterests, true);
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +56,7 @@ $interests = json_decode($userInterests, true);
         <main>
             <div class="row profile" itemscope itemtype="https://schema.org/Person">
                 <meta itemprop="url"
-                    content="https://<?= htmlspecialchars(DOMAIN_NAME); ?>/profile?id=<?= htmlspecialchars($userInfo['username']); ?>">
+                    content="https://<?= htmlspecialchars(DOMAIN_NAME); ?>profile.php?id=<?= htmlspecialchars($userInfo['username']); ?>">
                 <meta itemprop="identifier" content="<?= htmlspecialchars($userInfo['username']); ?>">
                 <div class="col w-40 left">
                     <span itemprop="name">
@@ -68,8 +72,8 @@ $interests = json_decode($userInterests, true);
                                     src='pfp/<?= htmlspecialchars($userInfo['pfp']); ?>'>
                             </div>
                             <div class="details">
-                                <p class="online"><img src="static/img/green_person.png"
-                                        aria-hidden="true" alt="Online icon" loading="lazy"> ONLINE!</p>
+                                <p class="online"><img src="static/img/green_person.png" aria-hidden="true"
+                                        alt="Online icon" loading="lazy"> ONLINE!</p>
                             </div>
                         </div>
                         <audio controls autoplay>
@@ -157,7 +161,9 @@ $interests = json_decode($userInterests, true);
                                     <?= htmlspecialchars(SITE_NAME); ?> URL:
                                 </b></p>
                             <p>
-                                https://<?= htmlspecialchars(DOMAIN_NAME); ?>/profile?id=<?= htmlspecialchars($userInfo['id']); ?>
+                                https://
+                                <?= htmlspecialchars(DOMAIN_NAME); ?>/profile.php?id=
+                                <?= htmlspecialchars($userInfo['id']); ?>
                             </p>
                         </div>
                         <div class="table-section">
@@ -222,7 +228,7 @@ $interests = json_decode($userInterests, true);
                                         <tr>
                                             <td>
                                                 <p>
-                                                   Heroes 
+                                                    Heroes
                                                 </p>
                                             </td>
                                             <td>
@@ -266,7 +272,7 @@ $interests = json_decode($userInterests, true);
                             <h4>
                                 <?= htmlspecialchars($userInfo['username']); ?>'s Friend Space
                             </h4>
-                            <a class="more" href="#">[view all]</a>
+                            <a class="more" href="friends.php?id=<?= $userId ?>">[view all]</a>
                         </div>
                         <div class="inner">
                             <p><b>
@@ -275,7 +281,19 @@ $interests = json_decode($userInterests, true);
                                     </span> friends.
                                 </b></p>
                             <div class="friends-grid">
+                                <?php
+                                foreach ($friends as $friend) {
+                                    $friendId = $id === $friend['sender'] ? $friend['receiver'] : $friend['sender'];
 
+                                    if ($friendId == $id) {
+                                        continue;
+                                    }
+                                    $friendName = getName($friendId, $conn);
+                                    $friendPfp = getPFP($friendName, $conn);
+
+                                    echo "<div class='person'><a href='profile.php?id=" . htmlspecialchars($friendId) . "'><center><b>" . htmlspecialchars($friendName) . "</b></center><br><img width='125px' src='pfp/" . htmlspecialchars($friendPfp) . "'></a></div>";
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -288,14 +306,56 @@ $interests = json_decode($userInterests, true);
                         <div class="inner">
                             <p>
                                 <b>
-                                    Displaying <span class="count">0</span> of <span class="count">0</span> comments
-                                    ( <a href="#">View all</a> | <a href="comments.php">Add
+                                    Displaying <span class="count"><?= $countComments ?></span> of <span class="count"><?= $countTotalComments ?></span> comments
+                                    ( <a href="comments.php?id=<?= $userInfo['id'] ?>">View all</a> | <a
+                                        href="addcomment.php?id=<?= $userInfo['id'] ?>">Add
                                         Comment</a> )
                                 </b>
                             </p>
                             <table class="comments-table" cellspacing="0" cellpadding="3" bordercolor="ffffff"
                                 border="1">
                                 <tbody>
+                                    <?php foreach ($limitedComments as $comment): ?>
+                                        <tr>
+                                            <td>
+                                                <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
+                                                    <p>
+                                                        <?= htmlspecialchars(getName($comment['author'], $conn)) ?>
+                                                    </p>
+                                                </a>
+                                                <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
+                                                    <?php
+                                                    $pfpPath = getPFP(getName($comment['author'], $conn), $conn);
+                                                    $pfpPath = $pfpPath ? $pfpPath : 'default.png';
+                                                    ?>
+                                                    <img class="pfp-fallback" src="pfp/<?= $pfpPath ?>"
+                                                        alt="<?= htmlspecialchars(getName($comment['author'], $conn)) ?>'s profile picture"
+                                                        loading="lazy" width="50px">
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <p><b><time class="">
+                                                            <?= time_elapsed_string($comment['date']) ?>
+                                                        </time></b></p>
+                                                <p>
+                                                    <?= htmlspecialchars($comment['text']) ?>
+                                                </p>
+                                                <br>
+                                                <p class="report">
+                                                    <a href="/report?type=comment&id=<?= htmlspecialchars($comment['id']) ?>"
+                                                        rel="nofollow">
+                                                        <img src="https://static.spacehey.net/icons/flag_red.png"
+                                                            class="icon" aria-hidden="true" loading="lazy" alt=""> Report
+                                                        Comment
+                                                    </a>
+                                                </p>
+                                                <a
+                                                    href="/addcomment?id=<?= $toid ?>&reply=<?= htmlspecialchars($comment['id']) ?>">
+                                                    <button>Add Reply</button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
