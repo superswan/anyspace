@@ -17,19 +17,27 @@ AnySpace is an Open Source Social Network similar to MySpace circa 2005
   - [x] Registration
   - [ ] Password Reset
   - [ ] Email Verification
+- [ ] Admin Panel
 - [ ] Blog
 - [ ] Bulletins
 - [x] Comment System
+- [ ] Documentation/Help
 - [ ] Forum
 - [x] Friend System
 - [ ] Group System
+- [ ] Plugins
+  - [ ] WYSIWYG Editor
+  - [ ] PGP Auth
+  - [ ] Crypto Payments
 - [ ] Private Messaging
 - [ ] Report System
+- [ ] Session Management
 - [x] User Browser
 - [x] User Search
 - [x] User Profiles
   - [x] Profile Editing 
-  - [x] Custom CSS (untested)
+  - [x] Custom CSS
+  - [ ] External Links 
 
 ## Screenshot
 
