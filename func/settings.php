@@ -22,33 +22,6 @@ function validateCSS($validate) {
     return $validated;
 }
 
-function getID($user, $connection) {
-    $stmt = $connection->prepare("SELECT * FROM users WHERE username = :username");
-    $stmt->execute(array(':username' => $user));
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (count($result) === 0) return 'error';
-    $id = $result[0]['id']; // Assuming username is unique and only one result should be returned
-    return $id;
-}
-
-function getName($id, $connection) {
-    $stmt = $connection->prepare("SELECT * FROM users WHERE id = :id");
-    $stmt->execute(array(':id' => $id));
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (count($result) === 0) return 'error';
-    $name = $result[0]['username']; // Assuming ID is unique and only one result should be returned
-    return $name;
-}
-
-function getPFP($user, $connection) {
-    $stmt = $connection->prepare("SELECT * FROM users WHERE username = :username");
-    $stmt->execute(array(':username' => $user));
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (count($result) === 0) return 'error';
-    $pfp = $result[0]['pfp']; // Assuming username is unique and only one result should be returned
-    return $pfp;
-}
-
 // thanks dzhaugasharov https://gist.github.com/afsalrahim/bc8caf497a4b54c5d75d
 function replaceBBcodes($text) {
     $text = htmlspecialchars($text);

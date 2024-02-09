@@ -12,11 +12,12 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; 
 
 if (isset($_SESSION['user'], $_POST['submit'], $_POST['comment']) && !empty($_POST['comment'])) {
-    $authorId = getID($_SESSION['user'], $conn); // You might need to fetch this based on the username or other session stored value
+    //remove to allow unique usernames
+    $authorId = $_SESSION['userId']; 
     $commentText = trim($_POST['comment']);
 
-    if (addComment($conn, $toid, $authorId, $commentText)) {
-        header("Location: profile.php?id=$toid");
+    if (addComment($toid, $authorId, $commentText)) {
+        header("Location: comments.php?id=$toid");
         exit;
     } else {
         echo "<p>Error adding comment.</p>";

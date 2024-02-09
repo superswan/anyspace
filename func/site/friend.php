@@ -15,7 +15,7 @@ function addFriend($pdo, $senderId, $receiverId) {
     $exists = $checkStmt->fetchColumn() > 0;
 
     if ($exists) {
-        exit('You are already friends.');
+        exit('You are already friends or there is a friend request pending');
     }
 
     $insertStmt = $pdo->prepare("INSERT INTO friends (sender, receiver, status) VALUES (:senderId, :receiverId, 'PENDING')");

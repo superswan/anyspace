@@ -3,12 +3,6 @@ require("func/conn.php");
 require_once("func/settings.php");
 require("lib/password.php"); // compatibility library for PHP 5.3
 
-// Start or resume a session
-if (session_id() == '') {
-    session_start();
-}
-
-// Process login 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] == 'login') {
         // Sanitize input
@@ -17,13 +11,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 
         if ($_POST['action'] == 'login') {
             // Prepare SQL statement for login
-            $stmt = $conn->prepare("SELECT username, password FROM users WHERE email = ?");
+            $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
             $stmt->execute(array($email));
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user'] = $user['username'];
+                $_SESSION['userId'] = $user['id'];
+
                 header("Location: home.php");
                 exit;
             } else {

@@ -6,7 +6,7 @@ require("func/site/comment.php");
 require("func/site/friend.php");
 
 // Fetch user information
-$userInfo = fetchUserInfo($conn, $_GET['id']);
+$userInfo = fetchUserInfo($_GET['id']);
 $user = $userInfo ? $userInfo['username'] : '';
 $userId = $userInfo['id'];
 $id = $userId;
@@ -23,9 +23,9 @@ $friends = array_merge(
     fetchFriends($conn, 'ACCEPTED', 'sender', $userId)
 );
 // Fetch comments
-$limitedComments = fetchComments($conn, $id, 20);
+$limitedComments = fetchComments($id, 20);
 $countComments = count($limitedComments);
-$countTotalComments = count(fetchComments($conn, $id));
+$countTotalComments = count(fetchComments($id));
 
 ?>
 
@@ -33,6 +33,7 @@ $countTotalComments = count(fetchComments($conn, $id));
 <html>
 
 <head>
+    <title><?= $user ?>'s Profile | <?= SITE_NAME ?></title>
     <link rel="stylesheet" href="static/css/header.css">
     <link rel="stylesheet" href="static/css/base.css">
     <link rel="stylesheet" href="static/css/my.css">
@@ -162,8 +163,7 @@ $countTotalComments = count(fetchComments($conn, $id));
                                 </b></p>
                             <p>
                                 https://
-                                <?= htmlspecialchars(DOMAIN_NAME); ?>/profile.php?id=
-                                <?= htmlspecialchars($userInfo['id']); ?>
+                                <?= htmlspecialchars(DOMAIN_NAME); ?>/profile.php?id=<?= htmlspecialchars($userInfo['id']); ?>
                             </p>
                         </div>
                         <div class="table-section">
@@ -288,8 +288,8 @@ $countTotalComments = count(fetchComments($conn, $id));
                                     if ($friendId == $id) {
                                         continue;
                                     }
-                                    $friendName = getName($friendId, $conn);
-                                    $friendPfp = getPFP($friendName, $conn);
+                                    $friendName = fetchName($friendId);
+                                    $friendPfp = fetchPFP($friendId);
 
                                     echo "<div class='person'><a href='profile.php?id=" . htmlspecialchars($friendId) . "'><center><b>" . htmlspecialchars($friendName) . "</b></center><br><img width='125px' src='pfp/" . htmlspecialchars($friendPfp) . "'></a></div>";
                                 }
@@ -320,16 +320,16 @@ $countTotalComments = count(fetchComments($conn, $id));
                                             <td>
                                                 <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
                                                     <p>
-                                                        <?= htmlspecialchars(getName($comment['author'], $conn)) ?>
+                                                        <?= htmlspecialchars(fetchName($comment['author'])) ?>
                                                     </p>
                                                 </a>
                                                 <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
                                                     <?php
-                                                    $pfpPath = getPFP(getName($comment['author'], $conn), $conn);
+                                                    $pfpPath = fetchPFP($comment['author']);
                                                     $pfpPath = $pfpPath ? $pfpPath : 'default.png';
                                                     ?>
                                                     <img class="pfp-fallback" src="pfp/<?= $pfpPath ?>"
-                                                        alt="<?= htmlspecialchars(getName($comment['author'], $conn)) ?>'s profile picture"
+                                                        alt="<?= htmlspecialchars(fetchName($comment['author'])) ?>'s profile picture"
                                                         loading="lazy" width="50px">
                                                 </a>
                                             </td>

@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <title><?= SITE_NAME ?></title>
     <link rel="stylesheet" href="static/css/normalize.css">
     <link rel="stylesheet" href="static/css/header.css">
     <link rel="stylesheet" href="static/css/base.css">

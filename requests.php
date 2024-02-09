@@ -2,6 +2,7 @@
 require("func/conn.php");
 require_once("func/settings.php");
 require("func/site/friend.php");
+require_once("func/site/user.php");
 
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
@@ -13,7 +14,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $user = $_SESSION['user'];
-$userId = getID($user, $conn); // Ensure getID is compatible with PDO
+$userId = $_SESSION['userId']; 
 
 // Fetch pending and accepted friends
 $pendingReceived = fetchFriends($conn, 'PENDING', 'receiver', $userId);
@@ -67,13 +68,13 @@ $acceptedFriends = array_merge(
                                             <td>
                                                 <a href="profile.php?id=<?= $request['sender']; ?>">
                                                     <p>
-                                                        <?= htmlspecialchars(getName($request['sender'], $conn)); ?>
+                                                        <?= htmlspecialchars(fetchName($request['sender'])); ?>
                                                     </p>
                                                 </a>
                                                 <a href="profile.php?id=<?= $request['sender']; ?>">
                                                     <?php
                                                     // Since PHP 5.3 does not support the null coalescing operator, use a ternary operator as an alternative
-                                                    $pfpPath = getPFP(getName($request['sender'], $conn), $conn);
+                                                    $pfpPath = fetchPFP($request['sender']);
                                                     $pfpPath = $pfpPath ? $pfpPath : 'default.png';
                                                     ?>
                                                     <img class="pfp-fallback" src="pfp/<?= htmlspecialchars($pfpPath); ?>"
@@ -127,12 +128,12 @@ $acceptedFriends = array_merge(
                                             <td>
                                                 <a href="profile.php?id=<?= $request['receiver']; ?>">
                                                     <p>
-                                                        <?= htmlspecialchars(getName($request['receiver'], $conn)); ?>
+                                                        <?= htmlspecialchars(fetchName($request['receiver'])); ?>
                                                     </p>
                                                 </a>
                                                 <a href="profile.php?id=<?= $request['receiver']; ?>">
                                                     <?php
-                                                    $pfpPath = getPFP(getName($request['receiver'], $conn), $conn);
+                                                    $pfpPath = fetchPFP($request['receiver']);
                                                     $pfpPath = $pfpPath ? $pfpPath : 'default.png';
                                                     ?>
                                                     <img class="pfp-fallback" src="pfp/<?= htmlspecialchars($pfpPath); ?>"

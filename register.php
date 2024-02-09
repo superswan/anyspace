@@ -3,11 +3,6 @@ require("func/conn.php"); // Ensure this returns a PDO connection ($conn)
 require_once("func/settings.php");
 require("lib/password.php");
 
-
-if (session_id() == '') {
-    session_start();
-}
-
 if (isset($_SESSION['user'])) {
     header("Location: home.php");
     exit;

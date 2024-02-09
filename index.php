@@ -22,13 +22,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 
       
             // Prepare SQL statement for login
-            $stmt = $conn->prepare("SELECT username, password FROM users WHERE email = ?");
+            $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
             $stmt->execute(array($email)); // Execute with parameter for PHP 5.3 compatibility
             $user = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the user
 
             // Verify user exists and check password
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user'] = $user['username']; 
+                $_SESSION['userId'] = $user['id']; 
                 header("Location: home.php"); 
                 exit;
             } else {

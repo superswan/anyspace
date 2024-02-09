@@ -6,21 +6,17 @@ require("func/site/friend.php");
 require("func/site/comment.php");
 
 if (!isset($_SESSION['user'])) {
-    // Optionally redirect to login page
     header("Location: login.php");
     exit;
 }
 
 // Fetch user information
-$userInfo = fetchUserInfoByUsername($conn, $_SESSION['user']);
+$userInfo = fetchUserInfo($_SESSION['userId']);
 $user = $userInfo ? $userInfo['username'] : '';
 $userId = $userInfo['id'];
 
 // Fetch blogs and friends using the user's username
 $blogs = fetchUserBlogs($conn, $user);
-
-// Fetch comments
-$comments = fetchComments($conn, $_SESSION['user']);
 
 // Fetch users for the users list
 $users = fetchUsers($conn);
@@ -234,7 +230,7 @@ $profileViews = 0;
                                                 </a>
                                                 <a href="profile.php?id=<?= $request['sender'] ?>">
                                                     <img class="pfp-fallback"
-                                                        src="pfp/<?= (getPFP(getName($request['sender'], $conn), $conn) ?: 'default.png') ?>"
+                                                        src="pfp/<?= fetchPFP($request['sender']) ?: 'default.png' ?>"
                                                         alt="profile picture" loading="lazy" width="50px">
                                                 </a>
                                             </td>

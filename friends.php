@@ -2,6 +2,7 @@
 require("func/conn.php");
 require_once("func/settings.php");
 require("func/site/friend.php");
+require("func/site/user.php");
 
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
@@ -9,7 +10,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $user = $_SESSION['user'];
-$userId = getID($user, $conn);
+$userId = $_SESSION['userId'];
 
 // Page is used as a single entry point for friends actions
 $action = isset($_GET['action']) ? $_GET['action'] : '';
@@ -58,10 +59,10 @@ $acceptedFriends = array_merge(
         <main>
             <div class="simple-container">
                 <h1>
-                    <?= htmlspecialchars(getName($id, $conn)) ?>'s Friends'
+                    <?= htmlspecialchars(fetchName($id)) ?>'s Friends'
                 </h1>
-                <p><a href="profile.php?id=<?= $userId ?>">&laquo; Back to
-                        <?= htmlspecialchars(getName($id, $conn)) ?>'s Profile
+                <p><a href="profile.php?id=<?= $id ?>">&laquo; Back to
+                        <?= htmlspecialchars(fetchName($id)) ?>'s Profile
                     </a></p>
                 <br>
                 <form metrhod="get">
@@ -86,8 +87,8 @@ $acceptedFriends = array_merge(
                                     $friendId = $friend['receiver'];
                                 }
  
-                                $friendName = getName($friendId, $conn);
-                                $friendPfp = getPFP($friendName, $conn);
+                                $friendName = fetchName($friendId);
+                                $friendPfp = fetchPFP($friendId);
 
                                 echo "<div class='person'><a href='profile.php?id=" . htmlspecialchars($friendId) . "'><center><b>" . htmlspecialchars($friendName) . "</b></center><br><img width='125px' src='pfp/" . htmlspecialchars($friendPfp) . "'></div>";
                             }

@@ -10,15 +10,15 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; // Ensure you validate and sanitize input
-$comments = fetchComments($conn, $toid);
+$comments = fetchComments($toid);
 
 ?>
 
 <?php require_once("header.php") ?>
 
 <div class="simple-container">
-    <h1><?= getName($toid, $conn) ?>'s Friends Comments</h1>
-    <p><a href="profile.php?id=1">&laquo; Back to <?= getName($toid, $conn) ?>'s Profile</a></p>
+    <h1><?= fetchName($toid) ?>'s Friends Comments</h1>
+    <p><a href="profile.php?id=<?= $toid ?>">&laquo; Back to <?= fetchName($toid) ?>'s Profile</a></p>
     <br>
     <?php if (empty($comments)): ?>
     <p>No comments yet.</p>
@@ -29,14 +29,14 @@ $comments = fetchComments($conn, $toid);
             <tr>
                 <td>
                     <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
-                        <p><?= htmlspecialchars(getName($comment['author'], $conn)) ?></p>
+                        <p><?= htmlspecialchars(fetchName($comment['author'])) ?></p>
                     </a>
                     <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
                     <?php
-                        $pfpPath = getPFP(getName($comment['author'], $conn), $conn);
+                        $pfpPath = fetchPFP($comment['author']);
                         $pfpPath = $pfpPath ? $pfpPath : 'default.png';
                     ?>
-                        <img class="pfp-fallback" src="pfp/<?= $pfpPath ?>" alt="<?= htmlspecialchars(getName($comment['author'], $conn)) ?>'s profile picture" loading="lazy" width="50px">
+                        <img class="pfp-fallback" src="pfp/<?= $pfpPath ?>" alt="<?= htmlspecialchars(fetchName($comment['author'])) ?>'s profile picture" loading="lazy" width="50px">
                     </a>
                 </td>
                 <td>

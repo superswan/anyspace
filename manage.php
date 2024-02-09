@@ -2,11 +2,10 @@
 // EDIT PROFILE page
 require("func/conn.php");
 require_once("func/settings.php");
+require_once("func/site/user.php");
 
 $stmt = $conn->prepare("SELECT * FROM `users` WHERE username=?");
 $stmt->execute(array($_SESSION['user']));
-
-
 
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $bio = $row['bio'];
@@ -154,7 +153,7 @@ if (@$_POST['interestset']) {
                     <p>All fields are optional and can be left empty</p>
                     <div class="profile-pic">
                         <?php
-                        echo '<img width="180px" height="auto" src="pfp/' . getPFP($_SESSION['user'], $conn) . '"><h2>' . htmlspecialchars($_SESSION['user']) . '</h1>';
+                        echo '<img width="180px" height="auto" src="pfp/' . fetchPFP($_SESSION['userId']) . '"><h2>' . htmlspecialchars($_SESSION['user']) . '</h1>';
                         ?>
                     </div>
                     <form method="post" enctype="multipart/form-data">
