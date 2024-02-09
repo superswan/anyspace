@@ -10,6 +10,17 @@ AnySpace is an Open Source Social Network similar to MySpace circa 2005
 
 `pfp` and `music` folders need r/w/x permissions for the webserver 
 
+It's recommended to set the following in your `php.ini`
+
+```
+file_uploads = On
+upload_max_filesize = 10M
+post_max_size = 15M
+max_execution_time = 60
+max_input_time = 120
+memory_limit = 128M
+```
+
 ## Features
 
 - [ ] Authentication
