@@ -344,7 +344,7 @@ $countTotalComments = count(fetchComments($id));
                                                 <p class="report">
                                                     <a href="/report?type=comment&id=<?= htmlspecialchars($comment['id']) ?>"
                                                         rel="nofollow">
-                                                        <img src="https://static.spacehey.net/icons/flag_red.png"
+                                                        <img src="/static/icons/flag_red.png"
                                                             class="icon" aria-hidden="true" loading="lazy" alt=""> Report
                                                         Comment
                                                     </a>

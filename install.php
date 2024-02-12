@@ -3,10 +3,8 @@ require("func/conn.php");
 require("lib/password.php"); 
 
 try {
-    // Begin Transaction
     $conn->beginTransaction();
 
-    // SQL statements to create tables
     $commands = array(
         "CREATE TABLE `blogs` (
             `id` int NOT NULL AUTO_INCREMENT,

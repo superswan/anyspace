@@ -36,8 +36,6 @@ if (!empty($action)) {
     }
 }
 
-
-// Fetch pending and accepted friends
 $acceptedFriends = array_merge(
     fetchFriends($conn, 'ACCEPTED', 'receiver', $id),
     fetchFriends($conn, 'ACCEPTED', 'sender', $id)

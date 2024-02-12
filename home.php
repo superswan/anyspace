@@ -1,14 +1,12 @@
 <?php
-require("func/conn.php");
-require_once("func/settings.php");
-require("func/site/user.php");
-require("func/site/friend.php");
-require("func/site/comment.php");
+require_once("core/conn.php");
+require_once("core/settings.php");
+require("core/site/user.php");
+require("core/site/friend.php");
+require("core/site/comment.php");
+require("core/site/blog.php");
 
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
-}
+login_check(); 
 
 // Fetch user information
 $userInfo = fetchUserInfo($_SESSION['userId']);
@@ -39,25 +37,21 @@ $sinceJoined = time_elapsed_string($userInfo['date']);
 
 $profileViews = 0;
 
+$blogEntries = fetchBlogEntries($userId, 4);
+
 ?>
 
 <!DOCTYPE html>
 <html>
 
 <head>
+    <title>Home | <?= SITE_NAME ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/normalize.css">
     <link rel="stylesheet" href="static/css/header.css">
     <link rel="stylesheet" href="static/css/base.css">
     <link rel="stylesheet" href="static/css/my.css">
 
-    <!-- USER STYLES -->
-    <?php
-    $stmt = $conn->prepare("SELECT * FROM `users` WHERE id = :id");
-    $stmt->execute(array(':id' => $_SESSION['user']));
-
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<style>" . $row['css'] . "</style>";
-    }
-    ?>
 </head>
 
 <body>
@@ -81,9 +75,18 @@ $profileViews = 0;
                                 <img width='235px;' src='pfp/<?= htmlspecialchars($userInfo['pfp']); ?>'>
                             </div>
                             <div class="details">
-                                <p><a href="manage.php">Edit Profile</a>
+                                <p><a href="manage.php">Edit Profile</a></p>
+                                <p><a href="editstatus.php">Edit Status</a></p>
                             </div>
-                            <div class="more-options"></div>
+                            <div class="more-options">
+                                <p>View My: <a href='profile.php?id=<?= $userId ?>'>Profile</a> | <a
+                                        <a href='blog/user.php?id=<?= $userId ?>'>Blog</a> | <a
+                                        href='friends.php?id=<?= $userId ?>'>Friends</a> | <a
+                                        href='requests.php?id=<?= $userId ?>'>Requests</a>
+                                </p>
+                                <p>My URL: <a href='profile.php?id=<?= $userId ?>'>https://<?= DOMAIN_NAME ?>/profile.php?id=<?= $userId ?>
+                                    </a></p>
+                            </div>
                         </div>
                     </div>
                     <div class="url-info view-full-profile">
@@ -128,9 +131,26 @@ $profileViews = 0;
                     <div class="row top-row">
                         <div class="row top-row">
                             <div class="blog-preview col">
-                                <h4>Your Latest Blog Entries [<a href="#">New Entry</a>]
+                                <h4>Your Latest Blog Entries [<a href="blog/newpost.php">New Entry</a>]
                                 </h4>
-                                <p><i>There are no Blog Entries yet.</i></p>
+                                <?php if (empty($blogEntries)): ?>
+                                    <p><i>There are no Blog Entries yet.</i></p>
+                                <?php else: ?>
+                                    <?php foreach ($blogEntries as $entry): ?>
+                                        <?php
+                                        $maxTitleLength = 20;
+                                        $title = $entry['title'];
+                                        if (mb_strlen($title) > $maxTitleLength) {
+                                            $title = mb_substr($title, 0, $maxTitleLength) . '...';
+                                        }
+                                        ?>
+                                        <p>
+                                            <?= htmlspecialchars($title) ?> 
+                                            (<a href="blog/entry.php?id=<?= $entry['id'] ?>">View More</a>)
+                                        </p>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
                             </div>
                             <div class="statistics col">
                                 <div class="heading">
@@ -156,9 +176,9 @@ $profileViews = 0;
                                                 </span></p>
                                         </div>
                                         <div class="m-col">
-                                            <p>Joined: </p> <i>
-                                                <?= $sinceJoined ?>
-                                            </i> ago
+                                            <p>Joined: <br> <span class="count"><i>
+                                                        <?= $sinceJoined ?>
+                                                    </i> </span>
                                         </div>
                                     </div>
                                 </div>
@@ -168,24 +188,22 @@ $profileViews = 0;
                     </div>
                     <div class="new-people cool">
                         <div class="top">
-                            <h4>New Users</h4>
+                            <h4>Cool New People</h4>
 
                         </div>
                         <div class="inner">
                             <?php
-                            $stmt = $conn->prepare("SELECT id, username, pfp FROM `users`");
+                            $stmt = $conn->prepare("SELECT id, username, pfp FROM `users` ORDER BY date DESC LIMIT 4");
                             $stmt->execute();
 
-                            // Fetch and display each row
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 $profilePicPath = htmlspecialchars('pfp/' . $row['pfp']);
                                 $profileLink = 'profile.php?id=' . $row['id'];
                                 $username = htmlspecialchars($row['username']);
 
-                                // Display link with profile picture and username
                                 echo "<div class='person'>";
                                 echo "<a href='{$profileLink}'><p>{$username}</p></a>";
-                                echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'>";
+                                echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
                                 echo "</div>";
                             }
                             ?>
@@ -225,7 +243,7 @@ $profileViews = 0;
                                             <td>
                                                 <a href="profile.php?id=<?= $request['sender'] ?>">
                                                     <p>
-                                                        <?= htmlspecialchars(getName($request['sender'], $conn)) ?>
+                                                        <?= htmlspecialchars(fetchName($request['sender'])) ?>
                                                     </p>
                                                 </a>
                                                 <a href="profile.php?id=<?= $request['sender'] ?>">

@@ -9,7 +9,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit; 
 }
 
-$toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; // Ensure you validate and sanitize input
+$toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; 
 $comments = fetchComments($toid);
 
 ?>
@@ -45,7 +45,7 @@ $comments = fetchComments($toid);
                     <br>
                     <p class="report">
                         <a href="/report?type=comment&id=<?= htmlspecialchars($comment['id']) ?>" rel="nofollow">
-                            <img src="https://static.spacehey.net/icons/flag_red.png" class="icon" aria-hidden="true" loading="lazy" alt=""> Report Comment
+                            <img src="/static/icons/flag_red.png" class="icon" aria-hidden="true" loading="lazy" alt=""> Report Comment
                         </a>
                     </p>
                     <a href="/addcomment?id=<?= $toid ?>&reply=<?= htmlspecialchars($comment['id']) ?>">

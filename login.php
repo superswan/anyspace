@@ -5,12 +5,10 @@ require("lib/password.php"); // compatibility library for PHP 5.3
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] == 'login') {
-        // Sanitize input
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'];
 
         if ($_POST['action'] == 'login') {
-            // Prepare SQL statement for login
             $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
             $stmt->execute(array($email));
             $user = $stmt->fetch(PDO::FETCH_ASSOC);

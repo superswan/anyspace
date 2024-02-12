@@ -48,13 +48,11 @@ if (!isset($_SESSION['user'])) {
             $stmt = $conn->prepare("SELECT id, username, pfp FROM `users`");
             $stmt->execute();
 
-            // Fetch and display each row
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $profilePicPath = htmlspecialchars('pfp/' . $row['pfp']);
                 $profileLink = 'profile.php?id=' . $row['id'];
                 $username = htmlspecialchars($row['username']);
 
-                // Display link with profile picture and username
                 echo "<div class='person'>";
                 echo "<a href='{$profileLink}'><p>{$username}</p></a>";
                 echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'>";

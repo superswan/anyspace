@@ -3,7 +3,6 @@ require("func/conn.php");
 require("func/settings.php");
 require("lib/password.php");
 
-// Start or resume a session
 if (session_id() == '') {
     session_start();
 }
@@ -13,27 +12,22 @@ if (isset($_SESSION['user'])) {
     exit;
 }
 
-// Process login 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] == 'login') {
-        // Sanitize input
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'];
 
       
-            // Prepare SQL statement for login
             $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
-            $stmt->execute(array($email)); // Execute with parameter for PHP 5.3 compatibility
-            $user = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the user
+            $stmt->execute(array($email)); 
+            $user = $stmt->fetch(PDO::FETCH_ASSOC); 
 
-            // Verify user exists and check password
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user'] = $user['username']; 
                 $_SESSION['userId'] = $user['id']; 
                 header("Location: home.php"); 
                 exit;
             } else {
-                // Handle login failure
                 echo '<p>Login information doesn\'t exist or incorrect password.</p><hr>';
             }
     } 
@@ -67,13 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                                 $stmt = $conn->prepare("SELECT id, username, pfp FROM `users`");
                                 $stmt->execute();
 
-                                // Fetch and display each row
                                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     $profilePicPath = htmlspecialchars('pfp/' . $row['pfp']);
                                     $profileLink = 'profile.php?id=' . $row['id'];
                                     $username = htmlspecialchars($row['username']);
 
-                                    // Display link with profile picture and username
                                     echo "<div class='person'>";
                                     echo "<a href='{$profileLink}'><p>{$username}</p></a>";
                                     echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'>";

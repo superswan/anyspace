@@ -1,5 +1,5 @@
 <?php
-require("func/conn.php"); // Ensure this returns a PDO connection ($conn)
+require("func/conn.php"); 
 require_once("func/settings.php");
 require("lib/password.php");
 
@@ -8,7 +8,7 @@ if (isset($_SESSION['user'])) {
     exit;
 }
 
-$message = ''; // Variable to hold messages for the user
+$message = ''; 
 
 
 
@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($_POST['password'] !== $_POST['confirm'] || strlen($_POST['username']) > 21) {
             $message = "<small>Passwords do not match up or username is too long.</small>";
         } else {
-            // Check for existing username
             $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
             $stmt->execute(array($_POST['username']));
             if ($stmt->fetch()) {
@@ -27,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $namecheck = true;
             }
 
-            // Check for existing email
             $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
             $stmt->execute(array($_POST['email']));
             if ($stmt->fetch()) {
@@ -48,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 );
                 $jsonInterests = json_encode($interests);
 
-                // Insert new user
                 $stmt = $conn->prepare("INSERT INTO users (username, email, password, date, interests) VALUES (?, ?, ?, NOW(), ?)");
                 $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
                 $username = htmlspecialchars($_POST['username']);

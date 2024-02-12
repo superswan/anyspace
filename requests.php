@@ -9,14 +9,12 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// Page is used as a single entry point for friends actions
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+//$action = isset($_GET['action']) ? $_GET['action'] : '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $user = $_SESSION['user'];
 $userId = $_SESSION['userId']; 
 
-// Fetch pending and accepted friends
 $pendingReceived = fetchFriends($conn, 'PENDING', 'receiver', $userId);
 $pendingSent = fetchFriends($conn, 'PENDING', 'sender', $userId);
 $acceptedFriends = array_merge(

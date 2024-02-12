@@ -1,2 +1,11 @@
 pfp/*.jpg
+pfp/*.jpeg
+pfp/*.png
+pfp/*.gif
+!pfp/default.jpg
+
 music/*.mp3
+music/*.mp3.sfk
+!music/default.mp3
+
+.vscode

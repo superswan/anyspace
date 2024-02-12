@@ -1,2 +1,0 @@
-# Deny direct access to the func directory
-Deny from all

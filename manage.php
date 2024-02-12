@@ -81,14 +81,11 @@ if (@$_POST['interestset']) {
     if ($uploadOk == 0) {
     } else {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            // Prepare the statement using PDO syntax
             $stmt = $conn->prepare("UPDATE users SET pfp = :filename WHERE `users`.`username` = :username");
 
-            // Bind the parameters to the query
             $filename = basename($_FILES["fileToUpload"]["name"]);
             $username = $_SESSION['user'];
 
-            // Execute the statement with the bound parameters
             $stmt->execute(array(':filename' => $filename, ':username' => $username));
         } else {
             echo 'fatal error<hr>';
@@ -118,14 +115,11 @@ if (@$_POST['interestset']) {
     if ($uploadOk == 0) {
     } else {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            // Prepare the statement using PDO syntax
             $stmt = $conn->prepare("UPDATE users SET music = :filename WHERE `users`.`username` = :username");
 
-            // Bind the parameters to the query
             $filename = basename($_FILES["fileToUpload"]["name"]);
             $username = $_SESSION['user'];
 
-            // Execute the statement with the bound parameters
             $stmt->execute(array(':filename' => $filename, ':username' => $username));
         } else {
             echo 'fatal error' . $_FILES["fileToUpload"]["error"] . '<hr>';
