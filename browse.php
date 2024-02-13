@@ -1,12 +1,30 @@
 <?php
-require("func/conn.php");
-require_once("func/settings.php");
-require("func/site/user.php");
+require("core/conn.php");
+require_once("core/settings.php");
+require("core/site/user.php");
 
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
+login_check();
+$view = isset($_GET['view']) ? $_GET['view'] : '';
+
+function isFilterActive($filter, $friends = null) {
+    $currentView = isset($_GET['view']) ? $_GET['view'] : '';
+    $currentFriends = isset($_GET['friends']) ? $_GET['friends'] : null;
+
+    if ($currentView === $filter && $friends === null) {
+        return true; // Filter is active without considering friends
+    }
+
+    if ($currentView === $filter && $currentFriends === $friends) {
+        return true; // Filter is active considering friends
+    }
+
+    if ($currentView === 'new' && $friends === '') {
+        return true; 
+    }
+
+    return false;
 }
+
 ?>
 
 <?php require("header.php"); ?>
@@ -14,48 +32,66 @@ if (!isset($_SESSION['user'])) {
 <div class="simple-container">
     <h1>Browse Users</h1>
     <p>
-        Filter:
-        <a href="browse" class="filter-active">
+    Filter:
+    <a href="browse.php" class="<?= isFilterActive('') ? 'filter-active' : '' ?>">
+    <?php if (isFilterActive('')): ?>
+        <img src="static/icons/tick.png" class="icon" aria-hidden="true" loading="lazy" alt="">
+    <?php endif; ?>
+    All Users
+</a>
+|
+<a href="browse.php?view=new" class="<?= isFilterActive('new') ? 'filter-active' : '' ?>">
+    <?php if (isFilterActive('new')): ?>
+        <img src="static/icons/tick.png" class="icon" aria-hidden="true" loading="lazy" alt="">
+    <?php endif; ?>
+    New People
+</a>
+<!--
+<p>
+    Friends:
+    <a href="browse.php?view=active" class="<?= isFilterActive('') ? 'filter-active' : '' ?>">
+        <?php if (!isset($_GET['friends'])): ?>
             <img src="static/icons/tick.png" class="icon" aria-hidden="true" loading="lazy" alt="">
-            All Users
-        </a>
-        |
-        <a href="browse?view=new" class="">
-            New People
-        </a>
-        |
-        <a href="browse?view=online" class="">
-            Online Users
-        </a>
-    </p>
-    <p>
-        Friends:
-        <a href="browse?view=active" class="filter-active">
+        <?php endif; ?>
+        Include Friends
+    </a>
+    |
+    <a href="browse.php?view=active&friends=no" class="<?= isFilterActive('active', 'no') ? 'filter-active' : '' ?>">
+        <?php if (isFilterActive('active', 'no')): ?>
             <img src="static/icons/tick.png" class="icon" aria-hidden="true" loading="lazy" alt="">
-            Include Friends
-        </a>
-        |
-        <a href="browse?view=active&friends=no" class="">
-            Exclude Friends
-        </a>
-    </p>
-    <div class="new-people cool">
+        <?php endif; ?>
+        Exclude Friends
+    </a>
+</p>
+        -->
+    <div class="new-people">
         <div class="top">
             <h4>Active Users</h4>
+            <a class="more" href="#">[random]</a>
         </div>
         <div class="inner">
             <?php
-            $stmt = $conn->prepare("SELECT id, username, pfp FROM `users`");
-            $stmt->execute();
+          if ($view === 'new') {
+            $query = "SELECT id, username, pfp FROM `users` ORDER BY id DESC";
+        } else if ($view === 'online') { // Example for future implementation
+            $query = "SELECT id, username, pfp FROM `users` WHERE online_status = 'Online'";
+        } else {
+            $query = "SELECT id, username, pfp FROM `users`";
+        }
+        
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
 
+            // Fetch and display each row
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $profilePicPath = htmlspecialchars('pfp/' . $row['pfp']);
                 $profileLink = 'profile.php?id=' . $row['id'];
                 $username = htmlspecialchars($row['username']);
 
+                // Display link with profile picture and username
                 echo "<div class='person'>";
                 echo "<a href='{$profileLink}'><p>{$username}</p></a>";
-                echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'>";
+                echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
                 echo "</div>";
             }
             ?>

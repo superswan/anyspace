@@ -1,20 +1,19 @@
 <?php
-require("func/conn.php");
-require_once("func/settings.php");
-require("func/site/friend.php");
-require_once("func/site/user.php");
+require("core/conn.php");
+require_once("core/settings.php");
+require("core/site/friend.php");
+require_once("core/site/user.php");
 
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
-}
+login_check();
 
-//$action = isset($_GET['action']) ? $_GET['action'] : '';
+// Page is used as a single entry point for friends actions
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $user = $_SESSION['user'];
 $userId = $_SESSION['userId']; 
 
+// Fetch pending and accepted friends
 $pendingReceived = fetchFriends($conn, 'PENDING', 'receiver', $userId);
 $pendingSent = fetchFriends($conn, 'PENDING', 'sender', $userId);
 $acceptedFriends = array_merge(

@@ -1,106 +1,90 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 
-CREATE TABLE `blogs` (
-  `id` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `blogs` (
+  `id` int(11) NOT NULL,
   `text` text NOT NULL,
   `author` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
-  `title` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `comments` (
-  `id` int NOT NULL,
-  `toid` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id` int(11) NOT NULL,
+  `toid` int(11) NOT NULL,
   `author` varchar(255) NOT NULL,
   `text` varchar(500) NOT NULL,
-  `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `friends` (
-  `sender` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `friends` (
+  `id` int(11) NOT NULL,
+  `sender` varchar(255) NOT NULL,
   `receiver` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'PENDING',
-  `id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `groupcomments` (
-  `id` int NOT NULL,
-  `toid` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `groupcomments` (
+  `id` int(11) NOT NULL,
+  `toid` int(11) NOT NULL,
   `author` varchar(255) NOT NULL,
   `text` varchar(500) NOT NULL,
-  `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `groups` (
+CREATE TABLE IF NOT EXISTS `groups` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` varchar(500) NOT NULL,
   `author` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
-  `id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
-  `bio` varchar(500) NOT NULL DEFAULT '',
-  `interests` varchar(500) NOT NULL DEFAULT ' ',
-  `css` varchar(5000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
-  `music` varchar(255) NOT NULL DEFAULT 'default.mp3',
-  `pfp` varchar(255) NOT NULL DEFAULT 'default.jpg',
-  `currentgroup` varchar(255) NOT NULL DEFAULT 'None',
-  `id` int NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `bio` varchar(500) NOT NULL default '',
+  `interests` varchar(500) NOT NULL default ' ',
+  `css` blob NOT NULL,
+  `music` varchar(255) NOT NULL default 'default.mp3',
+  `pfp` varchar(255) NOT NULL default 'default.jpg',
+  `currentgroup` varchar(255) NOT NULL default 'None',
+  `status` varchar(255) NOT NULL default '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `bulletincomments` (
+  `id` int(11) NOT NULL,
+  `toid` int(11) NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `text` varchar(500) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `blogs`
-  ADD PRIMARY KEY (`id`);
+CREATE TABLE IF NOT EXISTS `bulletins` (
+  `id` int(11) NOT NULL,
+  `text` text NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `comments`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `friends`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `groupcomments`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `groups`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
-
-ALTER TABLE `blogs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `comments`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `friends`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `groupcomments`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `groups`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

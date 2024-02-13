@@ -1,20 +1,17 @@
 <?php
-require("func/conn.php");
-require_once("func/settings.php");
-require("func/site/user.php");
+require("core/conn.php");
+require_once("core/settings.php");
+require("core/site/user.php");
 
 
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
-}
+login_check();
 
 $searchResults = array();
 
 if (isset($_GET['q']) && !empty($_GET['q'])) {
     $searchQuery = "%" . $_GET['q'] . "%";
 
-    $stmt = $conn->prepare("SELECT id, username FROM users WHERE username LIKE :query");
+    $stmt = $conn->prepare("SELECT id, username, pfp FROM users WHERE username LIKE :query");
     $stmt->bindParam(':query', $searchQuery, PDO::PARAM_STR);
     $stmt->execute();
 
@@ -34,15 +31,23 @@ if (isset($_GET['q']) && !empty($_GET['q'])) {
     </form>
     <br>
     <?php if (!empty($searchResults)): ?>
-        <div>
-            <h2>Search Results:</h2>
-            <ul>
-                <?php foreach ($searchResults as $user): ?>
-                    <li>
-                        <?php echo htmlspecialchars($user['username']); ?>
-                    </li> 
-                <?php endforeach; ?>
-            </ul>
+        <div class="new-people">
+            <div class="top">
+                <h4>Search Results:</h4>
+            </div>
+            <div class="inner">
+                <?php foreach ($searchResults as $user) {
+                    $profilePicPath = htmlspecialchars('pfp/' . $user['pfp']);
+                    $profileLink = 'profile.php?id=' . $user['id'];
+                    $username = htmlspecialchars($user['username']);
+
+                    echo "<div class='person'>";
+                    echo "<a href='{$profileLink}'><p>{$username}</p></a>";
+                    echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
+                    echo "</div>";
+                }
+                 ?>
+            </div>
         </div>
     <?php elseif (isset($_GET['q'])): ?>
         <p>No results found for "

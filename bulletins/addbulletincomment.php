@@ -1,8 +1,10 @@
 <?php
-require_once("core/conn.php");
-require_once("core/settings.php");
-require("core/site/user.php"); 
-require("core/site/comment.php");
+require_once("../core/conn.php");
+require_once("../core/settings.php");
+require("../core/site/user.php"); 
+require("../core/site/comment.php");
+
+login_check();
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: index.php");
@@ -12,11 +14,12 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; 
 
 if (isset($_SESSION['user'], $_POST['submit'], $_POST['comment']) && !empty($_POST['comment'])) {
+    //remove to allow unique usernames
     $authorId = $_SESSION['userId']; 
     $commentText = trim($_POST['comment']);
 
-    if (addComment($toid, $authorId, $commentText)) {
-        header("Location: comments.php?id=$toid");
+    if (addBulletinComment($toid, $authorId, $commentText)) {
+        header("Location: bulletincomments.php?id=$toid");
         exit;
     } else {
         echo "<p>Error adding comment.</p>";
@@ -25,7 +28,7 @@ if (isset($_SESSION['user'], $_POST['submit'], $_POST['comment']) && !empty($_PO
 
 ?>
 
-<?php require_once("header.php") ?>
+<?php require_once("bulletins-header.php") ?>
 
 <div class="row edit-profile">
   <div class="col w-20 left">
@@ -43,4 +46,4 @@ if (isset($_SESSION['user'], $_POST['submit'], $_POST['comment']) && !empty($_PO
   </div>
 </div>
 
-<?php require_once("footer.php") ?>
+<?php require_once("../footer.php") ?>

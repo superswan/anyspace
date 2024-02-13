@@ -3,10 +3,36 @@
 
 <head>
     <title><?= SITE_NAME ?></title>
-    <link rel="stylesheet" href="static/css/normalize.css">
-    <link rel="stylesheet" href="static/css/header.css">
-    <link rel="stylesheet" href="static/css/base.css">
-    <link rel="stylesheet" href="static/css/my.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/my.css">
+        <style>
+        @media screen and (max-width: 768px) {
+            .row.home {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .col {
+                width: 100%;
+            }
+
+            .col.right {
+                width: 60%);
+                margin: 0 auto; 
+            }
+
+             .col.w-60 {
+                width: 100%;
+            }
+
+            .master-container {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>

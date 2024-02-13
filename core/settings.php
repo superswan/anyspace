@@ -16,7 +16,7 @@ define("DOMAIN_NAME", $domainName);
 // Helper Functions (Will eventually get moved)
 function login_check() {
     if (!isset($_SESSION['user'])) {
-        header("Location: login.php");
+        header("Location: /login.php");
         exit;
     }
 }

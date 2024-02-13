@@ -4,6 +4,7 @@ pfp/*.png
 pfp/*.gif
 !pfp/default.jpg
 
+# Ignore MP3 files in the music directory except default.mp3
 music/*.mp3
 music/*.mp3.sfk
 !music/default.mp3

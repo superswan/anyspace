@@ -1,6 +1,6 @@
 <?php
-require("func/conn.php");
-require_once("func/settings.php");
+require("core/conn.php");
+require_once("core/settings.php");
 
 if((int)$_GET['id']) {
     $stmt = $conn->prepare("SELECT * FROM `groups` WHERE id = ?");

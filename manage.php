@@ -1,129 +1,54 @@
 <?php
 // EDIT PROFILE page
-require("func/conn.php");
-require_once("func/settings.php");
-require_once("func/site/user.php");
+require("core/conn.php");
+require_once("core/settings.php");
+require_once("core/site/user.php");
+require_once("core/site/edit.php");
 
-$stmt = $conn->prepare("SELECT * FROM `users` WHERE username=?");
-$stmt->execute(array($_SESSION['user']));
-
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $bio = $row['bio'];
-    $css = $row['css'];
-    $id = $row['id'];
-    $interests = $row['interests'];
+$userInfo = fetchUserInfo($_SESSION['userId']); // Assume this function exists and fetches user info
+if ($userInfo) {
+    $bio = $userInfo['bio'];
+    $css = $userInfo['css'];
+    $userId = $userInfo['id'];
+    $interests = json_decode($userInfo['interests'], true) ?: array("General" => "", "Music" => "", "Movies" => "", "Television" => "", "Books" => "", "Heroes" => "");
+} else {
+    echo "User not found.";
+    exit;
 }
 
-function prepareAndExecute($query, $params)
-{
-    global $conn;
-    $stmt = $conn->prepare($query);
-    $stmt->execute($params);
-    return $stmt;
-}
-
-$stmt = $conn->prepare("SELECT interests FROM users WHERE username = ?");
-$stmt->execute(array($_SESSION['user']));
-$userInterests = $stmt->fetchColumn();
-
-// Decode the JSON string back into an array
-$interests = json_decode($userInterests, true) ?: array("General" => "", "Music" => "", "Movies" => "", "Television" => "", "Books" => "", "Heroes" => "");
-
-if (@$_POST['interestset']) {
-    // This is probably an XSS vuln
-    $sanitizedInterests = array_map(function($interest) {
-        return $interest; 
-    }, $_POST['interests']);
-    
-    $jsonInterests = json_encode($sanitizedInterests);
-    
-    $stmt = $conn->prepare("UPDATE users SET interests = ? WHERE username = ?");
-    $stmt->execute(array($jsonInterests, $_SESSION['user']));
-
-    header("Location: manage.php");
-} else if (@$_POST['bioset']) {
-    $unprocessedText = replaceBBcodes($_POST['bio']);
-    $text = str_replace(PHP_EOL, "<br>", $unprocessedText);
-    prepareAndExecute("UPDATE users SET bio = ? WHERE `users`.`username` = ?", array($text, $_SESSION['user']));
-    header("Location: manage.php");
-} else if (@$_POST['statusset']) {
-    $text = htmlspecialchars($_POST['status']);
-    prepareAndExecute("UPDATE users SET status = ? WHERE `users`.`username` = ?", array($text, $_SESSION['user']));
-    header("Location: manage.php");
-} else if (@$_POST['cssset']) {
-    $validatedcss = validateCSS($_POST['css']);
-    prepareAndExecute("UPDATE users SET css = ? WHERE `users`.`username` = ?", array($validatedcss, $_SESSION['user']));
-    header("Location: manage.php");
-} else if (@$_POST['submit']) {
-    $target_dir = "pfp/";
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    if (isset($_POST["submit"])) {
-        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-        if ($check !== false) {
-            $uploadOk = 1;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (@$_POST['interestset']) {
+        // This is probably an XSS vuln
+        $sanitizedInterests = array_map(function ($interest) {
+            return $interest;
+        }, $_POST['interests']);
+        updateInterests($userId, $sanitizedInterests);
+        header("Location: manage.php");
+    } elseif (isset($_POST['usernameset'])) {
+        $newUsername = trim($_POST['newUsername']);
+        if (strlen($newUsername) > 50) {
+            echo "<small>Username too long. Max is 50 characters.</small><br>";
         } else {
-            $uploadOk = 0;
+            // Update the username
+            $stmt = $conn->prepare("UPDATE users SET username = ? WHERE id = ?");
+            $stmt->execute(array($newUsername, $userId));
+            $_SESSION['user'] = $newUsername; // Update session username
+            echo "<small>Username updated successfully.</small><br>";
+            header("Refresh:0"); // Refresh the page to reflect the change
         }
-    }
-    if (file_exists($target_file)) {
-        echo 'file with the same name already exists<hr>';
-        $uploadOk = 0;
-    }
-    if (
-        $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif"
-    ) {
-        echo 'unsupported file type. must be jpg, png, jpeg, or gif<hr>';
-        $uploadOk = 0;
-    }
-    if ($uploadOk == 0) {
-    } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            $stmt = $conn->prepare("UPDATE users SET pfp = :filename WHERE `users`.`username` = :username");
-
-            $filename = basename($_FILES["fileToUpload"]["name"]);
-            $username = $_SESSION['user'];
-
-            $stmt->execute(array(':filename' => $filename, ':username' => $username));
-        } else {
-            echo 'fatal error<hr>';
-        }
-    }
-} else if (@$_POST['photoset']) {
-    $target_dir = "music/";
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    if (isset($_POST["submit"])) {
-        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-        if ($check !== false) {
-            $uploadOk = 1;
-        } else {
-            $uploadOk = 0;
-        }
-    }
-    if (file_exists($target_file)) {
-        echo 'file with the same name already exists<hr>';
-        $uploadOk = 0;
-    }
-    if ($imageFileType != "ogg" && $imageFileType != "mp3") {
-        echo 'unsupported file type. must be mp3 or ogg<hr>';
-        $uploadOk = 0;
-    }
-    if ($uploadOk == 0) {
-    } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            $stmt = $conn->prepare("UPDATE users SET music = :filename WHERE `users`.`username` = :username");
-
-            $filename = basename($_FILES["fileToUpload"]["name"]);
-            $username = $_SESSION['user'];
-
-            $stmt->execute(array(':filename' => $filename, ':username' => $username));
-        } else {
-            echo 'fatal error' . $_FILES["fileToUpload"]["error"] . '<hr>';
-        }
+    } else if (@$_POST['bioset']) {
+        $unprocessedText = replaceBBcodes($_POST['bio']);
+        $text = str_replace(PHP_EOL, "<br>", $unprocessedText);
+        updateBio($userId, $text);
+        header("Location: manage.php");
+    } else if (@$_POST['cssset']) {
+        //$validatedcss = validateCSS($_POST['css']);
+        updateCSS($userId, $_POST['css']);
+        header("Location: manage.php");
+    } else if (@$_POST['submit']) {
+        uploadFile($userId, $_FILES["fileToUpload"], "pfp/", array('jpg', 'png', 'jpeg', 'gif'));
+    } elseif (isset($_POST['photoset'])) { // For music upload
+        uploadFile($userId, $_FILES["fileToUpload"], "music/", array('mp3', 'ogg'));
     }
 }
 ?>
@@ -143,32 +68,54 @@ if (@$_POST['interestset']) {
             <div class="row edit-profile">
                 <div class="col w-20 left"></div>
                 <div class="col right">
-                    <h2>Edit Profile</h2>
+                    <h1>Edit Profile</h1>
                     <p>All fields are optional and can be left empty</p>
                     <div class="profile-pic">
                         <?php
-                        echo '<img width="180px" height="auto" src="pfp/' . fetchPFP($_SESSION['userId']) . '"><h2>' . htmlspecialchars($_SESSION['user']) . '</h1>';
+                        echo '<h1>' . htmlspecialchars($_SESSION['user']) . '</h1><br>' . '<img width="180px" height="auto" src="pfp/' . fetchPFP($_SESSION['userId']) . '"><br>';
                         ?>
                     </div>
+                    <hr>
+                    <h1>Change Name:</h1>
+                    <br>
+                    <form method="post" enctype="multipart/form-data">
+                        <input size="77" type="text" name="newUsername" placeholder="New Username"
+                            value="<?php echo htmlspecialchars($_SESSION['user']); ?>"><br>
+                        <input name="usernameset" type="submit" value="Change Name" style="max-width: 20%;"> <small>max: 50
+                            characters</small>
+                    </form>
+                    <br>
+
+
+                    <br>
+                    <h1>Profile Picture & Song:</h1>
+                    <br>
                     <form method="post" enctype="multipart/form-data">
                         <small>Select photo:</small>
                         <input type="file" name="fileToUpload" id="fileToUpload">
                         <input type="submit" value="Upload Image" name="submit">
                     </form>
+                    <small>Max file size: 10MB (jpg/png/gif)</small>
+                    <hr style="max-width: 80%;">
+                    <br>
                     <form method="post" enctype="multipart/form-data">
                         <small>Select song:</small>
                         <input type="file" name="fileToUpload" id="fileToUpload">
                         <input type="submit" value="Upload Song" name="photoset">
                     </form>
+                    <small>Max file size: 10MB (mp3/ogg)</small>
+                    <hr style="max-width: 80%;">
                     <br>
-                    <b>Bio</b>
+                    <h1>Bio:</h1>
+                    <br>
                     <form method="post" enctype="multipart/form-data">
                         <textarea required cols="58" placeholder="Bio" name="bio"><?php echo $bio; ?></textarea><br>
                         <input name="bioset" type="submit" value="Set"> <small>max limit: 500 characters | supports
                             bbcode</small>
                     </form>
                     <br>
-                    <b>Interests</b>
+                    <h1>Interests:</h1>
+                    <br>
                     <form method="post" enctype="multipart/form-data">
                         <label for="general">General:</label>
                         <input type="text" id="general" name="interests[General]"
@@ -199,19 +146,16 @@ if (@$_POST['interestset']) {
                     </form>
 
                     <br>
-                    <b>CSS</b>
-                    <form method="post" enctype="multipart/form-data">
+                    <h1>Layout:</h1>
+                    <small>what you would normally paste into 'About me' (include 'style' tags)</small>
+                    <br>
+                    <form accept-charset="UTF-8" method="post" enctype="multipart/form-data">
                         <textarea required rows="15" cols="58" placeholder="Your CSS"
                             name="css"><?php echo $css; ?></textarea><br>
-                        <input name="cssset" type="submit" value="Set"> <small>max limit: 5000 characters</small>
+                        <input name="cssset" type="submit" value="Set"> <small>max limit: None</small>
                     </form>
                     <br>
-                    <b>Status</b>
-                    <form method="post" enctype="multipart/form-data">
-                        <input size="77" type="text" name="status"><br>
-                        <input name="statusset" type="submit" value="Set"> <small>max limit: 255 characters</small>
-                    </form>
-                    <br>
+
                 </div>
             </div>
             <?php require_once("footer.php") ?>

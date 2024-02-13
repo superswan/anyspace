@@ -1,8 +1,8 @@
 <?php
-require("func/conn.php");
-require_once("func/settings.php");
-require("func/site/friend.php");
-require("func/site/user.php");
+require("core/conn.php");
+require_once("core/settings.php");
+require("core/site/friend.php");
+require("core/site/user.php");
 
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
@@ -36,6 +36,8 @@ if (!empty($action)) {
     }
 }
 
+
+// Fetch pending and accepted friends
 $acceptedFriends = array_merge(
     fetchFriends($conn, 'ACCEPTED', 'receiver', $id),
     fetchFriends($conn, 'ACCEPTED', 'sender', $id)

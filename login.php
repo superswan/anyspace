@@ -1,14 +1,16 @@
 <?php
-require("func/conn.php");
-require_once("func/settings.php");
+require("core/conn.php");
+require_once("core/settings.php");
 require("lib/password.php"); // compatibility library for PHP 5.3
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] == 'login') {
+        // Sanitize input
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'];
 
         if ($_POST['action'] == 'login') {
+            // Prepare SQL statement for login
             $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
             $stmt->execute(array($email));
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -28,23 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <link rel="stylesheet" href="static/css/header.css">
-    <link rel="stylesheet" href="static/css/base.css">
-    <link rel="stylesheet" href="static/css/my.css">
-</head>
-
-<body>
-    <div class="master-container">
-        <?php require("navbar.php"); ?>
-        <main>
+<?php require_once("header.php") ?>
             <div class="center-container">
                 <div class="box standalone">
                     <!-- Login/Signup Form -->
-                    <h4>Member Login/Signup</h4>
+                    <h4>Please login or signup to continue.</h4>
                     <form action="" method="post" name="theForm" id="theForm">
                         <input name="client_id" type="hidden" value="web">
                         <table>
@@ -71,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                                     <td>
                                         <button type="submit" class="login_btn" name="action"
                                             value="login">Login</button>
-                                       <a href="register.php"> <button class="signup_btn" name="action" value="signup">Sign
-                                            Up!</button></a>
+                                            <button type="button" class="signup_btn" onclick="location.href='register.php'" name="action" value="signup">Sign
+                                                Up!</button>
                                     </td>
                                 </tr>
                             </tbody>

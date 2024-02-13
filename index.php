@@ -1,36 +1,34 @@
 <?php
-require("func/conn.php");
-require("func/settings.php");
+require("core/conn.php");
+require("core/settings.php");
 require("lib/password.php");
-
-if (session_id() == '') {
-    session_start();
-}
 
 if (isset($_SESSION['user'])) {
     header("Location: home.php");
     exit;
 }
 
+// Process login 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] == 'login') {
+        // Sanitize input
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'];
 
-      
-            $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
-            $stmt->execute(array($email)); 
-            $user = $stmt->fetch(PDO::FETCH_ASSOC); 
 
-            if ($user && password_verify($password, $user['password'])) {
-                $_SESSION['user'] = $user['username']; 
-                $_SESSION['userId'] = $user['id']; 
-                header("Location: home.php"); 
-                exit;
-            } else {
-                echo '<p>Login information doesn\'t exist or incorrect password.</p><hr>';
-            }
-    } 
+        $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
+        $stmt->execute(array($email)); 
+        $user = $stmt->fetch(PDO::FETCH_ASSOC); 
+
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['user'] = $user['username'];
+            $_SESSION['userId'] = $user['id'];
+            header("Location: home.php");
+            exit;
+        } else {
+            echo '<p>Login information doesn\'t exist or incorrect password.</p><hr>';
+        }
+    }
 }
 
 ?>
@@ -38,10 +36,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/css/normalize.css">
     <link rel="stylesheet" href="static/css/header.css">
     <link rel="stylesheet" href="static/css/base.css">
     <link rel="stylesheet" href="static/css/my.css">
+        <style>
+        @media screen and (max-width: 768px) {
+            .row.home {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .col {
+                width: 100%;
+            }
+
+            .col.right {
+                width: 60%);
+                margin: 0 auto; 
+            }
+
+             .col.w-60 {
+                width: 100%;
+            }
+
+            .master-container {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -53,32 +77,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                     <!-- Cool New People Section -->
                     <div class="new-people cool">
                         <div class="top">
-                            <h4>New Users</h4>
-
+                            <h4>Cool New People</h4>
                         </div>
                         <div class="inner">
-                                <?php
-                                $stmt = $conn->prepare("SELECT id, username, pfp FROM `users`");
-                                $stmt->execute();
+                            <?php
+                            $stmt = $conn->prepare("SELECT id, username, pfp FROM `users` ORDER BY date DESC LIMIT 4");
+                            $stmt->execute();
 
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                    $profilePicPath = htmlspecialchars('pfp/' . $row['pfp']);
-                                    $profileLink = 'profile.php?id=' . $row['id'];
-                                    $username = htmlspecialchars($row['username']);
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                $profilePicPath = htmlspecialchars('pfp/' . $row['pfp']);
+                                $profileLink = 'profile.php?id=' . $row['id'];
+                                $username = htmlspecialchars($row['username']);
 
-                                    echo "<div class='person'>";
-                                    echo "<a href='{$profileLink}'><p>{$username}</p></a>";
-                                    echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'>";
-                                    echo "</div>";
-                                }
-                                ?>
+                                echo "<div class='person'>";
+                                echo "<a href='{$profileLink}'><p>{$username}</p></a>";
+                                echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
+                                echo "</div>";
+                            }
+                            ?>
                         </div>
                     </div>
 
                     <div class="music">
                         <!-- Content similar to Cool New People -->
                         <div class="heading">
-                            <h4><?= htmlspecialchars(SITE_NAME); ?> Music</h4>
+                            <h4>
+                                <?= htmlspecialchars(SITE_NAME); ?> Music
+                            </h4>
                             <a class="more" href="#">[more music]</a>
                         </div>
                         <div class="inner">
@@ -103,13 +128,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                     <!-- Announcements Section -->
                     <div class="specials">
                         <div class="heading">
-                            <h4><?= htmlspecialchars($siteName) ?> Announcements</h4>
+                            <h4>
+                                <?= htmlspecialchars($siteName) ?> Announcements
+                            </h4>
                         </div>
                         <div class="inner">
                             <div class="image">
                                 <a href="https://store.remilia.org/">
-                                    <img src="https://store.remilia.org/cdn/shop/files/2_1_180x.gif" alt="Merchandise Photo"
-                                        loading="lazy">
+                                    <img src="https://store.remilia.org/cdn/shop/files/2_1_180x.gif"
+                                        alt="Merchandise Photo" loading="lazy">
                                 </a>
                             </div>
                             <div class="details" lang="en">
@@ -157,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                                         <td>
                                             <button type="submit" class="login_btn" name="action"
                                                 value="login">Login</button>
-                                            <button type="submit" class="signup_btn" name="action" value="signup">Sign
+                                            <button type="button" class="signup_btn" onclick="location.href='register.php'" name="action" value="signup">Sign
                                                 Up!</button>
                                         </td>
                                     </tr>
@@ -174,7 +201,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                     <!-- Indie Box / Donation CTA -->
                     <div class="indie-box">
                         <p>
-                            <?= htmlspecialchars(SITE_NAME); ?> is an open source social network. Check out the code and host your own instance!
+                            <?= htmlspecialchars(SITE_NAME); ?> is an open source social network. Check out the code and
+                            host your own instance!
                         </p>
                         <p>
                             <a href="https://github.com" class="more-details">[more details]</a>
@@ -188,13 +216,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                     <h3>Retro Social</h3>
                     <p>All the things you missed most about Social Networks are back: Bulletins, Blogs, Forums, and so
                         much more!</p>
-                    <p class="link">&raquo; <a href="/signup" title="Join <?= htmlspecialchars(SITE_NAME); ?> Today">Join Today</a></p>
+                    <p class="link">&raquo; <a href="/signup"
+                            title="Join <?= htmlspecialchars(SITE_NAME); ?> Today">Join Today</a></p>
                 </div>
                 <div class="col info-box">
                     <h3>Privacy Friendly</h3>
                     <p>No algorithms, no tracking, no personalized Ads - just a safe space for you and your friends to
                         hang out online!</p>
-                    <p class="link">&raquo; <a href="browse.php" title="Browse <?= htmlspecialchars(SITE_NAME); ?> Profiles">Browse Profiles</a></p>
+                    <p class="link">&raquo; <a href="browse.php"
+                            title="Browse <?= htmlspecialchars(SITE_NAME); ?> Profiles">Browse Profiles</a></p>
                 </div>
                 <div class="col info-box">
                     <h3>Fully Customizable</h3>
@@ -207,9 +237,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                 <div class="col info-box">
                     <h3>Join Today!</h3>
                     <p>Join your friends on the web or meet some new ones.</p>
-                    <p class="link">&raquo; <a href="register.php" title="Sign Up for <?= htmlspecialchars(SITE_NAME); ?>">SignUp Now</a></p>
+                    <p class="link">&raquo; <a href="register.php"
+                            title="Sign Up for <?= htmlspecialchars(SITE_NAME); ?>">SignUp Now</a></p>
                 </div>
             </div>
 
 
-<?php require_once("footer.php") ?>
+            <?php require_once("footer.php") ?>

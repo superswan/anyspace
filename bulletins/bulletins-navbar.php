@@ -1,19 +1,16 @@
-<?php require_once('core/settings.php'); ?>
-<!-- BEGIN HEADER -->
+<?php require_once('../core/settings.php'); ?>
 <header class="main-header">
   <nav class="">
     <div class="top">
       <div class="left">
         <a href="index.php">
             <?= SITE_NAME ?>
-          </a> | <a href="index.php">Home</a>
+          </a> | <a href="index.php">Bulletin Board</a>
       </ul>
     </div>
     <div class="center">
 
       <form>
-
-
         <label>
           <?= htmlspecialchars(SITE_NAME); ?>
         </label>
@@ -28,9 +25,10 @@
   <div class="right">
       <ul class="topnav signup">
         <?php if (isset($_SESSION['user'])): ?>
-          <a href="docs/help.html">Help</a> | <a href="logout.php">Logout</a>
+          <a href="/docs/help.html">Help</a> | <a href="/logout.php">LogOut</a>
         <?php else: ?>
-          <a href="docs/help.html">Help</a> |
+          <a href="/docs/help.html">Help</a> |
+          <a href="/docs/help.html">LogIn</a> |
           <a href="register.php">SignUp</a>
         <?php endif; ?>
       </ul>
@@ -38,8 +36,7 @@
     </div>
     <ul class="links">
       <?php
-      $currentUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-      $currentPage = basename($currentUrl);
+      $currentPage = basename($_SERVER['SCRIPT_FILENAME']);
 
       $isHomePage = in_array($currentPage, array('index.php', 'home.php'));
 
@@ -61,18 +58,16 @@
       );
 
       foreach ($navItems as $name => $page) {
-        if ($name == 'Home' && $isHomePage) {
+        if ($name == 'Bulletins' && $isHomePage) {
           $activeClass = 'class="active"';
         } else {
-          $activeClass = ($currentPage == basename($page)) ? 'class="active"' : '';
+          $activeClass = ($name == 'Bulletins') ? 'class="active"' : '';
         }
-        echo "<li><a href=\"$page\" $activeClass>&nbsp;$name </a></li>";
+        echo "<li><a href=\"$page\" $activeClass>&nbsp$name</a></li>";
       }
       ?>
     </ul>
   </nav>
-
-
 
 </header>
 <!-- END HEADER -->

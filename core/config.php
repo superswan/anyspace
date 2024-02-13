@@ -3,7 +3,7 @@
 $host = 'localhost';
 $dbname = 'anyspace';
 $username = 'anyspace';
-$password = 'anyspace';
+$password = '';
 
 // Site localization
 $siteName = "AnySpace";

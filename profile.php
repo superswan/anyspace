@@ -1,9 +1,10 @@
 <?php
-require("func/conn.php");
-require_once("func/settings.php");
-require("func/site/user.php");
-require("func/site/comment.php");
-require("func/site/friend.php");
+require("core/conn.php");
+require_once("core/settings.php");
+require("core/site/user.php");
+require("core/site/comment.php");
+require("core/site/friend.php");
+require("core/site/blog.php");
 
 // Fetch user information
 $userInfo = fetchUserInfo($_GET['id']);
@@ -22,10 +23,14 @@ $friends = array_merge(
     fetchFriends($conn, 'ACCEPTED', 'receiver', $userId),
     fetchFriends($conn, 'ACCEPTED', 'sender', $userId)
 );
+$friendsTopEight = fetchUserFriends($userId, 8);
 // Fetch comments
 $limitedComments = fetchComments($id, 20);
 $countComments = count($limitedComments);
 $countTotalComments = count(fetchComments($id));
+
+$blogEntries = fetchBlogEntries($userId, 4);
+$statusInfo = fetchUserStatus($userId);
 
 ?>
 
@@ -38,22 +43,83 @@ $countTotalComments = count(fetchComments($id));
     <link rel="stylesheet" href="static/css/base.css">
     <link rel="stylesheet" href="static/css/my.css">
 
-    <!-- USER STYLES -->
-    <?php
-    $stmt = $conn->prepare("SELECT * FROM `users` WHERE id = :id");
-    $stmt->execute(array(':id' => $_GET['id']));
 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<style>" . $row['css'] . "</style>";
-    }
-    ?>
 </head>
 
 <body>
-    <div class="master-container">
+
+<div class="container">
+  <nav class="">
+    <div class="top">
+        <div class="left">
+        <a href="index.php">
+            <?= SITE_NAME ?>
+            </a> | <a href="index.php">Home</a>
+        </div>
+        <div class="center">
+
+            <form>
+
+                <label>
+                    <?= htmlspecialchars(SITE_NAME); ?>
+                </label>
+
+                <label>
+                    <input type="text" name="search">
+                </label>
+
+                <input class="submit-btn" type="submit" name="submit-button" value="Search">
+            </form>
+        </div>
+        <div class="right">
+            <ul class="topnav signup">
+                <?php if (isset($_SESSION['user'])): ?>
+                    <a href="docs/help.html">Help</a> | <a href="logout.php">Logout</a>
+                <?php else: ?>
+                    <a href="docs/help.html">Help</a>
+                    <a href="register.php">SignUp</a>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+    <ul class="links">
         <?php
-        require("navbar.php");
+        $currentUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $currentPage = basename($currentUrl);
+
+        $isHomePage = in_array($currentPage, array('index.php', 'home.php'));
+
+        $navItems = array(
+            'Home' => '/index.php',
+            'Browse' => '/browse.php',
+            'Search' => '/search.php',
+            'Board' => '/futaba.php',
+            'Mail' => '/messages.php',
+            'Blog' => '/blog/',
+            'Bulletins' => '/bulletins/',
+            'Forum' => '/forum.php',
+            'Groups' => '/groups/',
+            'Layouts' => '/layouts/',
+            'Favs' => '/favorites.php',
+            'Source' => 'https://github.com/superswan/anyspace',
+            'Help' => '/docs/help.html',
+            'About' => '/about.php',
+        );
+
+        foreach ($navItems as $name => $page) {
+            if ($name == 'Home' && $isHomePage) {
+                $activeClass = 'class="active"';
+            } else {
+                $activeClass = ($currentPage == basename($page)) ? 'class="active"' : '';
+            }
+            echo "<li><a href=\"$page\" $activeClass>&nbsp;$name </a></li>";
+        }
         ?>
+    </ul>
+  </nav>
+
+
+
         <main>
             <div class="row profile" itemscope itemtype="https://schema.org/Person">
                 <meta itemprop="url"
@@ -73,21 +139,29 @@ $countTotalComments = count(fetchComments($id));
                                     src='pfp/<?= htmlspecialchars($userInfo['pfp']); ?>'>
                             </div>
                             <div class="details">
-                                <p class="online"><img src="static/img/green_person.png" aria-hidden="true"
-                                        alt="Online icon" loading="lazy"> ONLINE!</p>
+                                <?php if (!empty($statusInfo['status'])): ?>
+                                        <p>"<?= $statusInfo['status'] ?>"
+                                        </p>
+                                    <? endif; ?>
+                                    <?php if (!empty($statusInfo['you'])): ?>
+                                        <p><?= $statusInfo['you'] ?>
+                                        </p>
+                                    <? endif; ?>
+                                    <p class="online"><img src="static/img/green_person.png" aria-hidden="true" alt="Online icon" loading="lazy">
+                                        ONLINE!</p>
+                                </div>
                             </div>
-                        </div>
-                        <audio controls autoplay>
-                            <source src="music/<?= htmlspecialchars($userInfo['music']); ?>" type="audio/ogg">
+                            <audio controls autoplay>
+                                <source src="music/<?= htmlspecialchars($userInfo['music']); ?>" type="audio/ogg">
                         </audio>
                         <div class="mood">
                             <p>
                                 <b>Mood: </b>
-                                <?= htmlspecialchars($userInfo['status']); ?>
+                                <?= htmlspecialchars($statusInfo['mood']); ?>
                             </p>
                             <p>
                                 <b>View my:
-                                    <a href="#">Blog</a>
+                                    <a href="blog/user.php?id=<?= $userInfo['id'] ?>">Blog</a>
                                 </b>
                             </p>
                         </div>
@@ -161,10 +235,7 @@ $countTotalComments = count(fetchComments($id));
                             <p><b>
                                     <?= htmlspecialchars(SITE_NAME); ?> URL:
                                 </b></p>
-                            <p>
-                                https://
-                                <?= htmlspecialchars(DOMAIN_NAME); ?>/profile.php?id=<?= htmlspecialchars($userInfo['id']); ?>
-                            </p>
+                            <p>https://<?= htmlspecialchars(DOMAIN_NAME); ?>/profile.php?id=<?= htmlspecialchars($userInfo['id']); ?></p>
                         </div>
                         <div class="table-section">
                             <div class="heading">
@@ -248,10 +319,27 @@ $countTotalComments = count(fetchComments($id));
                 <div class="col right">
                     <div class="blog-preview">
                         <h4>
-                            <?= htmlspecialchars($userInfo['username']); ?>'s Latest Blog Entries [<a href="#">View
+                            <?= htmlspecialchars($userInfo['username']); ?>'s Latest Blog Entries [<a href="/blog/user.php?id=<?= $userInfo['id'] ?>">View
                                 Blog</a>]
                         </h4>
-                        <p><i>There are no Blog Entries yet.</i></p>
+                        <?php if (empty($blogEntries)): ?>
+                                    <p><i>There are no Blog Entries yet.</i></p>
+                                <?php else: ?>
+                                    <?php foreach ($blogEntries as $entry): ?>
+                                        <?php
+                                        $maxTitleLength = 20;
+                                        $title = $entry['title'];
+                                        if (mb_strlen($title) > $maxTitleLength) {
+                                            $title = mb_substr($title, 0, $maxTitleLength) . '...';
+                                        }
+                                        ?>
+                                        <p>
+                                            <?= htmlspecialchars($title) ?> 
+                                            (<a href="blog/entry.php?id=<?= $entry['id'] ?>">View More</a>)
+                                        </p>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
                     </div>
                     <div class="blurbs">
                         <div class="heading">
@@ -262,11 +350,20 @@ $countTotalComments = count(fetchComments($id));
                         <div class="inner">
                             <div class="section">
                                 <p itemprop="description">
-                                    <?= htmlspecialchars($userInfo['bio']); ?>
+                                    <?= $userInfo['bio']; ?>
+                                    <!-- USER STYLES -->
+                                    <?php
+                                    $stmt = $conn->prepare("SELECT * FROM `users` WHERE id = :id");
+                                    $stmt->execute(array(':id' => $_GET['id']));
+
+                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                        echo $row['css'];
+                                    }
+                                    ?>
                                 </p>
                             </div>
                         </div>
-                    </div>
+                        </div>
                     <div class="friends">
                         <div class="heading">
                             <h4>
@@ -282,7 +379,7 @@ $countTotalComments = count(fetchComments($id));
                                 </b></p>
                             <div class="friends-grid">
                                 <?php
-                                foreach ($friends as $friend) {
+                                foreach ($friendsTopEight as $friend) {
                                     $friendId = $id === $friend['sender'] ? $friend['receiver'] : $friend['sender'];
 
                                     if ($friendId == $id) {
@@ -350,7 +447,7 @@ $countTotalComments = count(fetchComments($id));
                                                     </a>
                                                 </p>
                                                 <a
-                                                    href="/addcomment?id=<?= $toid ?>&reply=<?= htmlspecialchars($comment['id']) ?>">
+                                                    href="/addcomment?id=<?= $comment['author'] ?>&reply=<?= htmlspecialchars($comment['id']) ?>">
                                                     <button>Add Reply</button>
                                                 </a>
                                             </td>
@@ -365,6 +462,24 @@ $countTotalComments = count(fetchComments($id));
 
             </div>
         </main>
+        <footer>
+        <p>
+                <a href="https://github.com/superswan/anyspace/superswan/anyspace" target="_blank" rel="noopener">AnySpace Engine</a>
+        </p>
+        <p> <i>Disclaimer: This project is not affiliated with MySpace&reg; in any way.</i>
+        </p>
+        <ul class="links">
+                <li><a href="about.php">About</a></li>
+                <li><a href="rules.php">Rules</a></li>
+                <li><a href="/docs/help.html">Help</a></li>
+                <li><a href="https://github.com/superswan/anyspace/superswan/anyspace">Source Code</a></li>
+        </ul>
+        <p class="copyright">
+                <a href="https://github.com/superswan/anyspace/superswan/anyspace/superswan/anyspace">&copy;2024 Copyleft</a>
+        </p>
+</footer>
+</div>
+
 </body>
 
 </html>

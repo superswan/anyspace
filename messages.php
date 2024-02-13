@@ -2,10 +2,7 @@
 require("core/conn.php");
 require_once("core/settings.php");
 
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
-}
+login_check();
 
 ?>
 <?php require("header.php"); ?>

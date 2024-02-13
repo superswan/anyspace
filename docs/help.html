@@ -17,6 +17,7 @@
       </style>
       <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {
+    // your code here
   });
 </script></head><body for="html-export">
     
@@ -27,74 +28,15 @@
 <p>Here you will find support documentation on using the site.</p>
 <h2 id="profile-customization">Profile Customization </h2>
 <p>This will help you personalize the appearance of the page according to your preferences.</p>
-<h3 id="master-container">Master Container </h3>
-<p>The <code>master-container</code> is the main wrapper for the content of the page.</p>
-<pre data-role="codeBlock" data-info="css" class="language-css css"><code><span class="token selector"><span class="token class">.master-container</span></span> <span class="token punctuation">{</span>
-  <span class="token comment">/* Change the background, padding, etc. */</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token hexcode color">#f0f0f0</span><span class="token punctuation">;</span>
-  <span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">20</span><span class="token unit">px</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre><h3 id="header-and-navigation">Header and Navigation </h3>
-<p>The <code>main-header</code> class is used for the page's header, which includes navigation menus (<code>search-bar</code> and <code>navbar</code>).</p>
-<pre data-role="codeBlock" data-info="css" class="language-css css"><code><span class="token selector"><span class="token class">.main-header</span></span> <span class="token punctuation">{</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token hexcode color">#333</span><span class="token punctuation">;</span>
-  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode color">#fff</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector"><span class="token class">.search-bar</span> <span class="token class">.topnav</span> a<span class="token punctuation">,</span> <span class="token class">.navbar</span> ul li a</span> <span class="token punctuation">{</span>
-  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode color">#fff</span><span class="token punctuation">;</span> <span class="token comment">/* Text color */</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector"><span class="token class">.search-bar</span> form</span> <span class="token punctuation">{</span>
-  <span class="token comment">/* Style the search form */</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector"><span class="token class">.navbar</span> ul</span> <span class="token punctuation">{</span>
-  <span class="token comment">/* Style the main navigation bar */</span>
-<span class="token punctuation">}</span>
-</code></pre><h3 id="profile-section">Profile Section </h3>
-<p>The profile section is wrapped within <code>div</code> elements with classes <code>row profile user-home</code> and contains various sub-sections.</p>
-<pre data-role="codeBlock" data-info="css" class="language-css css"><code><span class="token selector"><span class="token class">.row</span><span class="token class">.profile</span><span class="token class">.user-home</span> <span class="token class">.general-about</span></span> <span class="token punctuation">{</span>
-  <span class="token comment">/* Style the about section */</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector"><span class="token class">.row</span><span class="token class">.profile</span><span class="token class">.user-home</span> <span class="token class">.profile-pic</span> img</span> <span class="token punctuation">{</span>
-  <span class="token property">border-radius</span><span class="token punctuation">:</span> <span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">;</span> <span class="token comment">/* Make the profile picture circular */</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector"><span class="token class">.row</span><span class="token class">.profile</span><span class="token class">.user-home</span> <span class="token class">.details</span> a</span> <span class="token punctuation">{</span>
-  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode color">#007bff</span><span class="token punctuation">;</span> <span class="token comment">/* Change link color */</span>
-<span class="token punctuation">}</span>
-</code></pre><h3 id="sidebar-and-specials">Sidebar and Specials </h3>
-<p>The sidebar contains elements with classes <code>indie-box</code> and <code>specials</code>, which can be styled for better visibility.</p>
-<pre data-role="codeBlock" data-info="css" class="language-css css"><code><span class="token selector"><span class="token class">.indie-box</span><span class="token punctuation">,</span> <span class="token class">.specials</span></span> <span class="token punctuation">{</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token hexcode color">#eee</span><span class="token punctuation">;</span> <span class="token comment">/* Background color */</span>
-  <span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">10</span><span class="token unit">px</span><span class="token punctuation">;</span>
-  <span class="token property">margin-bottom</span><span class="token punctuation">:</span> <span class="token number">15</span><span class="token unit">px</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre><h3 id="blog-statistics-and-new-users">Blog, Statistics, and New Users </h3>
-<p>These sections provide updates and stats, identified by classes like <code>blog-preview</code>, <code>statistics</code>, and <code>new-people</code>.</p>
-<pre data-role="codeBlock" data-info="css" class="language-css css"><code><span class="token selector"><span class="token class">.blog-preview</span><span class="token punctuation">,</span> <span class="token class">.statistics</span><span class="token punctuation">,</span> <span class="token class">.new-people</span></span> <span class="token punctuation">{</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token hexcode color">#fafafa</span><span class="token punctuation">;</span> <span class="token comment">/* Background color */</span>
-  <span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">10</span><span class="token unit">px</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector"><span class="token class">.statistics</span> <span class="token class">.count</span></span> <span class="token punctuation">{</span>
-  <span class="token property">font-weight</span><span class="token punctuation">:</span> bold<span class="token punctuation">;</span> <span class="token comment">/* Highlight numbers */</span>
-<span class="token punctuation">}</span>
-</code></pre><h3 id="footer">Footer </h3>
-<p>The footer is styled using the <code>footer</code> tag and contains links and copyright information.</p>
-<pre data-role="codeBlock" data-info="css" class="language-css css"><code><span class="token selector">footer</span> <span class="token punctuation">{</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token hexcode color">#333</span><span class="token punctuation">;</span>
-  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode color">#fff</span><span class="token punctuation">;</span>
-  <span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">20</span><span class="token unit">px</span><span class="token punctuation">;</span>
-  <span class="token property">text-align</span><span class="token punctuation">:</span> center<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token selector">footer a</span> <span class="token punctuation">{</span>
-  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode color">#fff</span><span class="token punctuation">;</span> <span class="token comment">/* Footer links color */</span>
-<span class="token punctuation">}</span>
-</code></pre><p>This covers the main sections of the profile page. You can further refine each rule based on your specific design preferences and the layout requirements of your site.</p>
+<h3 id="edit-profile">Edit Profile </h3>
+<p>You can edit your profile from the Home page by selecting 'Edit Profile'.</p>
+<p>This page allows users to edit their profile information. It includes options to change username, upload profile picture and song, set bio and interests, and customize layout using CSS.</p>
+<h3 id="layouts">Layouts </h3>
+<p>The "Layouts" feature allows you to customize the appearance of your profile page similar to the "About Me:" section on MySpace. The code pasted in block will loaded into your Bio when your profile is viewied. This includes full layouts as well as blinkies and other page content.</p>
+<h4 id="external-layouts">External Layouts </h4>
+<p>We plan on supporting styles and layouts from other MySpace-like sites in the future (myspace, windows93, spacehey, spacemy.xyz, etc.)</p>
+<p>AnySpace is currently compatible with SpaceHey layouts.</p>
+<p>This covers the main sections of the profile page. You can further refine each rule based on your specific design preferences and the layout requirements of your page.</p>
 <h3 id="css-cheat-sheet">CSS Cheat Sheet </h3>
 <h3 id="css-examples">CSS Examples </h3>
 <p>Here is a simple example layout</p>
@@ -214,8 +156,84 @@ footer a:hover {
 </code></pre><h4 id="screenshot">Screenshot </h4>
 <p><img src="example_layout.png" alt="Example Custom CSS"></p>
 <h3 id="common-syles">Common Syles </h3>
-<h3 id="external-layouts">External Layouts </h3>
-<p>We plan on supporting styles and layouts from other MySpace-like sites in the future (myspace, windows93, spacehey, spacemy.xyz, etc.)</p>
+<h3 id="html-document-structure">HTML Document Structure </h3>
+<ol>
+<li>
+<p><strong>Root</strong></p>
+<ul>
+<li><code>&lt;html&gt;</code>: Root element of the HTML document.
+<ul>
+<li><code>&lt;head&gt;</code>: Contains meta-information about the document.</li>
+<li><code>&lt;body&gt;</code>: Contains the visible content of the document.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Containers:</strong></p>
+<ul>
+<li><code>.container</code>: Main container for the entire page content.</li>
+</ul>
+</li>
+<li>
+<p><strong>Header/Navigation:</strong></p>
+<ul>
+<li><code>&lt;nav&gt;</code>: Contains navigation links.
+<ul>
+<li><code>.top</code>: Top navigation bar.
+<ul>
+<li><code>.left</code>: Left-aligned section of the top bar.</li>
+<li><code>.center</code>: Center-aligned section of the top bar.</li>
+<li><code>.right</code>: Right-aligned section of the top bar.</li>
+</ul>
+</li>
+<li><code>.links</code>: Additional navigation links.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Main Content:</strong></p>
+<ul>
+<li><code>&lt;main&gt;</code>: Main content area of the page.
+<ul>
+<li><code>.row.profile</code>: Row for the user profile.
+<ul>
+<li><code>.col</code>: Columns within the profile row.
+<ul>
+<li><code>.w-40</code>: Left column with a width of 40%.</li>
+<li><code>.left</code>: Left-aligned content within the left column.</li>
+<li><code>.right</code>: Right column with additional content.</li>
+<li><code>.general-about</code>: Section for general information about the user.</li>
+<li><code>.profile-pic</code>: Container for the profile picture.</li>
+<li><code>.details</code>: Container for additional details about the user.</li>
+<li><code>.mood</code>: Section for the user's mood.</li>
+<li><code>.contact</code>: Section for contacting the user.</li>
+<li><code>.url-info</code>: Section for displaying the user's AnySpace URL.</li>
+<li><code>.table-section</code>: Section for displaying the user's interests.</li>
+</ul>
+</li>
+<li><code>.blog-preview</code>: Section for displaying the user's latest blog entries.</li>
+<li><code>.friends</code>: Section for displaying the user's friends and friend-related content.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Footer:</strong></p>
+<ul>
+<li><code>&lt;footer&gt;</code>: Footer section of the page.
+<ul>
+<li><code>.links</code>: Links within the footer.</li>
+<li><code>.copyright</code>: Copyright information.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>This hierarchy outlines the structure of the HTML elements and their respective classes in the page. Each class is used to style specific sections of the page, providing a clear organization of the content.</p>
 <h2 id="bbcode">BBCode </h2>
 <p>BBCode can be used in bio and comments in place of HTML (security reasons)</p>
 <table>

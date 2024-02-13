@@ -1,15 +1,10 @@
 <?php
-require("func/conn.php"); 
-require_once("func/settings.php");
+require("core/conn.php"); // Ensure this returns a PDO connection ($conn)
+require_once("core/settings.php");
+require_once("core/site/friend.php");
 require("lib/password.php");
 
-if (isset($_SESSION['user'])) {
-    header("Location: home.php");
-    exit;
-}
-
-$message = ''; 
-
+$message = ''; // Variable to hold messages for the user
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -17,15 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($_POST['password'] !== $_POST['confirm'] || strlen($_POST['username']) > 21) {
             $message = "<small>Passwords do not match up or username is too long.</small>";
         } else {
-            $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
-            $stmt->execute(array($_POST['username']));
-            if ($stmt->fetch()) {
-                $message .= "<small>There's already a user with that same name!</small><br>";
-                $namecheck = false;
-            } else {
-                $namecheck = true;
-            }
-
+            // Check for existing email only
             $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
             $stmt->execute(array($_POST['email']));
             if ($stmt->fetch()) {
@@ -35,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $emailcheck = true;
             }
 
-            if ($namecheck && $emailcheck) {
+            if ($emailcheck) {
                 $interests = array(
                     "General" => "",
                     "Music" => "",
@@ -52,7 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $stmt->execute(array($username, $email, $password, $jsonInterests));
 
+                $newUserId = $conn->lastInsertId();
+
+                autoAddFriend($newUserId);
                 $_SESSION['user'] = $username;
+                $_SESSION['userId'] = $newUserId;
                 header("Location: manage.php");
                 exit;
             }
@@ -69,21 +60,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Register</title>
     <link rel="stylesheet" href="static/css/header.css">
     <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/my.css">
 </head>
 
 <body>
     <div class="master-container">
         <?php require("navbar.php"); ?>
         <main>
-            <div class="center-container">
                 <h1>Register!</h1>
+                <br>
+            <div class="center-container">
                 <div class="contactInfo">
                     <div class="contactInfoTop">
                         <center>Benefits</center>
                     </div>
                     - Make new friends!<br>
                     - Talk to people!<br>
-                    - Algorithm Free!
+                    - Algorithm Free!<br>
+                    - Free and Open Source
                 </div>
                 <br>
                 <?php if ($message)

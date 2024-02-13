@@ -1,6 +1,5 @@
 <?php
-require_once("core/conn.php");
-require_once("core/settings.php");
+// Include database connection and settings once
 
 function autoAddFriend($newUserId) {
     global $conn;
@@ -9,6 +8,7 @@ function autoAddFriend($newUserId) {
     $insertStmt->execute(array(':senderId' => $systemUserId, ':receiverId' => $newUserId));
 }
 function addFriend($pdo, $senderId, $receiverId) {
+    // Check if the users are trying to friend themselves
     if ($senderId == $receiverId) {
         exit("You cannot friend yourself.");
     }

@@ -1,31 +1,31 @@
 <?php
-require_once("core/conn.php");
-require_once("core/settings.php");
-require("core/site/user.php"); 
-require("core/site/comment.php");
+require("../core/conn.php");
+require_once("../core/settings.php");
+require("../core/site/user.php"); 
+require("../core/site/comment.php");
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: index.php");
     exit; 
 }
 
-$toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; 
-$blogComments = fetchComments($toid);
+$toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; // Ensure you validate and sanitize input
+$bulletinComments = fetchBulletinComments($toid);
 
 ?>
 
-<?php require_once("header.php") ?>
+<?php require_once("bulletins-header.php") ?>
 
 <div class="simple-container">
-    <h1><?= fetchName($toid) ?>'s Friends Comments</h1>
-    <p><a href="profile.php?id=<?= $toid ?>">&laquo; Back to <?= fetchName($toid) ?>'s Profile</a></p>
+    <h1>Comments</h1>
+    <p><a href="bulletin.php?id=<?= $toid ?>">&laquo; Back to Bulletin</a></p>
     <br>
-    <?php if (empty($blogComments)): ?>
+    <?php if (empty($bulletinComments)): ?>
     <p>No comments yet.</p>
     <?php else: ?>
     <table class="comments-table" cellspacing="0" cellpadding="3" bordercolor="ffffff" border="1">
         <tbody>
-            <?php foreach ($blogComments as $comment): ?>
+            <?php foreach ($bulletinComments as $comment): ?>
             <tr>
                 <td>
                     <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
@@ -36,7 +36,7 @@ $blogComments = fetchComments($toid);
                         $pfpPath = fetchPFP($comment['author']);
                         $pfpPath = $pfpPath ? $pfpPath : 'default.png';
                     ?>
-                        <img class="pfp-fallback" src="pfp/<?= $pfpPath ?>" alt="<?= htmlspecialchars(fetchName($comment['author'])) ?>'s profile picture" loading="lazy" width="50px">
+                        <img class="pfp-fallback" src="/pfp/<?= $pfpPath ?>" alt="<?= htmlspecialchars(fetchName($comment['author'])) ?>'s profile picture" loading="lazy" width="50px">
                     </a>
                 </td>
                 <td>
@@ -59,4 +59,4 @@ $blogComments = fetchComments($toid);
     <?php endif; ?>
 </div>
 
-<?php require_once("footer.php") ?>
+<?php require_once("../footer.php") ?>

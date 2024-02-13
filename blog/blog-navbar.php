@@ -46,7 +46,7 @@
         'Board' => '/futaba.php',
         'Mail' => '/messages.php',
         'Blog' => '/blog/',
-        'Bulletins' => '/bulletins/bulletins.php',
+        'Bulletins' => '/bulletins/',
         'Forum' => '/forum.php',
         'Groups' => '/groups/',
         'Layouts' => '/layouts/',

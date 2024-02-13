@@ -5,8 +5,12 @@ require("core/site/user.php");
 require("core/site/friend.php");
 require("core/site/comment.php");
 require("core/site/blog.php");
+require("core/site/bulletin.php");
 
-login_check(); 
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit;
+}
 
 // Fetch user information
 $userInfo = fetchUserInfo($_SESSION['userId']);
@@ -37,7 +41,9 @@ $sinceJoined = time_elapsed_string($userInfo['date']);
 
 $profileViews = 0;
 
-$blogEntries = fetchBlogEntries($userId, 4);
+// Blogs & Bulletins
+$blogEntries = fetchBlogEntries($userId, 5);
+$bulletins = fetchAllFriendBulletins($userId, 5);
 
 ?>
 
@@ -60,6 +66,7 @@ $blogEntries = fetchBlogEntries($userId, 4);
         require("navbar.php");
         ?>
         <main>
+            <!-- Profile Box -->
             <div class="row profile user-home">
                 <div class="col w-40 left">
                     <div class="general-about home-actions">
@@ -81,6 +88,7 @@ $blogEntries = fetchBlogEntries($userId, 4);
                             <div class="more-options">
                                 <p>View My: <a href='profile.php?id=<?= $userId ?>'>Profile</a> | <a
                                         <a href='blog/user.php?id=<?= $userId ?>'>Blog</a> | <a
+                                        <a href='bulletins/userbulletins.php?id=<?= $userId ?>'>Bulletins</a> | <a
                                         href='friends.php?id=<?= $userId ?>'>Friends</a> | <a
                                         href='requests.php?id=<?= $userId ?>'>Requests</a>
                                 </p>
@@ -93,6 +101,8 @@ $blogEntries = fetchBlogEntries($userId, 4);
                         <p><a href="profile.php?id=<?= htmlspecialchars($userInfo['id']) ?>"><b>View Your
                                     Profile</b></p>
                     </div>
+
+
                     <!-- sidebar -->
                     <div class="indie-box">
                         <p>
@@ -126,7 +136,8 @@ $blogEntries = fetchBlogEntries($userId, 4);
                         </div>
                     </div>
                 </div>
-
+                
+                <!-- Stats & Blog -->
                 <div class="col right">
                     <div class="row top-row">
                         <div class="row top-row">
@@ -186,6 +197,9 @@ $blogEntries = fetchBlogEntries($userId, 4);
 
                         </div>
                     </div>
+
+
+                    <!-- NEW PEOPLE -->
                     <div class="new-people cool">
                         <div class="top">
                             <h4>Cool New People</h4>
@@ -214,15 +228,48 @@ $blogEntries = fetchBlogEntries($userId, 4);
                             </a>
                         </div>
                     </div>
+
+
+                    <!-- BULLETINS -->
                     <div class="bulletin-preview">
                         <div class="heading">
                             <h4>Your Friend's Bulletins</h4>
-                            <a class="more" href="/bulletins">[view all]</a>
+                            <a class="more" href="/bulletins/">[view all]</a>
                         </div>
+                        <?php if (!empty($bulletins)): ?>
                         <table class="bulletin-table preview">
+                            <thead>
+                                <tr>
+                                    <th scope="col">From</th>
+                                    <th scope="col">Subject</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($bulletins as $entry): ?>
+                                <tr>
+                                    <td class="user-info">
+                                        <a href="profile.php?id=<?= $entry['author'] ?>">
+                                        <p><?= fetchName($entry['author']) ?></p>
+                                        </a>
+                                    </td>
+                                    <td class="subject">
+                                        <a href="/bulletins/bulletin.php?id=<?= $entry['id'] ?>">
+                                        <p><b><?= $entry['title'] ?></b></p>
+                                        </a>
+                                    </td>
+                                </tr>
+                                 <?php endforeach; ?>
+                                <tr>
+                                <td colspan="2">
+                                <i><a href="/bulletins/">View all Bulletins</a></i>            </td>
+                            </tr>
+                            </tbody>
                         </table>
+                        <?php endif; ?>
                     </div>
 
+
+                    <!-- FRIENDS -->
                     <div class="friends">
                         <div class="heading">
                             <h4>Friend Requests</h4>
