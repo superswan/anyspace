@@ -23,9 +23,24 @@ function login_check() {
 
 
 function validateCSS($validate) {
-    $searchVal = array("<", ">", "<?php", "?>", "behavior: url");
-    $replaceVal = array("", "", "", "", "");
-    $validated = str_replace($searchVal, $replaceVal, $validate);
+    // Whitelisted tags
+    $allowedTags = '<style><img><iframe><a><h1><h2><h3><p><ul><ol><li><blockquote><code><em><strong><br>';
+
+    // Remove script tags
+    $validated = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $validate);
+    
+    // Remove PHP blocks
+    $validated = preg_replace('/<\?php(.*?)\?>/is', '', $validated);
+
+    // Remove any remaining PHP short tags
+    $validated = preg_replace('/<\?(?!php)(.*?)\?>/is', '', $validated);
+    
+    // Remove behavior: url()
+    $validated = str_replace("behavior: url", "", $validated);
+    
+    // Remove any remaining HTML tags except the allowed ones
+    $validated = strip_tags($validated, $allowedTags);
+
     return $validated;
 }
 

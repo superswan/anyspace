@@ -1,0 +1,10 @@
+<?php 
+$host = 'localhost';
+$dbname = 'anyspace';
+$username = 'anyspace';
+$password = 'sekrit';
+
+
+$siteName = "AnySpace";
+$domainName = "anyspace.example.com";
+?>

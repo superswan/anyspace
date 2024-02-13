@@ -1,6 +1,6 @@
 <?php
-require_once("core/conn.php"); 
-require_once("lib/sqUID.php"); // php sqUID implementation. generalize long or stupid filenames
+require_once("../core/conn.php"); 
+require_once("../lib/sqUID.php"); // php sqUID implementation. generalize long or stupid filenames
 
 function updateInterests($userId, $interests) {
     global $conn;
@@ -50,13 +50,13 @@ function uploadFile($userId, $file, $targetDir, $validTypes) {
         return;
     }
 
-    $prefix = $targetDir == "pfp/" ? "pfp" : "mus";
+    $prefix = $targetDir == "media/pfp/" ? "pfp" : "mus";
     $uniqueId = generateUniqueId($prefix);
     $newFileName = $uniqueId . "." . $fileType;
     $targetFile = $targetDir . $newFileName;
 
     if (move_uploaded_file($file["tmp_name"], $targetFile)) {
-        $column = $targetDir == "pfp/" ? "pfp" : "music";
+        $column = $targetDir == "media/pfp/" ? "pfp" : "music";
         $stmt = $conn->prepare("UPDATE users SET $column = ? WHERE id = ?");
         $stmt->execute(array($newFileName, $userId));
         $_SESSION['uploadStatus'] = 'File uploaded successfully.';

@@ -1,12 +1,14 @@
-pfp/*.jpg
-pfp/*.jpeg
-pfp/*.png
-pfp/*.gif
-!pfp/default.jpg
+core/config.php
+
+public/media/pfp/*.jpg
+public/media/pfp/*.jpeg
+public/media/pfp/*.png
+public/media/pfp/*.gif
+!public/media/pfp/default.jpg
 
 # Ignore MP3 files in the music directory except default.mp3
-music/*.mp3
-music/*.mp3.sfk
-!music/default.mp3
+public/media/music/*.mp3
+public/media/music/*.mp3.sfk
+!public/media/music/default.mp3
 
 .vscode

@@ -3,10 +3,11 @@ AnySpace is an Open Source Social Network similar to MySpace circa 2005
 
 ## Install
 
-1. Clone repo and transfer files to webserver
-2. Create database and update settings in `config.php`
-3. Set site and domain name in `config.php`
-4. Navigate to `http://<DOMAIN-NAME>/install.php`
+1. Clone repo and transfer files to webserver. Webserver should serve files in `public` directory.
+2. Create database 
+3. Update settings in `config.php.example` and rename to `config.php`
+4. Set site and domain name in `config.php`
+5. Navigate to `http://<DOMAIN-NAME>/install.php`
 
 `pfp` and `music` folders need r/w/x permissions for the webserver 
 
@@ -23,6 +24,7 @@ memory_limit = 128M
 
 ## Features
 
+- [ ] Admin Panel 
 - [ ] Authentication
   - [x] Login/Logout
   - [x] Registration
@@ -32,21 +34,65 @@ memory_limit = 128M
   - [x] Posting/Editing
   - [x] Comments
   - [ ] Categories
-- [ ] Bulletins
+- [x] Bulletins
 - [x] Comment System
 - [ ] Forum
 - [x] Friend System
 - [ ] Group System
 - [ ] Private Messaging
 - [ ] Report System
+- [ ] Session Management
 - [x] User Browser
 - [x] User Search
 - [x] User Profiles
   - [x] Profile Editing 
-  - [x] Custom CSS (untested)
+  - [x] Custom CSS 
 
 ## Screenshot
 
-![screenshot](docs/screenshot.png)
+![screenshot](public/docs/screenshot.png)
 
+## Project Structure
 
+```
+project-root/
+│
+├───core/                     # Core application logic
+│   ├───site/                 # Site-specific functionality
+│   └───tools/                # Tools and utilities
+│
+├───lib/                      # Libraries and dependencies
+│
+└───public/                   # Publicly accessible files
+    │
+    ├───blog/                 # Blog related files
+    │   └───editor/           # Trumbowyg WYSIWIG editor components
+    │       ├───langs/        # Language files for Trumbowyg
+    │       └───plugins/      # Plugins for Trumbowyg
+    │
+    ├───bulletins/             # Bulletins related files
+    ├───docs/                  # Documentation files
+    ├───forum/                 # Forum related files
+    ├───groups/                # Groups related files
+    ├───layouts/               # Layout related files
+    ├───media/                 # User uploaded media files
+    │   ├───music/             # Music files
+    │   └───pfp/               # Profile picture files
+    │
+    └───static/                # Static assets
+        ├───css/               # CSS files
+        ├───icons/             # Icon files
+        └───img/               # Image files
+```
+
+## Quirks
+- Developed with PHP 5.3 compatibility in mind due to limitations of developer hardware
+- Bad code parsing for user inputted fields
+- CSS
+
+## Credits
+
+[MySpace](myspace.com)
+[SpaceHey](spacehey.com)
+[This spacemy.xyz codebase](https://github.com/Ahe4d/spacemy.xyz)
+[Trumbowyg](https://github.com/Alex-D/Trumbowyg)
