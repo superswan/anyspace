@@ -92,7 +92,7 @@ project-root/
 
 ## Credits
 
-[MySpace](myspace.com)<br>
-[SpaceHey](spacehey.com)<br>
+[MySpace](https://myspace.com)<br>
+[SpaceHey](https://spacehey.com)<br>
 [This spacemy.xyz codebase](https://github.com/Ahe4d/spacemy.xyz)<br>
 [Trumbowyg](https://github.com/Alex-D/Trumbowyg)<br>
