@@ -7,52 +7,79 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 
+CREATE TABLE IF NOT EXISTS `blogcomments` (
+  `id` int(11) NOT NULL auto_increment,
+  `toid` int(11) NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `text` varchar(500) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `blogs` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
   `text` text NOT NULL,
   `author` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
   `title` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `bulletincomments` (
+  `id` int(11) NOT NULL auto_increment,
+  `toid` int(11) NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `text` varchar(500) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `bulletins` (
+  `id` int(11) NOT NULL auto_increment,
+  `text` text NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `comments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
   `toid` int(11) NOT NULL,
   `author` varchar(255) NOT NULL,
   `text` varchar(500) NOT NULL,
   `date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `friends` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
   `sender` varchar(255) NOT NULL,
   `receiver` varchar(255) NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'PENDING',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `status` varchar(255) NOT NULL default 'PENDING',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `groupcomments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
   `toid` int(11) NOT NULL,
   `author` varchar(255) NOT NULL,
   `text` varchar(500) NOT NULL,
   `date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `groups` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
   `description` varchar(500) NOT NULL,
   `author` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -64,27 +91,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `pfp` varchar(255) NOT NULL default 'default.jpg',
   `currentgroup` varchar(255) NOT NULL default 'None',
   `status` varchar(255) NOT NULL default '',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `bulletincomments` (
-  `id` int(11) NOT NULL,
-  `toid` int(11) NOT NULL,
-  `author` varchar(255) NOT NULL,
-  `text` varchar(500) NOT NULL,
-  `date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `bulletins` (
-  `id` int(11) NOT NULL,
-  `text` text NOT NULL,
-  `author` varchar(255) NOT NULL,
-  `date` datetime NOT NULL,
-  `title` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
