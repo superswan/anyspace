@@ -4,10 +4,9 @@ AnySpace is an Open Source Social Network similar to MySpace circa 2005
 ## Install
 
 1. Clone repo and transfer files to webserver. Webserver should serve files in `public` directory.
-2. Create database 
-3. Update settings in `config.php.example` and rename to `config.php`
-4. Set site and domain name in `config.php`
-5. Navigate to `http://<DOMAIN-NAME>/install.php`
+2. Create database and update settings in `config.php`
+3. Set site and domain name in `config.php`
+4. Navigate to `http://<DOMAIN-NAME>/install.php`
 
 `pfp` and `music` folders need r/w/x permissions for the webserver 
 
@@ -24,7 +23,7 @@ memory_limit = 128M
 
 ## Features
 
-- [ ] Admin Panel 
+- [x] Admin Panel 
 - [ ] Authentication
   - [x] Login/Logout
   - [x] Registration
@@ -36,9 +35,12 @@ memory_limit = 128M
   - [ ] Categories
 - [x] Bulletins
 - [x] Comment System
+  - [ ] Comment replies
+- [x] Favorite Users
 - [ ] Forum
 - [x] Friend System
 - [ ] Group System
+- [ ] Layout sharing feature
 - [ ] Private Messaging
 - [ ] Report System
 - [ ] Session Management
@@ -92,7 +94,7 @@ project-root/
 
 ## Credits
 
-[MySpace](https://myspace.com)<br>
-[SpaceHey](https://spacehey.com)<br>
-[This spacemy.xyz codebase](https://github.com/Ahe4d/spacemy.xyz)<br>
-[Trumbowyg](https://github.com/Alex-D/Trumbowyg)<br>
+[MySpace](myspace.com)
+[SpaceHey](spacehey.com)
+[This spacemy.xyz codebase](https://github.com/Ahe4d/spacemy.xyz)
+[Trumbowyg](https://github.com/Alex-D/Trumbowyg)

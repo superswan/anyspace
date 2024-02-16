@@ -95,7 +95,7 @@ $countTotalComments = count(fetchBlogComments($blogEntryId));
             </p>
         <?php endif; ?>
         <div class="content" itemprop="articleBody">
-            <?= $blogEntry['text'] ?>
+            <?= nl2br($blogEntry['text']) ?>
         </div>
         <!-- Comments Section -->
         <br>

@@ -1,4 +1,5 @@
 <?php
+// used to update users when implemented. keeping for now in case it becomes toggleable feature
 require("../conn.php");
 require("../settings.php");
 function autoAddAllUsersAsFriends($conn, $systemUserId = 1) {

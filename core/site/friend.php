@@ -7,13 +7,14 @@ function autoAddFriend($newUserId) {
     $insertStmt = $conn->prepare("INSERT INTO friends (sender, receiver, status) VALUES (:senderId, :receiverId, 'ACCEPTED')");
     $insertStmt->execute(array(':senderId' => $systemUserId, ':receiverId' => $newUserId));
 }
-function addFriend($pdo, $senderId, $receiverId) {
-    // Check if the users are trying to friend themselves
+function addFriend($senderId, $receiverId) {
+    global $conn;
+    
     if ($senderId == $receiverId) {
         exit("You cannot friend yourself.");
     }
 
-    $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM `friends` WHERE (sender = :senderId AND receiver = :receiverId) OR (sender = :receiverId AND receiver = :senderId)");
+    $checkStmt = $conn->prepare("SELECT COUNT(*) FROM `friends` WHERE (sender = :senderId AND receiver = :receiverId) OR (sender = :receiverId AND receiver = :senderId)");
     $checkStmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
     $exists = $checkStmt->fetchColumn() > 0;
 
@@ -21,26 +22,29 @@ function addFriend($pdo, $senderId, $receiverId) {
         exit('You are already friends or there is a friend request pending');
     }
 
-    $insertStmt = $pdo->prepare("INSERT INTO friends (sender, receiver, status) VALUES (:senderId, :receiverId, 'PENDING')");
+    $insertStmt = $conn->prepare("INSERT INTO friends (sender, receiver, status) VALUES (:senderId, :receiverId, 'PENDING')");
     $insertStmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
 
     header("Location: requests.php");
 }
 
-function acceptFriend($pdo, $senderId, $receiverId) {
-    $stmt = $pdo->prepare("UPDATE friends SET status = 'ACCEPTED' WHERE sender = :senderId AND receiver = :receiverId AND status = 'PENDING'");
+function acceptFriend($senderId, $receiverId) {
+    global $conn;
+    $stmt = $conn->prepare("UPDATE friends SET status = 'ACCEPTED' WHERE sender = :senderId AND receiver = :receiverId AND status = 'PENDING'");
     $stmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
 
     header("Location: requests.php");
 }
 
-function revokeFriend($pdo, $senderId, $receiverId) {
-    $stmt = $pdo->prepare("DELETE FROM friends WHERE sender = :senderId AND receiver = :receiverId AND status = 'PENDING'");
+function revokeFriend($senderId, $receiverId) {
+    global $conn;
+    $stmt = $conn->prepare("DELETE FROM friends WHERE sender = :senderId AND receiver = :receiverId AND status = 'PENDING'");
     $stmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
 }
 
-function removeFriend($pdo, $senderId, $receiverId) {
-    $stmt = $pdo->prepare("DELETE FROM friends WHERE (sender = :senderId AND receiver = :receiverId) OR (sender = :receiverId AND receiver = :senderId) AND status = 'ACCEPTED'");
+function removeFriend($senderId, $receiverId) {
+    global $conn;
+    $stmt = $conn->prepare("DELETE FROM friends WHERE (sender = :senderId AND receiver = :receiverId) OR (sender = :receiverId AND receiver = :senderId) AND status = 'ACCEPTED'");
     $stmt->execute(array(':senderId' => $senderId, ':receiverId' => $receiverId));
 }
 
@@ -100,4 +104,13 @@ function checkFriend($userId, $targetId) {
         error_log("Error checking friendship: " . $e->getMessage());
         return false; // Assuming false in case of an error
     }
+}
+
+function checkFriendPending($userId, $profileId) {
+    global $conn;
+    $query = "SELECT COUNT(*) AS count FROM friends WHERE (sender = :userId AND receiver = :profileId AND status = 'PENDING') OR (sender = :profileId AND receiver = :userId AND status = 'PENDING')";
+    $stmt = $conn->prepare($query);
+    $stmt->execute(array(':userId' => $userId, ':profileId' => $profileId));
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return ($row['count'] > 0);
 }

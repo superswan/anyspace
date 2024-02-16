@@ -13,6 +13,8 @@ if (DEBUG == true) {
 define("SITE_NAME", $siteName);
 define("DOMAIN_NAME", $domainName);
 
+define("ADMIN_USER", $adminUser);
+
 // Helper Functions (Will eventually get moved)
 function login_check() {
     if (!isset($_SESSION['user'])) {
@@ -24,7 +26,7 @@ function login_check() {
 
 function validateCSS($validate) {
     // Whitelisted tags
-    $allowedTags = '<style><img><iframe><a><h1><h2><h3><p><ul><ol><li><blockquote><code><em><strong><br>';
+    $allowedTags = '<style><img><div><iframe><a><h1><h2><h3><p><ul><ol><li><blockquote><code><em><strong><br>';
 
     // Remove script tags
     $validated = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $validate);

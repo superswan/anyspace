@@ -24,7 +24,7 @@ function fetchUserBlogs($pdo, $username)
 // attribute specific functions
 function fetchName($id) {
     global $conn; // Use the globally defined connection
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
+    $stmt = $conn->prepare("SELECT username FROM users WHERE id = :id");
     $stmt->execute(array(':id' => $id));
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (count($result) === 0) return 'error';
@@ -34,7 +34,7 @@ function fetchName($id) {
 
 function fetchPFP($id) {
     global $conn; // Use the globally defined connection
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
+    $stmt = $conn->prepare("SELECT pfp FROM users WHERE id = :id");
     $stmt->execute(array(':id' => $id));
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (count($result) === 0) return 'error';
@@ -55,12 +55,54 @@ function fetchUserStatus($id) {
         } else {
             return null;
         }
+
     } catch (PDOException $e) {
         error_log('Fetch user status failed: ' . $e->getMessage());
         return null;
     }
 }
 
+function addFavorite($userId, $favoriteId) {
+    global $conn;
+    // Fetch the current favorites JSON string
+    $query = "SELECT favorites FROM favorites WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute(array($userId));
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $currentFavorites = $row ? json_decode($row['favorites'], true) : array();
+
+    $currentFavorites[] = $favoriteId;
+
+    $updatedFavorites = json_encode($currentFavorites);
+
+    $query = "INSERT INTO favorites (user_id, favorites) VALUES (?, ?)
+              ON DUPLICATE KEY UPDATE favorites = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute(array($userId, $updatedFavorites, $updatedFavorites));
+}
+
+function fetchFavorites($userId) {
+    global $conn;
+    $query = "SELECT favorites FROM favorites WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute(array($userId));
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row ? $row['favorites'] : ''; // Return the JSON string directly
+}
+
+function printPerson($userId) {
+    $username = fetchName($userId);
+    $profilePicPath = fetchPFP($userId);
+
+    $profilePicPath = htmlspecialchars('media/pfp/' . $profilePicPath);
+    $profileLink = 'profile.php?id=' . $userId;
+    $username = htmlspecialchars($username);
+
+    echo "<div class='person'>";
+    echo "<a href='{$profileLink}'><p>{$username}</p></a>";
+    echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
+    echo "</div>";
+}
 
 
 

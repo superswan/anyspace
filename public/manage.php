@@ -5,6 +5,8 @@ require_once("../core/settings.php");
 require_once("../core/site/user.php");
 require_once("../core/site/edit.php");
 
+login_check();
+
 $userInfo = fetchUserInfo($_SESSION['userId']); // Assume this function exists and fetches user info
 if ($userInfo) {
     $bio = $userInfo['bio'];
@@ -70,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="col right">
                     <h1>Edit Profile</h1>
                     <p>All fields are optional and can be left empty</p>
+                    <a href="profile.php?id=<?= $_SESSION['userId'] ?>">&laquo; View Profile</a>
                     <div class="profile-pic">
                         <?php
                         echo '<h1>' . htmlspecialchars($_SESSION['user']) . '</h1><br>' . '<img width="180px" height="auto" src="media/pfp/' . fetchPFP($_SESSION['userId']) . '"><br>';

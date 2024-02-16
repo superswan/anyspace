@@ -4,10 +4,7 @@ require_once("../core/settings.php");
 require("../core/site/user.php"); 
 require("../core/site/comment.php");
 
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: index.php");
-    exit; 
-}
+login_check();
 
 $toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; 
 

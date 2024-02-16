@@ -2,15 +2,15 @@
 <html>
 
 <head>
-    <title><?= SITE_NAME ?></title>
+    <title><?= SITE_NAME ?> | Admin Panel</title>
     <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="description" content="An Open Source social network">
-    <link rel="stylesheet" href="static/css/normalize.css">
-    <link rel="stylesheet" href="static/css/header.css">
-    <link rel="stylesheet" href="static/css/base.css">
-    <link rel="stylesheet" href="static/css/my.css">
+    <link rel="stylesheet" href="../public/static/css/normalize.css">
+    <link rel="stylesheet" href="../public/static/css/header.css">
+    <link rel="stylesheet" href="../public/static/css/base.css">
+    <link rel="stylesheet" href="../public/static/css/my.css">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">

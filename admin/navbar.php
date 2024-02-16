@@ -5,7 +5,7 @@
       <div class="left">
         <a href="index.php">
             <?= SITE_NAME ?>
-          </a> | <a href="index.php">Home</a>
+          </a> | <a href="index.php">Admin Panel</a>
       </ul>
     </div>
     <div class="center">
@@ -44,16 +44,18 @@
       $isHomePage = in_array($currentPage, array('index.php', 'home.php'));
 
       $navItems = array(
-        'Home' => 'index.php',
-        'Browse' => 'browse.php',
+        'General' => 'index.php',
+        'Users' => 'users.php',
         'Search' => 'search.php',
-        'Board' => 'futaba.php',
+        'Reports' => 'futaba.php',
+        /*
         'Mail' => 'messages.php',
         'Blog' => 'blog/',
         'Bulletins' => 'bulletins/',
         'Forum' => 'forum.php',
         'Groups' => '#',
         'Layouts' => '#',
+        */
         'Favs' => 'favorites.php',
         'Source' => 'https://github.com/superswan/anyspace',
         'Help' => 'docs/help.html',

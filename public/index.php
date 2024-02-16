@@ -1,6 +1,7 @@
 <?php
 require("../core/conn.php");
 require("../core/settings.php");
+require("../core/site/user.php");
 require("../lib/password.php");
 
 if (isset($_SESSION['user'])) {
@@ -36,12 +37,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 <html>
 
 <head>
+<title><?= SITE_NAME ?> | A Space for Anyone</title>
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="description" content="An Open Source social network">
     <link rel="stylesheet" href="static/css/normalize.css">
     <link rel="stylesheet" href="static/css/header.css">
     <link rel="stylesheet" href="static/css/base.css">
     <link rel="stylesheet" href="static/css/my.css">
-        <style>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url"  content="https://<?= DOMAIN_NAME ?>/">
+    <meta property="og:title" content="<?= SITE_NAME ?>">
+    <meta property="og:description" content="A brief description of your site.">
+    <meta property="og:image" content="https://yourwebsite.com/static/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://<?= DOMAIN_NAME ?>/">
+    <meta name="twitter:title" content="<?= SITE_NAME ?>">
+    <meta name="twitter:description" content="<?= SITE_NAME ?> a space for anyone">
+    <meta name="twitter:image" content="">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden; 
+        }
+
         @media screen and (max-width: 768px) {
             .row.home {
                 display: flex;
@@ -81,18 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                         </div>
                         <div class="inner">
                             <?php
-                            $stmt = $conn->prepare("SELECT id, username, pfp FROM `users` ORDER BY date DESC LIMIT 4");
+                            $stmt = $conn->prepare("SELECT id FROM `users` ORDER BY date DESC LIMIT 4");
                             $stmt->execute();
 
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                $profilePicPath = htmlspecialchars('media/pfp/' . $row['pfp']);
-                                $profileLink = 'profile.php?id=' . $row['id'];
-                                $username = htmlspecialchars($row['username']);
-
-                                echo "<div class='person'>";
-                                echo "<a href='{$profileLink}'><p>{$username}</p></a>";
-                                echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
-                                echo "</div>";
+                                printPerson($row['id']);
                             }
                             ?>
                         </div>

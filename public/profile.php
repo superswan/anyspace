@@ -6,12 +6,17 @@ require("../core/site/comment.php");
 require("../core/site/friend.php");
 require("../core/site/blog.php");
 
+
+if(isset($_SESSION['userId'])) {
+    $userId = $_SESSION['userId'];
+} else {
+    $userId = null;
+}
+
 // Fetch user information
 $userInfo = fetchUserInfo($_GET['id']);
 $user = $userInfo ? $userInfo['username'] : '';
-$userId = $userInfo['id'];
-$id = $userId;
-
+$profileId = $userInfo['id'];
 
 $userInterests = $userInfo['interests'];
 $interests = json_decode($userInterests, true);
@@ -20,17 +25,32 @@ $interests = json_decode($userInterests, true);
 $blogs = fetchUserBlogs($conn, $user);
 
 $friends = array_merge(
-    fetchFriends($conn, 'ACCEPTED', 'receiver', $userId),
-    fetchFriends($conn, 'ACCEPTED', 'sender', $userId)
+    fetchFriends($conn, 'ACCEPTED', 'receiver', $profileId),
+    fetchFriends($conn, 'ACCEPTED', 'sender', $profileId)
 );
-$friendsTopEight = fetchUserFriends($userId, 8);
-// Fetch comments
-$limitedComments = fetchComments($id, 20);
-$countComments = count($limitedComments);
-$countTotalComments = count(fetchComments($id));
+$friendsTopEight = fetchUserFriends($profileId, 8);
 
-$blogEntries = fetchBlogEntries($userId, 4);
-$statusInfo = fetchUserStatus($userId);
+$isFriend = false;
+$isPendingFriend = false;
+
+if ($userId !== null) {
+    // Check if users are friends
+    $isFriend = checkFriend($userId, $profileId);
+    
+    if (!$isFriend) {
+        // If they are not friends, check for pending friend requests
+        $isPendingFriend = checkFriendPending($userId, $profileId);
+    }
+}
+
+// Fetch comments
+$toid = $profileId;
+$comments = fetchComments($profileId, 20);
+$countComments = count($comments);
+$countTotalComments = count(fetchComments($profileId));
+
+$blogEntries = fetchBlogEntries($profileId, 4);
+$statusInfo = fetchUserStatus($profileId);
 
 ?>
 
@@ -40,9 +60,14 @@ $statusInfo = fetchUserStatus($userId);
 <head>
     <title><?= $user ?>'s Profile | <?= SITE_NAME ?></title>
     <link rel="stylesheet" href="static/css/normalize.css">
-    <link rel="stylesheet" href="static/css/header.css">
-    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/base.css"> 
     <link rel="stylesheet" href="static/css/my.css">
+
+    <style>
+        .profile-info {
+            height: 82px;
+        }
+    </style>
 </head>
 
 <body>
@@ -70,9 +95,10 @@ $statusInfo = fetchUserStatus($userId);
         <div class="right">
             <ul class="topnav signup">
                 <?php if (isset($_SESSION['user'])): ?>
-                    <a href="docs/help.html">Help</a> | <a href="logout.php">Logout</a>
+                    <a href="docs/help.html">Help</a> | <a href="logout.php">LogOut</a>
                 <?php else: ?>
-                    <a href="docs/help.html">Help</a>
+                    <a href="docs/help.html">Help</a> |
+                    <a href="docs/help.html">LogIn</a> |
                     <a href="register.php">SignUp</a>
                 <?php endif; ?>
             </ul>
@@ -117,10 +143,12 @@ $statusInfo = fetchUserStatus($userId);
 
 
         <main>
+            <!-- USER PROFILE -->
             <div class="row profile" itemscope itemtype="https://schema.org/Person">
                 <meta itemprop="url"
-                    content="https://<?= htmlspecialchars(DOMAIN_NAME); ?>profile.php?id=<?= htmlspecialchars($userInfo['username']); ?>">
-                <meta itemprop="identifier" content="<?= htmlspecialchars($userInfo['username']); ?>">
+                    content="https://<?= htmlspecialchars(DOMAIN_NAME); ?>profile.php?id=<?= htmlspecialchars($profileId); ?>">
+                <meta itemprop="identifier" content="<?= htmlspecialchars($user); ?>">
+            <!-- LEFT COLUMN -->
                 <div class="col w-40 left">
                     <span itemprop="name" style="margin-top: 0;">
                         <?php if ($userInfo): ?>
@@ -128,6 +156,7 @@ $statusInfo = fetchUserStatus($userId);
                                 <?= htmlspecialchars($userInfo['username']); ?>
                             </h1>
                         </span>
+            <!-- PROFILE PICTURE BOX -->
                         <div class="general-about">
                             <div class="profile-pic">
                                 <img class='pfp-fallback' width='235px;' alt="user pfp" src='media/pfp/<?= htmlspecialchars($userInfo['pfp']); ?>'>
@@ -145,11 +174,11 @@ $statusInfo = fetchUserStatus($userId);
                                         ONLINE!</p>
                                 </div>
                             </div>
-                            
+            <!-- AUDIO -->
                             <audio controls autoplay style="max-height: 40px; width: 100%;">
                                 <source src="media/music/<?= htmlspecialchars($userInfo['music']); ?>" type="audio/ogg">
                         </audio> 
-
+            <!-- MOOD -->
 
                         <div class="mood">
                             <p>
@@ -158,27 +187,50 @@ $statusInfo = fetchUserStatus($userId);
                             </p>
                             <p>
                                 <b>View my:
-                                    <a href="blog/user.php?id=<?= $userInfo['id'] ?>">Blog</a>
+                                    <a href="blog/user.php?id=<?= $userInfo['id'] ?>">Blog</a> 
+                                    <?php if ($isFriend || $userId == $profileId): ?>
+                                    |
+                                    <a href="bulletins/userbulletins.php?id=<?= $userInfo['id'] ?>">Bulletins</a> 
+                                    <?php endif; ?>
                                 </b>
                             </p>
                         </div>
+
+
+
+
+                        <!-- CONTACT BOX -->
                         <div class="contact">
                             <div class="heading">
                                 <h4>Contacting
-                                    <?= htmlspecialchars($userInfo['username']); ?>
+                                    <?= htmlspecialchars($user); ?>
                                 </h4>
                             </div>
                             <div class="inner">
                                 <div class="f-row">
                                     <div class="f-col">
-                                        <a href="friends.php?action=add&id=<?= htmlspecialchars($userInfo['id']); ?>"
+                                        <?php if ($isFriend): ?>
+                                        <a href="unfriend.php?action=add&id=<?= htmlspecialchars($profileId); ?>"
+                                            rel="nofollow">
+                                            <img src="static/icons/delete.png" class="icon" aria-hidden="true" loading="lazy"
+                                                alt=""> Remove Friend
+                                        </a>
+                                        <?php elseif ($isPendingFriend): ?>
+                                        <a href="requests.php"
+                                            rel="nofollow">
+                                            <img src="static/icons/hourglass.png" class="icon" aria-hidden="true" loading="lazy"
+                                                alt=""> Pending Request
+                                        </a>
+                                        <?php else: ?>
+                                        <a href="friends.php?action=add&id=<?= htmlspecialchars($profileId); ?>"
                                             rel="nofollow">
                                             <img src="static/icons/add.png" class="icon" aria-hidden="true" loading="lazy"
                                                 alt=""> Add to Friends
                                         </a>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="f-col">
-                                        <a href="#" rel="nofollow">
+                                        <a href="addfavorite.php?id=<?= $profileId ?>" rel="nofollow">
                                             <img src="static/icons/award_star_add.png" class="icon" aria-hidden="true"
                                                 loading="lazy" alt=""> Add to Favorites
                                         </a>
@@ -228,12 +280,23 @@ $statusInfo = fetchUserStatus($userId);
                                 </div>
                             </div>
                         </div>
+
+
+
+
+                        <!-- URL BOX -->
                         <div class="url-info">
                             <p><b>
                                     <?= htmlspecialchars(SITE_NAME); ?> URL:
                                 </b></p>
-                            <p>https://<?= htmlspecialchars(DOMAIN_NAME); ?>/profile.php?id=<?= htmlspecialchars($userInfo['id']); ?></p>
+                            <p>https://<?= htmlspecialchars(DOMAIN_NAME); ?>/profile.php?id=<?= htmlspecialchars($profileId); ?></p>
                         </div>
+
+
+
+
+
+                        <!-- INTERESTS -->
                         <div class="table-section">
                             <div class="heading">
                                 <h4>
@@ -313,11 +376,34 @@ $statusInfo = fetchUserStatus($userId);
                         <?php endif; ?>
                     </div>
                 </div>
+
+
+
+
                 <!-- RIGHT COLUMN -->
                 <div class="col right">
+
+                <!-- UGLY BLOCK -->
+                    <?php if($isFriend): ?>
+                    <div class="profile-info">
+                        <div class="inner">
+                            <h3><?= $user . " is your Friend." ?></h3>
+                        </div>
+                    </div>
+                    <?php elseif ($userId == $profileId): ?>
+                    <div class="profile-info">
+                        <div class="inner">
+                            <h3><a href="manage.php">Edit Your Profile</a></h3>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
+
+
+                <!-- BLOG -->
                     <div class="blog-preview">
                         <h4>
-                            <?= htmlspecialchars($userInfo['username']); ?>'s Latest Blog Entries [<a href="/blog/user.php?id=<?= $userInfo['id'] ?>">View
+                            <?= htmlspecialchars($userInfo['username']); ?>'s Latest Blog Entries [<a href="blog/user.php?id=<?= $userInfo['id'] ?>">View
                                 Blog</a>]
                         </h4>
                         <?php if (empty($blogEntries)): ?>
@@ -325,7 +411,7 @@ $statusInfo = fetchUserStatus($userId);
                                 <?php else: ?>
                                     <?php foreach ($blogEntries as $entry): ?>
                                         <?php
-                                        $maxTitleLength = 20;
+                                        $maxTitleLength = 25;
                                         $title = $entry['title'];
                                         if (mb_strlen($title) > $maxTitleLength) {
                                             $title = mb_substr($title, 0, $maxTitleLength) . '...';
@@ -339,6 +425,11 @@ $statusInfo = fetchUserStatus($userId);
                                 <?php endif; ?>
 
                     </div>
+
+
+
+
+                    <!-- BLURBS -->
                     <div class="blurbs">
                         <div class="heading">
                             <h4>
@@ -349,6 +440,8 @@ $statusInfo = fetchUserStatus($userId);
                             <div class="section">
                                 <p itemprop="description">
                                     <?= $userInfo['bio']; ?>
+                                    
+                                    
                                     <!-- USER STYLES -->
                                     <?php
                                     $stmt = $conn->prepare("SELECT * FROM `users` WHERE id = :id");
@@ -361,13 +454,17 @@ $statusInfo = fetchUserStatus($userId);
                                 </p>
                             </div>
                         </div>
-                        </div>
+                    </div>
+
+
+
+                    <!-- TOP 8 FRIENDS -->
                     <div class="friends">
                         <div class="heading">
                             <h4>
                                 <?= htmlspecialchars($userInfo['username']); ?>'s Friend Space
                             </h4>
-                            <a class="more" href="friends.php?id=<?= $userId ?>">[view all]</a>
+                            <a class="more" href="friends.php?id=<?= $profileId ?>">[view all]</a>
                         </div>
                         <div class="inner">
                             <p><b>
@@ -378,20 +475,22 @@ $statusInfo = fetchUserStatus($userId);
                             <div class="friends-grid">
                                 <?php
                                 foreach ($friendsTopEight as $friend) {
-                                    $friendId = $id === $friend['sender'] ? $friend['receiver'] : $friend['sender'];
+                                    $friendId = $profileId === $friend['sender'] ? $friend['receiver'] : $friend['sender'];
 
-                                    if ($friendId == $id) {
+                                    if ($friendId == $profileId) {
                                         continue;
                                     }
-                                    $friendName = fetchName($friendId);
-                                    $friendPfp = fetchPFP($friendId);
-
-                                    echo "<div class='person'><a href='profile.php?id=" . htmlspecialchars($friendId) . "'><center><b>" . htmlspecialchars($friendName) . "</b></center><br><img width='125px' src='media/pfp/" . htmlspecialchars($friendPfp) . "'></a></div>";
+                                    printPerson($friendId);
                                 }
                                 ?>
                             </div>
                         </div>
                     </div>
+
+
+
+
+                    <!-- COMMENTS -->
                     <div class="friends" id="comments">
                         <div class="heading">
                             <h4>
@@ -410,47 +509,7 @@ $statusInfo = fetchUserStatus($userId);
                             <table class="comments-table" cellspacing="0" cellpadding="3" bordercolor="ffffff"
                                 border="1">
                                 <tbody>
-                                    <?php foreach ($limitedComments as $comment): ?>
-                                        <tr>
-                                            <td>
-                                                <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
-                                                    <p>
-                                                        <?= htmlspecialchars(fetchName($comment['author'])) ?>
-                                                    </p>
-                                                </a>
-                                                <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
-                                                    <?php
-                                                    $pfpPath = fetchPFP($comment['author']);
-                                                    $pfpPath = $pfpPath ? $pfpPath : 'default.png';
-                                                    ?>
-                                                    <img class="pfp-fallback" src="media/pfp/<?= $pfpPath ?>"
-                                                        alt="<?= htmlspecialchars(fetchName($comment['author'])) ?>'s profile picture"
-                                                        loading="lazy" width="50px">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <p><b><time class="">
-                                                            <?= time_elapsed_string($comment['date']) ?>
-                                                        </time></b></p>
-                                                <p>
-                                                    <?= htmlspecialchars($comment['text']) ?>
-                                                </p>
-                                                <br>
-                                                <p class="report">
-                                                    <a href="/report?type=comment&id=<?= htmlspecialchars($comment['id']) ?>"
-                                                        rel="nofollow">
-                                                        <img src="/static/icons/flag_red.png"
-                                                            class="icon" aria-hidden="true" loading="lazy" alt=""> Report
-                                                        Comment
-                                                    </a>
-                                                </p>
-                                                <a
-                                                    href="/addcomment?id=<?= $comment['author'] ?>&reply=<?= htmlspecialchars($comment['id']) ?>">
-                                                    <button>Add Reply</button>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
+                                    <?php include("../core/components/comments_block.php") ?> 
                                 </tbody>
                             </table>
                         </div>

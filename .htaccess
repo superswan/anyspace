@@ -1,2 +1,2 @@
 RewriteEngine On
-RewriteRule ^(func|lib)/ - [F,L]
+RewriteRule ^(core|lib)/ - [F,L]

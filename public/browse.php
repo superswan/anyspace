@@ -71,28 +71,20 @@ function isFilterActive($filter, $friends = null) {
         </div>
         <div class="inner">
             <?php
-          if ($view === 'new') {
-            $query = "SELECT id, username, pfp FROM `users` ORDER BY id DESC";
-        } else if ($view === 'online') { // Example for future implementation
-            $query = "SELECT id, username, pfp FROM `users` WHERE online_status = 'Online'";
-        } else {
-            $query = "SELECT id, username, pfp FROM `users`";
-        }
-        
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
+            if ($view === 'new') {
+                $query = "SELECT id, username, pfp FROM `users` ORDER BY id DESC";
+            } else if ($view === 'online') { 
+                $query = "SELECT id, username, pfp FROM `users` WHERE online_status = 'Online'";
+            } else {
+                $query = "SELECT id, username, pfp FROM `users`";
+            }
+
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
 
             // Fetch and display each row
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $profilePicPath = htmlspecialchars('media/pfp/' . $row['pfp']);
-                $profileLink = 'profile.php?id=' . $row['id'];
-                $username = htmlspecialchars($row['username']);
-
-                // Display link with profile picture and username
-                echo "<div class='person'>";
-                echo "<a href='{$profileLink}'><p>{$username}</p></a>";
-                echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
-                echo "</div>";
+                printPerson($row['id']);
             }
             ?>
         </div>

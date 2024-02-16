@@ -1,10 +1,12 @@
 <?php 
+// Database configuration 
 $host = 'localhost';
 $dbname = 'anyspace';
 $username = 'anyspace';
-$password = 'sekrit';
+$password = '';
 
-
+// Site localization
 $siteName = "AnySpace";
-$domainName = "anyspace.example.com";
+$domainName = "anyspace.3to.moe";
+
 ?>

@@ -50,17 +50,17 @@ $you = $statusInfo['you'];
                 <h3>Status:</h3>
             </label>
             <p>What are you doing right now?</p><input type="text" maxlength="65" class="status_input"
-                id="category_status" name="category[status]" value="">
+                id="category_status" name="category[status]" value="<?= $status ?>">
             <p><b>Examples:</b> <i>reading, chilling, studying, sleeping, ...</i></p><br><label for="category_mood">
                 <h3>Mood:</h3>
             </label>
             <p>How are you feeling right now?</p><input type="text" maxlength="65" class="status_input"
-                id="category_mood" name="category[mood]" value="">
+                id="category_mood" name="category[mood]" value="<?= $mood ?>">
             <p><b>Examples:</b> <i>busy, bored, happy, sad, ...</i></p><br><label for="category_you">
                 <h3>You:</h3>
             </label>
             <p>A few short words about yourself.</p><input type="text" maxlength="65" class="status_input"
-                id="category_you" name="category[you]" value="">
+                id="category_you" name="category[you]" value="<?= $you ?>">
             <p><b>Examples:</b> <i>Your age, country, ...</i></p><br> <br><br>
             <button type="submit" name="submit">Save All</button>
         </form>

@@ -7,10 +7,7 @@ require("../core/site/comment.php");
 require("../core/site/blog.php");
 require("../core/site/bulletin.php");
 
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
-}
+login_check();
 
 // Fetch user information
 $userInfo = fetchUserInfo($_SESSION['userId']);
@@ -203,22 +200,15 @@ $bulletins = fetchAllFriendBulletins($userId, 5);
                     <div class="new-people cool">
                         <div class="top">
                             <h4>Cool New People</h4>
-
+                            <a class="more" href="browse.php">[view more]</a>
                         </div>
                         <div class="inner">
                             <?php
-                            $stmt = $conn->prepare("SELECT id, username, pfp FROM `users` ORDER BY date DESC LIMIT 4");
+                            $stmt = $conn->prepare("SELECT id FROM `users` ORDER BY date DESC LIMIT 4");
                             $stmt->execute();
 
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                $profilePicPath = htmlspecialchars('media/pfp/' . $row['pfp']);
-                                $profileLink = 'profile.php?id=' . $row['id'];
-                                $username = htmlspecialchars($row['username']);
-
-                                echo "<div class='person'>";
-                                echo "<a href='{$profileLink}'><p>{$username}</p></a>";
-                                echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
-                                echo "</div>";
+                                printPerson($row['id']);
                             }
                             ?>
                         </div>

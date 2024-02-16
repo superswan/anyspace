@@ -10,7 +10,7 @@ function createBlogEntry($authorId, $postContent)
         $date = date('Y-m-d H:i:s');
 
         $title = strip_tags($title);
-        $text = strip_tags($text);
+        $text = validateCSS($text);
 
         try {
             $stmt = $conn->prepare("INSERT INTO blogs (title, text, author, date) VALUES (?, ?, ?, ?)");
@@ -41,7 +41,7 @@ function updateBlogEntry($entryId, $authorId, $postContent) {
         $date = date('Y-m-d H:i:s'); 
 
         $title = strip_tags($title);
-        $text = strip_tags($text);
+        $text = validateCSS($text);
 
         try {
             $stmt = $conn->prepare("UPDATE blogs SET title = ?, text = ?, date = ? WHERE id = ? AND author = ?");

@@ -4,10 +4,7 @@ require_once("../core/settings.php");
 require("../core/site/friend.php");
 require("../core/site/user.php");
 
-if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
-}
+login_check();
 
 $user = $_SESSION['user'];
 $userId = $_SESSION['userId'];
@@ -20,16 +17,16 @@ $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if (!empty($action)) {
     switch ($action) {
         case 'accept':
-            acceptFriend($conn, $id, $userId);
+            acceptFriend($id, $userId);
             break;
         case 'add':
-            addFriend($conn, $userId, $id);
+            addFriend($userId, $id);
             break;
         case 'revoke':
-            revokeFriend($conn, $userId, $id);
+            revokeFriend($userId, $id);
             break;
         case 'remove':
-            removeFriend($conn, $userId, $id);
+            removeFriend($userId, $id);
             break;
         default:
             exit('Invalid action.');
@@ -86,11 +83,8 @@ $acceptedFriends = array_merge(
                                 if ($friendId == $id) {
                                     $friendId = $friend['receiver'];
                                 }
- 
-                                $friendName = fetchName($friendId);
-                                $friendPfp = fetchPFP($friendId);
-
-                                echo "<div class='person'><a href='profile.php?id=" . htmlspecialchars($friendId) . "'><center><b>" . htmlspecialchars($friendName) . "</b></center><br><img width='125px' src='media/pfp/" . htmlspecialchars($friendPfp) . "'></div>";
+                                
+                                printPerson($friendId);
                             }
                         }
                         ?>

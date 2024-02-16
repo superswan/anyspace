@@ -1,13 +1,12 @@
 <?php
 require("../../core/conn.php");
 require_once("../../core/settings.php");
-require_once("../core/site/blog.php");
+require_once("../../core/site/blog.php");
 
 login_check();
 
 $user = $_SESSION['user'];
 $userId = $_SESSION['userId'];
-
 
 
 $blogEntry = fetchBlogEntry($_GET['id']);

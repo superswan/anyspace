@@ -11,7 +11,9 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit; 
 }
 
-$toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; 
+$toid = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+// May need to add check for friend of author of bulletin
 
 if (isset($_SESSION['user'], $_POST['submit'], $_POST['comment']) && !empty($_POST['comment'])) {
     //remove to allow unique usernames

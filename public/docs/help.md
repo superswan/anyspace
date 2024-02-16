@@ -26,7 +26,699 @@ This covers the main sections of the profile page. You can further refine each r
 
 ### CSS Cheat Sheet
 
-### CSS Examples
+The following content has been taken from SpaceHey user 𝙙✩𝙣𝙣𝙮
+https://blog.spacehey.com/entry?id=1087827
+
+#### Changing background color:
+
+```html
+<style>
+
+body {
+
+background color: example color !important;
+
+}
+
+</style>
+```
+
+[you can use a color code, eg. #ffffff (white), or just a word, eg. 'white', in the 'example color' section. this applies to all codes.]
+
+
+
+#### Changing background image:
+
+```
+<style>
+
+body {
+
+background-image: url("insert link here") !important;
+
+background-color: example color !important;
+
+background-attachment: fixed !important;
+
+margin: 0;
+
+padding: 0;
+
+}
+
+<style>
+```
+
+
+
+#### inserting an image/gif anywhere:
+
+```
+<img src="insert link here"/>
+```
+
+
+#### changing your cursor:
+
+[go onto cursors-4u.com, find a cursor you want, find the 'code' section, and copy it into your 'about me' in between two style tags. for example:]
+
+```
+<style>
+
+<style type="text/css">* {cursor: url(https://ani.cursors-4u.net/symbols/sym-8/sym761.ani), url(https://ani.cursors-4u.net/symbols/sym-8/sym761.png), auto !important;}</style><a href="https://www.cursors-4u.com/cursor/2014/03/25/sexy-red-lips.html" target="_blank" title="Sexy Red Lips"><img src="https://cur.cursors-4u.net/cursor.png" border="0" alt="Sexy Red Lips" style="position:absolute; top: 0px; right: 0px;" /></a>
+
+</style>
+```
+
+
+#### adding a dropdown menu:
+
+```
+<details><summary style="font-size: 13px;" class="mb8"><u>insert title here</u> </summary><p>
+
+example text
+
+</p></details>
+```
+
+
+#### adding a scrollbox:
+
+```
+<div style="width: 400px; height: 120px; background-color: none ; border-color: #black; border-width: 0px; border-style: dotted; color: #000000; font-size: 11px; overflow: auto;"><p> 
+
+example text
+
+</p></div>
+
+```
+
+#### adding another box to your interest section (insert this into your 'heroes' section):
+
+```
+<tr><td>
+
+<p>example title of new section</p>
+
+</td><td>
+
+<p>example content of new section</p>
+
+</td></tr>
+```
+
+
+#### remove box from your interest section:
+
+```html
+<style>
+
+.table-section:nth-last-child(2) .details-table tr:nth-child(insert number here){display:none;}
+
+</style>
+```
+
+
+#### rename box/es in your interest section:
+```html
+<style>
+
+.table-section:nth-last-child(2) .details-table tr:nth-child(insert number here) td:first-child p:before { content:"new name for the interest section"; font-size:.7rem; }
+
+</style>
+```
+
+[this subsection is related to the previous two code snippets]
+
+which number to replace the 'insert number here' text with (the numbers change which section you want to rename/remove):
+
+1 - general
+2 - music
+3 - movies
+4 - television
+5 - books
+6 - heroes
+
+
+
+#### change dividers between navigation links:
+
+```html
+<style>
+
+nav .links li:not(:last-child)::after, footer .links li:not(:last-child)::after {
+
+  content: " symbol here (recommend a space on either side) ";
+
+  color: insert color;
+
+}
+
+</style>
+```
+
+
+#### changing the link titles in your contact box:
+
+```html
+<style>
+
+{font-size:12px}
+
+.contact .inner .f-row:nth-child(1) .f-col:nth-child(1) a:after{content:"text for 'add/remove'"}
+
+.contact .inner .f-row:nth-child(1) .f-col:nth-child(2) a:after{content:"text for 'favorite'"}
+
+.contact .inner .f-row:nth-child(2) .f-col:nth-child(1) a:after{content:"text for 'sent IM'"}
+
+.contact .inner .f-row:nth-child(2) .f-col:nth-child(2) a:after{content:"text for 'forward to friend'"}
+
+.contact .inner .f-row:nth-child(3) .f-col:nth-child(1) a:after{content:"text for 'instant messages'"}
+
+.contact .inner .f-row:nth-child(3) .f-col:nth-child(2) a:after{content:"text for 'block'"}
+
+.contact .inner .f-row:nth-child(4) .f-col:nth-child(1) a:after{content:"text for 'add to group'"}
+
+.contact .inner .f-row:nth-child(4) .f-col:nth-child(2) a:after{content:"text for 'report'"}
+
+</style>
+```
+
+
+#### changing the title of your contact box:
+
+```html
+<style>
+
+.contact .heading{ font-size:0; }
+
+.contact .heading:before{ content: "insert contact box title"; font-size:.8rem; font-weight:bold;
+
+</style>
+```
+
+
+changing the symbols in your contact box:
+
+```html
+<style>
+
+.contact .inner a img {
+
+font-size: 0;
+
+}
+
+.contact .inner a img:before {
+
+font-size: 1em;
+
+display: block
+
+}
+
+.contact .inner .f-row:nth-child(1) .f-col:nth-child(1) a:before {
+
+*add to friends*
+
+content: url("insert link")
+
+}
+
+.contact .inner .f-row:nth-child(1) .f-col:nth-child(2) a:before {
+
+*add to favorites*
+
+content: url("insert link")
+
+}
+
+.contact .inner .f-row:nth-child(2) .f-col:nth-child(1) a:before {
+
+*send message*
+
+content: url("insert link")
+
+}
+
+.contact .inner .f-row:nth-child(2) .f-col:nth-child(2) a:before {
+
+*forward to friend*
+
+content: url("insert link")
+
+}
+
+.contact .inner .f-row:nth-child(3) .f-col:nth-child(1) a:before {
+
+*instant message*
+
+content: url("insert link")
+
+}
+
+.contact .inner .f-row:nth-child(3) .f-col:nth-child(2) a:before {
+
+*block user*
+
+content: url("insert link")
+
+}
+
+.contact .inner .f-row:nth-child(4) .f-col:nth-child(1) a:before {
+
+*add to group*
+
+content: url("insert link")
+
+}
+
+.contact .inner .f-row:nth-child(4) .f-col:nth-child(2) a:before {
+
+*report user*
+
+content: url("insert link")
+
+}
+
+</style>
+```
+
+
+removing contact box symbols:
+
+```
+<style>
+
+.contact .inner a img {
+
+font-size: 0;
+
+}
+
+.contact .inner a img:before {
+
+font-size: 1em;
+
+display: block
+
+}
+
+</style>
+```
+
+
+rename 'blurbs' title:
+
+```
+<style>
+
+  .blurbs .heading{ font-size:0; }
+
+.blurbs .heading:before{ content: "insert title"; font-size:.8rem; font-weight:bold; color:insert color; }
+
+</style>
+```
+
+change title above your blogs (on your profile):
+
+```
+<style>
+
+.blog-preview h4{ font-size:0; }
+
+.blog-preview h4 a{font-size:.8rem;margin-left:5px; }
+
+.blog-preview h4:before{ content: "view [your name]'s blogs:"; font-size:.8rem; }
+
+</style>
+```
+
+
+change title of your friendspace (on your profile):
+
+```
+<style>
+
+.friends .heading{ font-size:0; }
+
+.friends .heading:before{ content: "[your name]'s friends:"; font-size:.8rem; font-weight:bold; }
+
+</style>
+```
+
+
+change title of your comment section (on your profile):
+
+```
+<style>
+
+.friends#comments .heading{ font-size:0; }
+
+.friends#comments .heading:before{ content: "[your name]'s profile comments:"; font-size:.8rem; font-weight:bold; }
+
+</style>
+```
+
+
+change title of your interests and link sections (on your profile):
+
+```
+<style>
+
+ .profile .table-section .heading h4 { font-size:0; }
+
+.profile .table-section .heading h4:before{ content: "[your name]'s interests + links:"; font-size:.8rem; font-weight:bold; 
+
+ </style>
+```
+
+
+change logo (on your profile):
+
+```
+<style>
+
+.logo{content:url("link to new image here")}
+
+</style>
+```
+
+
+adding gifs/images to the corner of your profile:
+
+```
+*top right*
+
+<div style="float: ; max-height: 400px; position: fixed; right: 1px; top: 9px; z-index: 200;">
+
+<img src="insert link" width="250" height="250"/></div>
+
+*top left*
+
+<div style="float:  ; max-height: 400px; position: fixed; left: 1px; top: 9px; z-index: 200;">
+
+<img src="insert link" width="250" height="250"/></div>
+
+*bottom right*
+
+<div style="float:  ; max-height: 400px; position: fixed; left: 1px; bottom: 9px; z-index: 200;">
+
+<img src="insert link" width="250" height="250"/></div>
+
+*bottom left*
+
+<div style="float:  ; max-height: 400px; position: fixed; left: 1px; bottom: 9px; z-index: 200;">
+
+<img src="insert link" width="250" height="250"/></div>
+```
+
+
+adding autoplay music to your page **(please avoid doing this and use the built-in audio upload instead)**:
+
+```html:
+<iframe width="0" height="0" src="insert link (only works with youtube as far as i know)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" loading="lazy">
+</iframe>
+```
+
+
+adding falling gifs/images to your page:
+
+```html
+<div class="snowflakes">
+  <div class="snowflake">
+   <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+  <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+  <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+  <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+  <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+  <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+    <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+    <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+     <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+    <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+    <img src="insert image link"/>
+  </div>
+  <div class="snowflake">
+    <img src="insert image link"/>
+  </div>
+</div>
+
+<style>
+
+*customizable snowflake styling*
+.snowflake {
+  color: insert color;
+  font-size: 2em;
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 0px rgba(0,0,0,0.7);
+}
+@-webkit-keyframes snowflakes-fall{0%{top:-10%}100%{top:100%}}@-webkit-keyframes snowflakes-shake{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}50%{-webkit-transform:translateX(80px);transform:translateX(80px)}}@keyframes snowflakes-fall{0%{top:-10%}100%{top:100%}}@keyframes snowflakes-shake{0%,100%{transform:translateX(0)}50%{transform:translateX(80px)}}.snowflake{position:fixed;top:-10%;z-index:9999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default;-webkit-animation-name:snowflakes-fall,snowflakes-shake;-webkit-animation-duration:10s,3s;-webkit-animation-timing-function:linear,ease-in-out;-webkit-animation-iteration-count:infinite,infinite;-webkit-animation-play-state:running,running;animation-name:snowflakes-fall,snowflakes-shake;animation-duration:10s,3s;animation-timing-function:linear,ease-in-out;animation-iteration-count:infinite,infinite;animation-play-state:running,running}.snowflake:nth-of-type(0){left:1%;-webkit-animation-delay:0s,0s;animation-delay:0s,0s}.snowflake:nth-of-type(1){left:10%;-webkit-animation-delay:1s,1s;animation-delay:1s,1s}.snowflake:nth-of-type(2){left:20%;-webkit-animation-delay:6s,.5s;animation-delay:6s,.5s}.snowflake:nth-of-type(3){left:30%;-webkit-animation-delay:4s,2s;animation-delay:4s,2s}.snowflake:nth-of-type(4){left:40%;-webkit-animation-delay:2s,2s;animation-delay:2s,2s}.snowflake:nth-of-type(5){left:50%;-webkit-animation-delay:8s,3s;animation-delay:8s,3s}.snowflake:nth-of-type(6){left:60%;-webkit-animation-delay:6s,2s;animation-delay:6s,2s}.snowflake:nth-of-type(7){left:70%;-webkit-animation-delay:2.5s,1s;animation-delay:2.5s,1s}.snowflake:nth-of-type(8){left:80%;-webkit-animation-delay:1s,0s;animation-delay:1s,0s}.snowflake:nth-of-type(9){left:90%;-webkit-animation-delay:3s,1.5s;animation-delay:3s,1.5s}.snowflake:nth-of-type(10){left:25%;-webkit-animation-delay:2s,0s;animation-delay:2s,0s}.snowflake:nth-of-type(11){left:65%;-webkit-animation-delay:4s,2.5s;animation-delay:4s,2.5s}
+
+</style>
+```
+
+
+adding a gif/image overlay:
+```
+<style>
+
+html:after{ 
+
+   animation: grain 8s steps(10) infinite;
+
+   background-image: url(insert link here);
+
+   background-size: 8%; 
+
+   content: "";
+
+   height: 200%;
+
+   left: -50%;
+
+   opacity: 0.08;
+
+   position: fixed;
+
+   top: -100%;
+
+   width: 200%;
+
+   pointer-events:none}
+
+</style>
+```
+
+
+
+change base/root colors (for example, the light blue and orange from the default layout):
+
+```html
+<style>
+
+   :root {
+   --logo-blue: insert color or type 'transparent';
+   --darker-blue: insert color or type 'transparent';
+   --lighter-blue: insert color or type 'transparent';
+   --lightest-blue: insert color or type 'transparent';
+   --dark-orange: insert color or type 'transparent';
+   --light-orange: insert color or type 'transparent';
+   --even-lighter-orange: insert color or type 'transparent';
+   --green: insert color or type 'transparent';
+     }
+
+</style>
+```
+
+
+change 'online now' icon:
+
+```html
+<style>
+.online{content:url("insert link");}
+</style>
+```
+
+
+adding a background to your contact box:
+
+```html
+<style>
+
+   .contact {
+
+  border-radius: 25px;
+
+  background: url(insert image/gif link);
+
+  background-position: left top;
+
+  background-repeat: repeat;
+
+  padding: 0px;
+
+  width: 250px;
+
+  height: 150px;
+
+  color: insert color!important;
+
+}
+
+</style>
+```
+
+
+
+adding a background to your blurbs: 
+
+<style>
+
+   .blurbs {
+
+  border-radius: 25px;
+
+  background: url(insert image/gif link);
+
+  background-position: left top;
+
+  background-repeat: repeat;
+
+  padding: 0px;
+
+  width: 250px;
+
+  height: 150px;
+
+  color: insert color!important;
+
+}
+
+</style>
+
+
+adding a background to you blog preview:
+
+```
+<style>
+
+   .blog-preview {
+
+  border-radius: 25px;
+
+  background: url(insert image/gif link);
+
+  background-position: left top;
+
+  background-repeat: repeat;
+
+  padding: 0px;
+
+  width: 250px;
+
+  height: 150px;
+
+  color: insert color!important;
+
+}
+
+</style>
+```
+
+
+adding a background to your interest table:
+
+```
+<style>
+
+   .table {
+
+  border-radius: 25px;
+
+  background: url(insert image/gif link);
+
+  background-position: left top;
+
+  background-repeat: repeat;
+
+  padding: 0px;
+
+  width: 250px;
+
+  height: 150px;
+
+  color: insert color!important;
+
+}
+
+</style>
+```
+
+
+changing the little icons on your page (verified checkmark, notification bell, etc.):
+
+```
+<style>
+
+}
+
+.url-info{display:none !important;}
+
+.icon, .award img {
+
+    content: url(insert link);
+
+    display: inline-block;
+
+    height: 2.0em;
+
+    width: 2.0em;
+
+    margin: 0 .05em 0 .1em;
+
+    vertical-align: -0.3em;
+
+    color: rgba(0,0,0,0);
+
+}
+
+</style>
+```
+
+
+remove all icons:
+
+```
+<style>
+
+.icon{display:none}
+
+</style>
+```
+
+
+### Layout Examples
 
 Here is a simple example layout
 
