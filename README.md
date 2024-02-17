@@ -1,5 +1,5 @@
 # AnySpace 
-AnySpace is an Open Source Social Network similar to MySpace circa 2005 
+AnySpace is an Open Source Social Network platform similar to MySpace circa 2005-2007 with the aim of being self-hosted.  
 
 ## Install
 
@@ -23,7 +23,7 @@ memory_limit = 128M
 
 ## Features
 
-- [x] Admin Panel 
+- [ ] Admin Panel 
 - [ ] Authentication
   - [x] Login/Logout
   - [x] Registration
@@ -94,7 +94,7 @@ project-root/
 
 ## Credits
 
-[MySpace](myspace.com)
-[SpaceHey](spacehey.com)
-[This spacemy.xyz codebase](https://github.com/Ahe4d/spacemy.xyz)
-[Trumbowyg](https://github.com/Alex-D/Trumbowyg)
+[MySpace](myspace.com) <br>
+[SpaceHey](spacehey.com) <br>
+[This spacemy.xyz codebase](https://github.com/Ahe4d/spacemy.xyz) <br>
+[Trumbowyg](https://github.com/Alex-D/Trumbowyg) 

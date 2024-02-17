@@ -49,7 +49,7 @@ background color: example color !important;
 
 #### Changing background image:
 
-```
+```html
 <style>
 
 body {
@@ -73,16 +73,16 @@ padding: 0;
 
 #### inserting an image/gif anywhere:
 
-```
+```html
 <img src="insert link here"/>
 ```
 
 
 #### changing your cursor:
 
-[go onto cursors-4u.com, find a cursor you want, find the 'code' section, and copy it into your 'about me' in between two style tags. for example:]
+go to cursors-4u.com, find a cursor you want, find the 'code' section, and copy it into your 'about me' in between two style tags. for example:
 
-```
+```html
 <style>
 
 <style type="text/css">* {cursor: url(https://ani.cursors-4u.net/symbols/sym-8/sym761.ani), url(https://ani.cursors-4u.net/symbols/sym-8/sym761.png), auto !important;}</style><a href="https://www.cursors-4u.com/cursor/2014/03/25/sexy-red-lips.html" target="_blank" title="Sexy Red Lips"><img src="https://cur.cursors-4u.net/cursor.png" border="0" alt="Sexy Red Lips" style="position:absolute; top: 0px; right: 0px;" /></a>
@@ -93,7 +93,7 @@ padding: 0;
 
 #### adding a dropdown menu:
 
-```
+```html
 <details><summary style="font-size: 13px;" class="mb8"><u>insert title here</u> </summary><p>
 
 example text
@@ -104,7 +104,7 @@ example text
 
 #### adding a scrollbox:
 
-```
+```html
 <div style="width: 400px; height: 120px; background-color: none ; border-color: #black; border-width: 0px; border-style: dotted; color: #000000; font-size: 11px; overflow: auto;"><p> 
 
 example text
@@ -115,7 +115,7 @@ example text
 
 #### adding another box to your interest section (insert this into your 'heroes' section):
 
-```
+```html
 <tr><td>
 
 <p>example title of new section</p>
@@ -218,7 +218,7 @@ nav .links li:not(:last-child)::after, footer .links li:not(:last-child)::after 
 ```
 
 
-changing the symbols in your contact box:
+#### changing the symbols in your contact box:
 
 ```html
 <style>
@@ -305,9 +305,9 @@ content: url("insert link")
 ```
 
 
-removing contact box symbols:
+#### removing contact box symbols:
 
-```
+```html
 <style>
 
 .contact .inner a img {
@@ -328,7 +328,7 @@ display: block
 ```
 
 
-rename 'blurbs' title:
+#### rename 'blurbs' title:
 
 ```
 <style>
@@ -340,7 +340,7 @@ rename 'blurbs' title:
 </style>
 ```
 
-change title above your blogs (on your profile):
+#### change title above your blogs (on your profile):
 
 ```
 <style>
@@ -355,7 +355,7 @@ change title above your blogs (on your profile):
 ```
 
 
-change title of your friendspace (on your profile):
+#### change title of your friendspace (on your profile):
 
 ```
 <style>
@@ -368,7 +368,7 @@ change title of your friendspace (on your profile):
 ```
 
 
-change title of your comment section (on your profile):
+#### change title of your comment section (on your profile):
 
 ```
 <style>
@@ -381,7 +381,7 @@ change title of your comment section (on your profile):
 ```
 
 
-change title of your interests and link sections (on your profile):
+#### change title of your interests and link sections (on your profile):
 
 ```
 <style>
@@ -394,7 +394,7 @@ change title of your interests and link sections (on your profile):
 ```
 
 
-change logo (on your profile):
+#### change logo (on your profile):
 
 ```
 <style>
@@ -405,7 +405,7 @@ change logo (on your profile):
 ```
 
 
-adding gifs/images to the corner of your profile:
+#### adding gifs/images to the corner of your profile:
 
 ```
 *top right*
@@ -442,7 +442,7 @@ adding autoplay music to your page **(please avoid doing this and use the built-
 ```
 
 
-adding falling gifs/images to your page:
+#### adding falling gifs/images to your page:
 
 ```html
 <div class="snowflakes">
@@ -593,6 +593,7 @@ adding a background to your contact box:
 
 adding a background to your blurbs: 
 
+```html
 <style>
 
    .blurbs {
@@ -616,11 +617,11 @@ adding a background to your blurbs:
 }
 
 </style>
-
-
-adding a background to you blog preview:
-
 ```
+
+#### adding a background to you blog preview:
+
+```html
 <style>
 
    .blog-preview {
@@ -647,9 +648,9 @@ adding a background to you blog preview:
 ```
 
 
-adding a background to your interest table:
+#### adding a background to your interest table:
 
-```
+```html
 <style>
 
    .table {
@@ -676,9 +677,9 @@ adding a background to your interest table:
 ```
 
 
-changing the little icons on your page (verified checkmark, notification bell, etc.):
+#### changing the little icons on your page (verified checkmark, notification bell, etc.):
 
-```
+```html
 <style>
 
 }
@@ -707,9 +708,9 @@ changing the little icons on your page (verified checkmark, notification bell, e
 ```
 
 
-remove all icons:
+#### remove all icons:
 
-```
+```html
 <style>
 
 .icon{display:none}

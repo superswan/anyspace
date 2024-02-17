@@ -18,9 +18,9 @@ if (!$isUserAuthor) {
   header("Location: entry.php?id=" . $blogEntry['id']);
 } else {
   if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-    $entryId = $_GET['id'];
-    updateBlogEntry($entryId, $userId, $_POST);
-    header("Location: entry.php?id=" . $entryId);
+    $commentId = $_GET['id'];
+    updateBlogEntry($commentId, $userId, $_POST);
+    header("Location: entry.php?id=" . $commentId);
   }
 }
 ?>

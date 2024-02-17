@@ -122,27 +122,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <form method="post" enctype="multipart/form-data">
                         <label for="general">General:</label>
                         <input type="text" id="general" name="interests[General]"
-                            value="<?php echo htmlspecialchars($interests['General']); ?>"><br>
+                            value="<?php echo htmlspecialchars($interests['General']); ?>">
+                            <br>
+                            <br>
 
                         <label for="music">Music:</label>
                         <input type="text" id="music" name="interests[Music]"
                             value="<?php echo htmlspecialchars($interests['Music']); ?>"><br>
+                            <br>
 
                         <label for="movies">Movies:</label>
                         <input type="text" id="movies" name="interests[Movies]"
                             value="<?php echo htmlspecialchars($interests['Movies']); ?>"><br>
+                            <br>
 
                         <label for="television">Television:</label>
                         <input type="text" id="television" name="interests[Television]"
                             value="<?php echo htmlspecialchars($interests['Television']); ?>"><br>
+                            <br>
 
                         <label for="books">Books:</label>
                         <input type="text" id="books" name="interests[Books]"
                             value="<?php echo htmlspecialchars($interests['Books']); ?>"><br>
+                            <br>
 
                         <label for="heroes">Heroes:</label>
                         <input type="text" id="heroes" name="interests[Heroes]"
                             value="<?php echo htmlspecialchars($interests['Heroes']); ?>"><br>
+                            <br>
 
                         <input name="interestset" type="submit" value="Set">
                         <small>max limit: 500 characters | supports bbcode</small>
@@ -150,10 +157,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <br>
                     <h1>Layout:</h1>
-                    <small>what you would normally paste into 'About me' (include 'style' tags)</small>
+                    <small>what you would normally paste into the 'Blurbs' section. Include HTML tags.</small>
                     <br>
                     <form accept-charset="UTF-8" method="post" enctype="multipart/form-data">
-                        <textarea required rows="15" cols="58" placeholder="Your CSS"
+                        <textarea required rows="15" cols="58" placeholder="Your code"
                             name="css"><?php echo $css; ?></textarea><br>
                         <input name="cssset" type="submit" value="Set"> <small>max limit: None</small>
                     </form>

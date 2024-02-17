@@ -81,6 +81,7 @@ $bulletins = fetchAllFriendBulletins($userId, 5);
                             <div class="details">
                                 <p><a href="manage.php">Edit Profile</a></p>
                                 <p><a href="editstatus.php">Edit Status</a></p>
+                                <p><a href="settings.php">Account Settings</a></p>
                             </div>
                             <div class="more-options">
                                 <p>View My: <a href='profile.php?id=<?= $userId ?>'>Profile</a> | <a

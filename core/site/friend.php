@@ -59,7 +59,6 @@ function fetchFriends($pdo, $status, $column, $userId)
     $query = "SELECT * FROM `friends` WHERE `$column` = :userId AND status = :status";
     
     $stmt = $pdo->prepare($query);
-    // Execute the statement with the provided user ID and status
     $stmt->execute(array(':userId' => $userId, ':status' => $status));
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -98,11 +97,10 @@ function checkFriend($userId, $targetId) {
         $stmt->execute(array(':userId' => $userId, ':targetId' => $targetId));
         $count = $stmt->fetchColumn();
 
-        return $count > 0; // True if a friendship exists, false otherwise
+        return $count > 0; 
     } catch (PDOException $e) {
-        // Handle error, log it, or return false if you prefer to hide the error
         error_log("Error checking friendship: " . $e->getMessage());
-        return false; // Assuming false in case of an error
+        return false; 
     }
 }
 

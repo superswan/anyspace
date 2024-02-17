@@ -1,16 +1,16 @@
 <?php
 require("../../core/conn.php");
 require_once("../../core/settings.php");
-require_once("../core/site/blog.php");
+require_once("../../core/site/blog.php");
 
 login_check();
 
 $user = $_SESSION['user'];
 $userId = $_SESSION['userId'];
 
-$entryId = isset($_GET['id']) ? $_GET['id'] : null;
+$commentId = isset($_GET['id']) ? $_GET['id'] : null;
 
-if (!$entryId) {
+if (!$commentId) {
     header("Location: /blog/index.php");
     exit;
 }
@@ -27,8 +27,8 @@ if (!$isUserAuthor) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
         $confirmation = isset($_POST['confirmation']) ? strtoupper(trim($_POST['confirmation'])) : '';
         if ($confirmation == 'DELETE') {
-            $entryId = $_GET['id']; 
-            deleteBlogEntry($entryId, $userId);
+            $commentId = $_GET['id']; 
+            deleteBlogEntry($commentId, $userId);
             header("Location: /blog/user.php?id=" . $userId );
         exit;
     }

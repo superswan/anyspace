@@ -62,16 +62,6 @@ html {
   }
   **/
 
-
- /** 
-  a:link {
-    color: #003399;
-  }
-  **/
-  
-  a:visited {
-    color: #003399;
-  }
   
   a:hover {
     text-decoration: underline;

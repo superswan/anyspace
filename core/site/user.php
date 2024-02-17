@@ -14,6 +14,14 @@ function fetchUserInfo($userId)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function fetchUserPassword($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT password FROM `users` WHERE id = :id");
+    $stmt->execute(array(':id' => $userId));
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function fetchUserBlogs($pdo, $username)
 {
     $stmt = $pdo->prepare("SELECT * FROM `blogs` WHERE author = :author");
@@ -29,6 +37,16 @@ function fetchName($id) {
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (count($result) === 0) return 'error';
     $name = $result[0]['username']; 
+    return $name;
+}
+
+function fetchEmail($id) {
+    global $conn; // Use the globally defined connection
+    $stmt = $conn->prepare("SELECT email FROM users WHERE id = :id");
+    $stmt->execute(array(':id' => $id));
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($result) === 0) return 'error';
+    $name = $result[0]['email']; 
     return $name;
 }
 
@@ -90,6 +108,14 @@ function fetchFavorites($userId) {
     return $row ? $row['favorites'] : ''; // Return the JSON string directly
 }
 
+function changePassword($userId, $hashedPassword) {
+    global $conn; 
+    $stmt = $conn->prepare("UPDATE users SET password = :hashedPassword WHERE id = :userId");
+    $stmt->execute(array(':hashedPassword' => $hashedPassword, ':userId' => $userId)); 
+
+}
+
+// Should probably get moved, no idea where to put it though
 function printPerson($userId) {
     $username = fetchName($userId);
     $profilePicPath = fetchPFP($userId);
@@ -103,6 +129,8 @@ function printPerson($userId) {
     echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
     echo "</div>";
 }
+
+
 
 
 

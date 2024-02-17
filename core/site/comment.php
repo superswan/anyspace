@@ -21,6 +21,28 @@ function addBulletinComment($toid, $authorId, $text) {
     return $success;
 }
 
+function getCommentAuthor($commentId)
+{
+    global $conn;
+    $query = "SELECT author FROM `comments` WHERE id = :id";
+    $stmt = $conn->prepare($query);
+
+    $stmt->bindParam(':id', $commentId);
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function fetchComment($commentId)
+{
+    global $conn;
+    $query = "SELECT * FROM `comments` WHERE id = :id";
+    $stmt = $conn->prepare($query);
+
+    $stmt->bindParam(':id', $commentId);
+
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 function fetchComments($toid, $limit=null)
 {
@@ -39,6 +61,18 @@ function fetchComments($toid, $limit=null)
 
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function fetchBlogComment($commentId)
+{
+    global $conn;
+    $query = "SELECT * FROM `blogcomments` WHERE id = :id";
+    $stmt = $conn->prepare($query);
+
+    $stmt->bindParam(':id', $commentId);
+
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 function fetchBlogComments($toid, $limit=null)
@@ -77,4 +111,22 @@ function fetchBulletinComments($toid, $limit=null)
 
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function deleteComment($commentId, $authorId) {
+    global $conn;
+    try {
+        $stmt = $conn->prepare("DELETE FROM comments WHERE id = ? AND author = ?");
+        
+        $stmt->bindParam(1, $commentId, PDO::PARAM_INT);
+        $stmt->bindParam(2, $authorId, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            echo "<p>Comment successfully deleted!</p>";
+        } else {
+            echo "<p>There was a problem deleting your comment.</p>";
+        }
+    } catch (PDOException $e) {
+        echo "<p>Error: " . $e->getMessage() . "</p>";
+    }
 }
