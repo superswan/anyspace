@@ -78,6 +78,8 @@ system.
 ```
 project-root/
 │
+├───admin/                    # Administration tools and dashboards
+│
 ├───core/                     # Core application logic
 │   ├───components/           # Shared site components
 │   ├───site/                 # Site-specific functionality
@@ -90,7 +92,7 @@ project-root/
     ├───blog/                 # Blog related files
     │   └───editor/           # Trumbowyg WYSIWIG editor components
     │       ├───langs/        # Language files for Trumbowyg
-    │       └───plugins/      # Plugins for Trumbowyg
+    │       └───plugins/      # Plugins for Trumbowyg 
     │
     ├───bulletins/             # Bulletins related files
     ├───docs/                  # Documentation files
@@ -105,6 +107,7 @@ project-root/
         ├───css/               # CSS files
         ├───icons/             # Icon files
         └───img/               # Image files
+
 ```
 
 ## Quirks
