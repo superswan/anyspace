@@ -64,9 +64,21 @@ $statusInfo = fetchUserStatus($profileId);
     <link rel="stylesheet" href="static/css/my.css">
 
     <style>
-        .profile-info {
-            height: 82px;
-        }
+    .profile-info {
+        height: 82px;
+    }
+
+    #music {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        width: 80px;
+        transition: 0.5s width;
+    }
+
+    #music:hover {
+        width: 360px;
+    }
     </style>
 </head>
 
@@ -159,7 +171,7 @@ $statusInfo = fetchUserStatus($profileId);
             <!-- PROFILE PICTURE BOX -->
                         <div class="general-about">
                             <div class="profile-pic">
-                                <img class='pfp-fallback' width='235px;' alt="user pfp" src='media/pfp/<?= htmlspecialchars($userInfo['pfp']); ?>'>
+                                <img class='pfp-fallback' style="width: 235px; height: auto; aspect-ratio: 1/1;" alt="user pfp" src='media/pfp/<?= htmlspecialchars($userInfo['pfp']); ?>'>
                             </div>
                             <div class="details">
                                 <?php if (!empty($statusInfo['status'])): ?>
@@ -175,7 +187,7 @@ $statusInfo = fetchUserStatus($profileId);
                                 </div>
                             </div>
             <!-- AUDIO -->
-                            <audio controls autoplay style="max-height: 40px; width: 100%;">
+                            <audio controls autoplay loop id="music">
                                 <source src="media/music/<?= htmlspecialchars($userInfo['music']); ?>" type="audio/ogg">
                         </audio> 
             <!-- MOOD -->

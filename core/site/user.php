@@ -1,7 +1,8 @@
 <?php
-function fetchUsers($pdo)
+function fetchUsers()
 {
-    $stmt = $pdo->prepare("SELECT * FROM `users`");
+    global $conn;
+    $stmt = $conn->prepare("SELECT * FROM `users`");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }

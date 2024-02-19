@@ -15,15 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
             $stmt->execute(array($email));
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            $isAdmin = ($user['id'] == $adminUser);
 
-            if ($user && password_verify($password, $user['password'])) {
+            if (($user && password_verify($password, $user['password'])) && $isAdmin) {
                 $_SESSION['user'] = $user['username'];
                 $_SESSION['userId'] = $user['id'];
 
                 header("Location: index.php");
                 exit;
             } else {
-                echo '<p>Login information doesn\'t exist or incorrect password.</p><hr>';
+                echo '<p>Login information doesn\'t exist, incorrect password, or user does not have proper permission.</p><hr>';
             }
 
         }

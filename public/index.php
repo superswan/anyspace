@@ -235,7 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                     <h3>Retro Social</h3>
                     <p>All the things you missed most about Social Networks are back: Bulletins, Blogs, Forums, and so
                         much more!</p>
-                    <p class="link">&raquo; <a href="/signup"
+                    <p class="link">&raquo; <a href="register.php"
                             title="Join <?= htmlspecialchars(SITE_NAME); ?> Today">Join Today</a></p>
                 </div>
                 <div class="col info-box">
@@ -250,7 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                     <p>Featuring custom HTML and CSS to give you all the freedom you need to make your Profile truly
                         <i>your</i> Space on the web!
                     </p>
-                    <p class="link">&raquo; <a href="layouts.php"
+                    <p class="link">&raquo; <a href="layouts/"
                             title="Discover custom <?= htmlspecialchars(SITE_NAME) ?> Layouts">Discover Layouts</a></p>
                 </div>
                 <div class="col info-box">

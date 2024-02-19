@@ -3,7 +3,6 @@ require("../core/conn.php");
 require_once("../core/settings.php");
 require("../core/site/user.php");
 
-login_check();
 $view = isset($_GET['view']) ? $_GET['view'] : '';
 
 function isFilterActive($filter, $friends = null) {

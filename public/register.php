@@ -67,7 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="master-container">
         <?php require("navbar.php"); ?>
         <main>
-                <h1>Register!</h1>
+                <h1>Sign Up</h1>
+
                 <br>
             <div class="center-container">
                 <div class="contactInfo">
@@ -79,6 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     - Algorithm Free!<br>
                     - Free and Open Source
                 </div>
+                <small style="color: red;">- email verification is currently disabled. you can enter any valid email address</small><br>
+                <small style="color: red;">- this is a test server. data may be wiped at any time</small>
+                <br>
                 <br>
                 <?php if ($message)
                     echo $message; ?>

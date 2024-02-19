@@ -7,7 +7,7 @@ require_once("../core/settings.php");
 
 <div class="simple-container">
     <h1>About <?= SITE_NAME ?></h1>
-
+    <br>
     Anyspace is an open source social media platform in the style of Myspace between 2005-2007.
 </div>
 

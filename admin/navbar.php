@@ -47,7 +47,7 @@
         'General' => 'index.php',
         'Users' => 'users.php',
         'Search' => 'search.php',
-        'Reports' => 'futaba.php',
+        'Reports' => 'reports.php',
         /*
         'Mail' => 'messages.php',
         'Blog' => 'blog/',
@@ -56,7 +56,10 @@
         'Groups' => '#',
         'Layouts' => '#',
         */
+        'Blog' => 'blog.php',
         'Favs' => 'favorites.php',
+        'Email' => 'email.php',
+        'Database' => 'email.php',
         'Source' => 'https://github.com/superswan/anyspace',
         'Help' => 'docs/help.html',
         'About' => 'about.php',
