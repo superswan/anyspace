@@ -32,8 +32,7 @@ $('.tb_wysiwyg').trumbowyg({
       allowCustomForeColor: true,
       allowCustomBackColor: true,
       displayAsList: false,
-    },
-    emoji: {}
+    }
   }
 });
 

@@ -156,6 +156,7 @@ if (!$isUserAuthor) {
     <!-- Editor Plugins and Injection -->
     <script src="editor/plugins/colors/trumbowyg.colors.js"></script>
     <script src="editor/plugins/emoji/trumbowyg.emoji.min.js"></script>
+    <script src="editor/plugins/pasteimage/trumbowyg.pasteimage.min.js"></script>
     <script src="editor.js"></script>
 
 </body>
