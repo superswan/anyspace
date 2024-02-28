@@ -46,9 +46,11 @@ $bulletins = fetchAllFriendBulletins($userId, 5);
 
 <head>
     <title>Home | <?= SITE_NAME ?></title>
-    <link rel="stylesheet" href="static/css/normalize.css">
-    <link rel="stylesheet" href="static/css/base.css">
-    <link rel="stylesheet" href="static/css/my.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/normalize.min.css">
+    <link rel="stylesheet" href="static/css/header.min.css">
+    <link rel="stylesheet" href="static/css/base.min.css">
+    <link rel="stylesheet" href="static/css/my.min.css">
 
 </head>
 
