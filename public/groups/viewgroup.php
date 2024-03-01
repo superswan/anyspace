@@ -35,7 +35,7 @@
     </head>
     <body>
         <?php
-            require("navbar.php");
+            require("../core/components/navbar.php");
         ?>
         <div class="container">
             <h1><?php echo $name; ?></h1>

@@ -98,12 +98,12 @@ $isUserAuthor = ($userId == $authorId);
                             </h3>
                             <p>
                                 <?php
-                                $maxLength = 240;
+                                $maxLength = 500;
                                 $previewText = $entry['text'];
                                 if (mb_strlen($previewText) > $maxLength) {
                                     $previewText = mb_substr($previewText, 0, $maxLength) . '...';
                                 }
-                                echo $previewText; ?>
+                                echo strip_tags($previewText) ?>
                                 <a href="entry.php?id=<?= htmlspecialchars($entry['id']) ?>">&raquo; Continue Reading</a>
                             </p>
                             <br>

@@ -12,6 +12,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $toid = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$parentId = isset($_GET['reply']) ? $_GET['reply'] : null; 
 
 // May need to add check for friend of author of bulletin
 
@@ -20,7 +21,7 @@ if (isset($_SESSION['user'], $_POST['submit'], $_POST['comment']) && !empty($_PO
     $authorId = $_SESSION['userId']; 
     $commentText = trim($_POST['comment']);
 
-    if (addBulletinComment($toid, $authorId, $commentText)) {
+    if (addBulletinComment($toid, $authorId, $commentText, $parentId)) {
         header("Location: bulletincomments.php?id=$toid");
         exit;
     } else {

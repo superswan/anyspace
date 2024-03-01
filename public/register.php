@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="master-container">
-        <?php require("navbar.php"); ?>
+        <?php require("../core/components/navbar.php"); ?>
         <main>
                 <h1>Sign Up</h1>
 

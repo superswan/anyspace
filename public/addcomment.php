@@ -7,12 +7,13 @@ require("../core/site/comment.php");
 login_check();
 
 $toid = isset($_GET['id']) ? (int)$_GET['id'] : 0; 
+$parentId = isset($_GET['reply']) ? $_GET['reply'] : null; 
 
 if (isset($_SESSION['user'], $_POST['submit'], $_POST['comment']) && !empty($_POST['comment'])) {
     $authorId = $_SESSION['userId']; 
     $commentText = trim($_POST['comment']);
 
-    if (addComment($toid, $authorId, $commentText)) {
+    if (addComment($toid, $authorId, $commentText, $parentId)) {
         header("Location: comments.php?id=$toid");
         exit;
     } else {

@@ -1,17 +1,17 @@
             <?php foreach ($comments as $comment): ?>
                 <tr>
                     <td>
-                        <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
+                        <a href="/profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
                             <p>
                                 <?= htmlspecialchars(fetchName($comment['author'])) ?>
                             </p>
                         </a>
-                        <a href="profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
+                        <a href="/profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
                             <?php
                             $pfpPath = fetchPFP($comment['author']);
                             $pfpPath = $pfpPath ? $pfpPath : 'default.png';
                             ?>
-                            <img class="pfp-fallback" src="media/pfp/<?= $pfpPath ?>"
+                            <img class="pfp-fallback" src="/media/pfp/<?= $pfpPath ?>"
                                 alt="<?= htmlspecialchars(fetchName($comment['author'])) ?>'s profile picture" loading="lazy"
                                 width="50px">
                         </a>
@@ -25,11 +25,18 @@
                         </p>
                         <br>
                         <p class="report">
-                            <a href="/report?type=comment&id=<?= htmlspecialchars($comment['id']) ?>" rel="nofollow">
+                            <a href="#/report?type=comment&id=<?= htmlspecialchars($comment['id']) ?>" rel="nofollow">
                                 <img src="/static/icons/flag_red.png" class="icon" aria-hidden="true" loading="lazy" alt="">
                                 Report Comment
                             </a>
                         </p>
+                        <?php 
+                        if (!isset($commentType)) { $commentType = ''; } 
+                        $replies = fetchCommentReplies($comment['id'], $commentType);
+                        if (!empty($replies)): ?>
+                            <?php include("comments_reply_block.php") ?>
+                        <?php endif; ?>
+
                         <?php if ($userId == $comment['author'] || $userId == $toid): ?>
                             <a href="deletecomment.php?id=<?= htmlspecialchars($comment['id']) ?>">
                                 <button>Delete</button>

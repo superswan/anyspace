@@ -9,69 +9,91 @@ $user = $_SESSION['user'];
 $userId = $_SESSION['userId'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-    createBlogEntry($userId, $_POST);
+  createBlogEntry($userId, $_POST);
 }
 
+
+
+
+// Doesn't use normal header since it needs css and js for editor
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>New Blog | <?= SITE_NAME ?></title>
-    <link rel="stylesheet" href="../static/css/normalize.css">
-    <link rel="stylesheet" href="../static/css/header.css">
-    <link rel="stylesheet" href="../static/css/base.css">
-    <link rel="stylesheet" href="../static/css/my.css">
-    <link rel="stylesheet" href="editor/ui/trumbowyg.min.css">
-    <link rel="stylesheet" href="editor/plugins/colors/ui/trumbowyg.colors.min.css">
-    <link rel="stylesheet" href="editor/plugins/emoji/ui/trumbowyg.emoji.min.css">
+  <title>New Blog |
+    <?= SITE_NAME ?>
+  </title>
+  <link rel="stylesheet" href="../static/css/normalize.css">
+  <link rel="stylesheet" href="../static/css/header.css">
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/my.css">
+  <link rel="stylesheet" href="editor/ui/trumbowyg.min.css">
+  <link rel="stylesheet" href="editor/plugins/colors/ui/trumbowyg.colors.min.css">
+  <link rel="stylesheet" href="editor/plugins/emoji/ui/trumbowyg.emoji.min.css">
 
-    <style>
-.trumbowyg-button {
-    width: 20px; 
-    height: 20px; 
-    background-size: 16px 16px; 
-}
+  <style>
+    .trumbowyg-button {
+      width: 20px;
+      height: 20px;
+      background-size: 16px 16px;
+    }
 
-.trumbowyg-toolbar {
-    height: auto; 
-}
-</style>
+    .trumbowyg-toolbar {
+      height: auto;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="master-container">
-        <?php require_once("blog-navbar.php"); ?>
-        <main>
+  <div class="master-container">
+    <?php require_once("../../core/components/navbar.php"); ?>
+    <main>
 
 
-<div class="row edit-blog-entry">
-  <div class="col w-20 left">
-    <div class="edit-info">
-      <p>Use the visual WYSIWYG Editor to edit your content.</p>
-    </div>
-  </div>
-  <div class="col right">
-    <h1>Create Blog Entry</h1>
-    <br>
-    
-    <form method="post" class="ctrl-enter-submit">
-      <label for="subject">Subject:</label>
-      <input type="text" id="subject" name="subject" autocomplete="off" value="" required>
+      <div class="row edit-blog-entry">
+        <div class="col w-20 left">
+          <div class="edit-info">
+            <p>Use the visual WYSIWYG Editor to edit your content.</p>
+          </div>
+        </div>
+        <div class="col right">
+          <h1>Create Blog Entry</h1>
+          <br>
 
-      <!--
-      <label for="category">Category:</label>
-      <select name="category" id="category" required>
-        <option value="" disabled selected>Choose a Category</option>
-        <option value="24">Art and Photography</option><option value="16">Automotive</option><option value="1">Blogging</option><option value="27">Books and Stories</option><option value="10">Dreams and the Supernatural</option><option value="19">Fashion, Style, Shopping</option><option value="3">Food and Restaurants</option><option value="25">Friends</option><option value="8">Games</option><option value="13">Goals, Plans, Hopes</option><option value="5">Jobs, Work, Careers</option><option value="14">Life</option><option value="6">Movies, TV, Celebrities</option><option value="15">Music</option><option value="7">News and Politics</option><option value="17">Parties and Nightlife</option><option value="9">Pets and Animals</option><option value="2">Podcast</option><option value="21">Quiz/Survey</option><option value="11">Religion and Philosophy</option><option value="20">Romance and Relationships</option><option value="23">School, College, University</option><option value="4">Sports</option><option value="18">Travel and Places</option><option value="12">Web, HTML, Tech</option><option value="22">Writing and Poetry</option>      </select>
-     -->
-      <br><br>
+          <form method="post" class="ctrl-enter-submit">
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" name="subject" autocomplete="off" value="" required>
 
-      <label for="wysiwyg">Content:</label>
-      <div>
-        <textarea class="tb_wysiwyg" id="wysiwyg" name="content"></textarea>
-      </div>
-     <!--
+            <label for="category">Category:</label>
+            <select name="category" id="category" required>
+              <option value="" disabled selected>Choose a Category</option>
+              <option value="1">Art</option>
+              <option value="2">Automotive</option>
+              <option value="3">Fashion</option>
+              <option value="4">Financial</option>
+              <option value="5">Food</option>
+              <option value="6">Games</option>
+              <option value="777">Life</option>
+              <option value="8">Literature</option>
+              <option value="9">Math & Science</option>
+              <option value="10">Movies & TV</option>
+              <option value="11">Music</option>
+              <option value="12">Paranormal</option>
+              <option value="13">Politics</option>
+              <option value="14">Humanity</option>
+              <option value="15">Romance</option>
+              <option value="16">Sports</option>
+              <option value="17">Technology</option>
+              <option value="18">Travel</option>
+            </select>
+            <br><br>
+
+            <label for="wysiwyg">Content:</label>
+            <div>
+              <textarea class="tb_wysiwyg" id="wysiwyg" name="content"></textarea>
+            </div>
+            <!--
       <label for="privacy"><u>Privacy:</u></label>
       <div id="privacy">
         <input type="radio" id="option1" name="privacy" value="public" checked="checked">
@@ -105,43 +127,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
       </div>
 -->
 
-      <div class="publish">
-        <button type="submit" name="submit">
-          Publish Blog Entry        </button>
+            <div class="publish">
+              <button type="submit" name="submit">
+                Publish Blog Entry </button>
+            </div>
+          </form>
+
+
+        </div>
       </div>
-    </form>
+    </main>
+    <footer>
+      <p>
+        <a href="https://github.com/superswan/anyspace/superswan/anyspace" target="_blank" rel="noopener">AnySpace
+          Engine</a>
+      </p>
+      <p> <i>Disclaimer: This project is not affiliated with MySpace&reg; in any way.</i>
+      </p>
+      <ul class="links">
+        <li><a href="about.php">About</a></li>
+        <li><a href="rules.php">Rules</a></li>
+        <li><a href="https://github.com/superswan/anyspace/superswan/anyspace">Source Code</a></li>
+      </ul>
+      <p class="copyright">
+        <a href="https://github.com/superswan/anyspace/superswan/anyspace/superswan/anyspace">&copy;2024 Copyleft</a>
+      </p>
+    </footer>
 
-    
-  </div>
-</div>
-</main>
-<footer>
-        <p>
-                <a href="https://github.com/superswan/anyspace/superswan/anyspace" target="_blank" rel="noopener">AnySpace Engine</a>
-        </p>
-        <p> <i>Disclaimer: This project is not affiliated with MySpace&reg; in any way.</i>
-        </p>
-        <ul class="links">
-                <li><a href="about.php">About</a></li>
-                <li><a href="rules.php">Rules</a></li>
-                <li><a href="https://github.com/superswan/anyspace/superswan/anyspace">Source Code</a></li>
-        </ul>
-        <p class="copyright">
-                <a href="https://github.com/superswan/anyspace/superswan/anyspace/superswan/anyspace">&copy;2024 Copyleft</a>
-        </p>
-</footer>
+    <!-- JQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
 
-<!-- JQuery -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+    <!-- WSYIWIG Editor -->
+    <script src="editor/trumbowyg.min.js"></script>
 
-<!-- WSYIWIG Editor -->
-<script src="editor/trumbowyg.min.js" ></script>
-
-<!-- Editor Plugins and Injection -->
-<script src="editor/plugins/colors/trumbowyg.colors.js"></script>
-<script src="editor/plugins/emoji/trumbowyg.emoji.min.js"></script>
-<script src="editor.js"></script>
+    <!-- Editor Plugins and Injection -->
+    <script src="editor/plugins/colors/trumbowyg.colors.js"></script>
+    <script src="editor/plugins/emoji/trumbowyg.emoji.min.js"></script>
+    <script src="editor.js"></script>
 
 </body>
 

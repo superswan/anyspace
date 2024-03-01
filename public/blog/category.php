@@ -5,9 +5,9 @@ require_once("../../core/site/user.php");
 require_once("../../core/site/blog.php");
 require_once("../../core/site/comment.php");
 
-$blogEntries = fetchAllBlogEntries();
-$highlightedEntry = 11;
+$categoryId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
+$blogEntries = fetchBlogEntriesByCategory($categoryId);
 
   ?>
 <?php require("blog-header.php"); ?>
@@ -52,27 +52,10 @@ $highlightedEntry = 11;
     </div>
   </div>
   <div class="col right">
-    <h1>Blogs</h1>
+    <h1>Category: <?= getCategoryName($categoryId) ?></h1>
     <div class="blog-preview">
       <h3>[<a href="user.php?id=<?= $_SESSION['userId'] ?>">View Your Blog</a>]</h3>
       <h3>[<a href="newpost.php">Create a new Blog Entry</a>]</h3>
-      <div class="blog-entries">
-        <div class="entry">
-          <div class="inner">
-            <h3 class="title">
-              <a href="entry.php?id=<?= $highlightedEntry ?>"><? 
-              
-              $higlighted = fetchBlogEntry($highlightedEntry); 
-              echo $higlighted['title']; 
-              ?></a>
-            </h3>
-            <p>
-              <a href="entry.php?id=<?= $highlightedEntry ?>">&raquo; Read Blog Entry</a>
-            </p>
-          </div>
-        </div>
-      </div>
-      <hr>
       <h3>Latest Blog Entries</h3>
       <div class="blog-entries">
         <?php foreach ($blogEntries as $entry): ?>

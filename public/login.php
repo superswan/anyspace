@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                                         <button type="submit" class="login_btn" name="action"
                                             value="login">Login</button>
                                             <button type="button" class="signup_btn" onclick="location.href='register.php'" name="action" value="signup">Sign
-                                                Up!</button>
+                                                Up</button>
                                     </td>
                                 </tr>
                             </tbody>

@@ -3,9 +3,6 @@ require("../core/conn.php");
 require_once("../core/settings.php");
 require("../core/site/user.php");
 
-
-login_check();
-
 $searchResults = array();
 
 if (isset($_GET['q']) && !empty($_GET['q'])) {

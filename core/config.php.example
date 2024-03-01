@@ -7,6 +7,6 @@ $password = '';
 
 // Site localization
 $siteName = "AnySpace";
-$domainName = "anyspace.3to.moe";
+$domainName = "anyspace.3to.moe";  // You can also use an IP address instead
 
 ?>

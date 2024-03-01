@@ -5,8 +5,6 @@ require_once("../../core/site/user.php");
 require_once("../../core/site/blog.php");
 require_once("../../core/site/comment.php");
 
-login_check();
-
 if (!isset($_GET['id'])) {
     header("Location: index.php");
     exit;
@@ -19,25 +17,30 @@ $authorId = $blogEntry['author'];
 
 $userInfo = fetchUserInfo($authorId);
 
+if (!isset($_SESSION['userId'])) {
+    $userId = null;
+} else {
+    $userId = $_SESSION['userId'];
+}
 
-$currentUser = $_SESSION['userId'];
-$isUserAuthor = ($currentUser == $authorId);
+$isUserAuthor = ($userId == $authorId);
 
 // COMMENTS
+$toid = $blogEntryId;
 $limitedBlogComments = fetchBlogComments($blogEntryId, 20);
 $countComments = count($limitedBlogComments);
 $countTotalComments = count(fetchBlogComments($blogEntryId));
+$commentType = 'blog';
 ?>
 <?php require("blog-header.php"); ?>
 
 <div class="row article blog-entry" itemscope itemtype="http://schema.org/Article">
     <div class="col w-20 left">
-        <!--
     <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="site_name">
-      <meta itemprop="logo" content="https://domain_name/img/logo.png">
+      <meta itemprop="name" content="<?= SITE_NAME ?>">
+      <meta itemprop="logo" content="https://3to.moe/a/corespace.png">
     </span>
--->
+        <!-- User Info Box -->
         <div class="edit-info">
             <div class="profile-pic">
                 <img class="pfp-fallback" src="../media/pfp/<?= $userInfo['pfp'] ?>"
@@ -60,16 +63,10 @@ $countTotalComments = count(fetchBlogComments($blogEntryId));
                         <?= time_elapsed_string($blogEntry['date']) ?>
                     </time><br>
                 </p>
-                <?php
-                /*
-                <!--
                 <p class="category">
-                  <b>Privacy:</b> <?= htmlspecialchars($blogEntry['privacy']) ?><br>
-                  <b>Category:</b> <a href="/category?id=<?= $blogEntry['category_id'] ?>"><?= htmlspecialchars($blogEntry['category_name']) ?></a>
+                  <!-- <b>Privacy:</b> <?= htmlspecialchars($blogEntry['privacy']) ?><br> !-->
+                  <b>Category:</b> <a href="category.php?id=<?= $blogEntry['category'] ?>"><?= getCategoryName($blogEntry['category']) ?></a>
                 </p>
-                -->
-                */
-                ?>
                 <p class="links">
                     <a href="user.php?id=<?= $authorId ?>">
                         <img src="../static/icons/script.png" class="icon" aria-hidden="true" loading="lazy" alt=""> <span
@@ -83,6 +80,8 @@ $countTotalComments = count(fetchBlogComments($blogEntryId));
             </div>
         </div>
     </div>
+
+
     <div class="col right">
         <h1 class="title" itemprop="headline name">
             <?= htmlspecialchars($blogEntry['title']) ?>
@@ -95,8 +94,12 @@ $countTotalComments = count(fetchBlogComments($blogEntryId));
             </p>
         <?php endif; ?>
         <div class="content" itemprop="articleBody">
-            <?= nl2br($blogEntry['text']) ?>
+            <?= $blogEntry['text'] ?>
         </div>
+        
+        
+        
+        
         <!-- Comments Section -->
         <br>
         <div class="comments" id="comments">
@@ -108,53 +111,14 @@ $countTotalComments = count(fetchBlogComments($blogEntryId));
                 <p>
                     <b>
                         Displaying <span class="count"><?= $countComments ?></span> of <span class="count"><?= $countTotalComments ?></span> comments
-                        ( <a href="comments.php?id=<?= $blogEntry['id'] ?>">View all</a> | <a href="comments.php?id=<?= $blogEntry['id'] ?>">Add Comment</a>
+                        ( <a href="comments.php?id=<?= $blogEntry['id'] ?>">View all</a> | <a href="addcomment.php?id=<?= $blogEntry['id'] ?>">Add Comment</a>
                         )
                     </b>
                 </p>
                 <table class="comments-table" cellspacing="0" cellpadding="3" bordercolor="ffffff" border="1">
                     <tbody>
-                        <?php foreach ($limitedBlogComments as $comment): ?>
-                                        <tr>
-                                            <td>
-                                                <a href="../profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
-                                                    <p>
-                                                        <?= htmlspecialchars(fetchName($comment['author'])) ?>
-                                                    </p>
-                                                </a>
-                                                <a href="../profile.php?id=<?= htmlspecialchars($comment['author']) ?>">
-                                                    <?php
-                                                    $pfpPath = fetchPFP($comment['author']);
-                                                    $pfpPath = $pfpPath ? $pfpPath : 'default.png';
-                                                    ?>
-                                                    <img class="pfp-fallback" src="../media/pfp/<?= $pfpPath ?>"
-                                                        alt="<?= htmlspecialchars(fetchName($comment['author'])) ?>'s profile picture"
-                                                        loading="lazy" width="50px">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <p><b><time class="">
-                                                            <?= time_elapsed_string($comment['date']) ?>
-                                                        </time></b></p>
-                                                <p>
-                                                    <?= htmlspecialchars($comment['text']) ?>
-                                                </p>
-                                                <br>
-                                                <p class="report">
-                                                    <a href="/report?type=comment&id=<?= htmlspecialchars($comment['id']) ?>"
-                                                        rel="nofollow">
-                                                        <img src="/static/icons/flag_red.png"
-                                                            class="icon" aria-hidden="true" loading="lazy" alt=""> Report
-                                                        Comment
-                                                    </a>
-                                                </p>
-                                                <a
-                                                    href="/addcomment?id=<?= $comment['author'] ?>&reply=<?= htmlspecialchars($comment['id']) ?>">
-                                                    <button>Add Reply</button>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
+                        <?php $comments = $limitedBlogComments ?>
+                        <?php include("../../core/components/comments_block.php") ?>
                     </tbody>
                 </table>
                 <a href="addcomment.php?id=<?= $blogEntry['id'] ?>"><button style="margin: 14px 0;">Add a Comment</button></a>

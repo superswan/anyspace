@@ -54,7 +54,7 @@ if (!$isUserAuthor) {
 
 <body>
   <div class="master-container">
-    <?php require_once("blog-navbar.php"); ?>
+    <?php require_once("../../core/components/navbar.php"); ?>
     <main>
 
 
@@ -77,7 +77,7 @@ if (!$isUserAuthor) {
       <label for="category">Category:</label>
       <select name="category" id="category" required>
         <option value="" disabled selected>Choose a Category</option>
-        <option value="24">Art and Photography</option><option value="16">Automotive</option><option value="1">Blogging</option><option value="27">Books and Stories</option><option value="10">Dreams and the Supernatural</option><option value="19">Fashion, Style, Shopping</option><option value="3">Food and Restaurants</option><option value="25">Friends</option><option value="8">Games</option><option value="13">Goals, Plans, Hopes</option><option value="5">Jobs, Work, Careers</option><option value="14">Life</option><option value="6">Movies, TV, Celebrities</option><option value="15">Music</option><option value="7">News and Politics</option><option value="17">Parties and Nightlife</option><option value="9">Pets and Animals</option><option value="2">Podcast</option><option value="21">Quiz/Survey</option><option value="11">Religion and Philosophy</option><option value="20">Romance and Relationships</option><option value="23">School, College, University</option><option value="4">Sports</option><option value="18">Travel and Places</option><option value="12">Web, HTML, Tech</option><option value="22">Writing and Poetry</option>      </select>
+        <option value="24">Art and Photography</option><option value="16">Automotive</option><option value="1">Blogging</option><option value="27">Books and Stories</option><option value="10">Dreams and the Supernatural</option><option value="19">Fashion, Style, Shopping</option><option value="3">Food and Restaurants</option><option value="25">Friends</option><option value="8">Games</option><option value="13">Goals, Plans, Hopes</option><option value="5">Jobs, Work, Careers</option><option value="14">Life</option><option value="6">Movies, TV, Celebrities</option><option value="15">Music</option><option value="7">News and Politics</option><option value="17">Parties and Nightlife</option><option value="9">Pets and Animals</option><option value="2">Podcast</option><option value="21">Quiz/Survey</option><option value="11">Religion and Humanity</option><option value="20">Romance and Relationships</option><option value="23">School, College, University</option><option value="4">Sports</option><option value="18">Travel and Places</option><option value="12">Web, HTML, Tech</option><option value="22">Writing and Poetry</option>      </select>
      -->
             <br><br>
 

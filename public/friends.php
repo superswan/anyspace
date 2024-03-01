@@ -52,7 +52,7 @@ $acceptedFriends = array_merge(
 
 <body>
     <div class="master-container">
-        <?php require("navbar.php"); ?>
+        <?php require("../core/components/navbar.php"); ?>
         <main>
             <div class="simple-container">
                 <h1>

@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         updateBio($userId, $text);
         header("Location: manage.php");
     } else if (@$_POST['cssset']) {
-        $validatedcss = validateCSS($_POST['css']);
+        $validatedcss = validateLayoutHTML($_POST['css']);
         updateCSS($userId, $validatedcss);
         header("Location: manage.php");
     } else if (@$_POST['submit']) {
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="master-container">
-        <?php require("navbar.php"); ?>
+        <?php require("../core/components/navbar.php"); ?>
         <main>
             <div class="row edit-profile">
                 <div class="col w-20 left"></div>

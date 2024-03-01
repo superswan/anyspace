@@ -62,7 +62,40 @@ $statusInfo = fetchUserStatus($profileId);
     <link rel="stylesheet" href="static/css/normalize.css">
     <link rel="stylesheet" href="static/css/base.css"> 
     <link rel="stylesheet" href="static/css/my.css">
+<!-- Doesn't seem to work on profile page
+        <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden; 
+        }
 
+        @media screen and (max-width: 768px) {
+            .row.home {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .col {
+                width: 100%;
+            }
+
+            .col.right {
+                width: 60%);
+                margin: 0 auto; 
+            }
+
+             .col.w-60 {
+                width: 100%;
+            }
+
+            .master-container {
+                width: 100%;
+            }
+        }
+    </style>
+    -->
     <style>
     .profile-info {
         height: 82px;
@@ -127,7 +160,6 @@ $statusInfo = fetchUserStatus($profileId);
             'Home' => 'index.php',
             'Browse' => 'browse.php',
             'Search' => 'search.php',
-            'Board' => 'futaba.php',
             'Mail' => 'messages.php',
             'Blog' => 'blog/',
             'Bulletins' => 'bulletins/',

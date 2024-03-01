@@ -79,6 +79,8 @@
   ul{
     padding-left: 20px;
   }
+
+
   
   nav {
     color: white;
@@ -172,6 +174,8 @@
     background-color: var(--lighter-blue);
     padding: 3.5px 16px;
     font-size: 10px;
+    display: flex;
+    justify-content: center;
   }
   nav .links .icon{
     vertical-align: -0.41em;
@@ -187,7 +191,6 @@
     text-align: center;
   }
 
-  
   nav .links li,
   footer .links li{
     display: inline-block;
@@ -220,7 +223,15 @@
   nav .links .special a{
     color: #ffff33;
   }
+
+  @media (max-width: 768px) {
+    nav .links {
+      flex-wrap: wrap;
+    }
+  }
   
+ 
+
   main{
     background: white;
     color: black;
@@ -2384,6 +2395,19 @@
       height: 38px;
     }
   }
+
+    @media screen and (max-width: 768px) {
+      .row.home, .row.profile {
+          display: flex;
+          flex-direction: column;
+      }
+  
+      .col, .col.right, .col.w-40, .col.w-60 {
+          width: 100%;
+          margin: 0 auto; /* Adjust margin as needed */
+      }
+  }
+
   
   @media(max-width: 17em){ /* SUPER-SMALL MOBILES (LIKE FEATURE-PHONES) */
     nav .top{

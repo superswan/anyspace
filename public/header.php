@@ -16,15 +16,15 @@
     <meta property="og:type" content="website">
     <meta property="og:url"  content="https://<?= DOMAIN_NAME ?>/">
     <meta property="og:title" content="<?= SITE_NAME ?>">
-    <meta property="og:description" content="A brief description of your site.">
-    <meta property="og:image" content="https://yourwebsite.com/static/og-image.jpg">
+    <meta property="og:description" content="A space for anyone.">
+    <meta property="og:image" content="https://3to.moe/a/corespace.png">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://<?= DOMAIN_NAME ?>/">
     <meta name="twitter:title" content="<?= SITE_NAME ?>">
-    <meta name="twitter:description" content="<?= SITE_NAME ?> a space for anyone">
-    <meta name="twitter:image" content="">
+    <meta name="twitter:description" content="<?= SITE_NAME ?>. A space for anyone">
+    <meta name="twitter:image" content="https://3to.moe/a/corespace.png">
     <style>
         body, html {
             margin: 0;
@@ -61,5 +61,5 @@
 
 <body>
     <div class="master-container">
-        <?php require_once("navbar.php"); ?>
+        <?php require_once("../core/components/navbar.php"); ?>
         <main>

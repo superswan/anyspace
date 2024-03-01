@@ -18,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 
 
         $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email = ?");
-        $stmt->execute(array($email)); 
-        $user = $stmt->fetch(PDO::FETCH_ASSOC); 
+        $stmt->execute(array($email));
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user['username'];
@@ -37,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 <html>
 
 <head>
-<title><?= SITE_NAME ?> | A Space for Anyone</title>
+    <title>
+        <?= SITE_NAME ?> | A Space for Anyone
+    </title>
     <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
@@ -49,23 +51,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url"  content="https://<?= DOMAIN_NAME ?>/">
+    <meta property="og:url" content="https://<?= DOMAIN_NAME ?>/">
     <meta property="og:title" content="<?= SITE_NAME ?>">
-    <meta property="og:description" content="A brief description of your site.">
-    <meta property="og:image" content="https://yourwebsite.com/static/og-image.jpg">
+    <meta property="og:description" content="A space for anyone.">
+    <meta property="og:image" content="https://3to.moe/a/corespace.png">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://<?= DOMAIN_NAME ?>/">
     <meta name="twitter:title" content="<?= SITE_NAME ?>">
-    <meta name="twitter:description" content="<?= SITE_NAME ?> a space for anyone">
-    <meta name="twitter:image" content="">
+    <meta name="twitter:description" content="<?= SITE_NAME ?>. A space for anyone">
+    <meta name="twitter:image" content="https://3to.moe/a/corespace.png">
+
+    <!-- here for responsiveness, not in css yet -->
     <style>
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             width: 100%;
-            overflow-x: hidden; 
+            overflow-x: hidden;
         }
 
         @media screen and (max-width: 768px) {
@@ -80,10 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 
             .col.right {
                 width: 60%);
-                margin: 0 auto; 
+                margin: 0 auto;
             }
 
-             .col.w-60 {
+            .col.w-60 {
                 width: 100%;
             }
 
@@ -96,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 
 <body>
     <div class="master-container">
-        <?php require("navbar.php"); ?>
+        <?php require("../core/components/navbar.php"); ?>
         <main>
             <div class="row home">
                 <div class="col w-60 left">
@@ -116,59 +121,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                             ?>
                         </div>
                     </div>
-
-                    <div class="music">
-                        <!-- Content similar to Cool New People -->
-                        <div class="heading">
-                            <h4>
-                                <?= htmlspecialchars(SITE_NAME); ?> Music
-                            </h4>
-                            <a class="more" href="#">[more music]</a>
-                        </div>
-                        <div class="inner">
-                            <div class="cover">
-                                <a href="/topmusic">
-                                    <img src="https://i1.sndcdn.com/artworks-Jn90sypuOrP3cv98-6PYYmQ-t500x500.jpg"
-                                        alt="cover" loading="lazy">
-                                </a>
-                            </div>
-                            <div class="details">
-                                <h4><a href="/topmusic">Rainworld</a></h4>
-                                <h5>
-                                    BRG Rain </h5>
-                                <p>
-                                    Check out the new music from #𝔅ℜ𝔊 Rain: <i>Rainworld</i>!
-                                </p>
-                                <p><b>&raquo; <a href="#">Listen Now</a></b></p>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Music section -->
+                    <?php include("../core/components/section_music.php") ?>
 
                     <!-- Announcements Section -->
-                    <div class="specials">
-                        <div class="heading">
-                            <h4>
-                                <?= htmlspecialchars($siteName) ?> Announcements
-                            </h4>
-                        </div>
-                        <div class="inner">
-                            <div class="image">
-                                <a href="https://store.remilia.org/">
-                                    <img src="https://store.remilia.org/cdn/shop/files/2_1_180x.gif"
-                                        alt="Merchandise Photo" loading="lazy">
-                                </a>
-                            </div>
-                            <div class="details" lang="en">
-                                <h4><a href="https://store.remilia.org/">REMILIA Merchandise</a></h4>
-                                <p><i>Now available!</i> Support REMILIA by buying a high-quality Shirt, Hoodie,
-                                    or hat! <span class="m-hide">Check out the full Collection on <a
-                                            href="https://store.remilia.org">store.remilia.org</a>!</span></p>
-                                <p><b>&raquo; <a href="https://store.remilia.org/">Shop Now!</a></b></p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php include("../core/components/section_announcements.php") ?>
                 </div>
-
                 <!-- MOTD -->
                 <div class="col right">
                     <div class="welcome">
@@ -203,8 +161,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                                         <td>
                                             <button type="submit" class="login_btn" name="action"
                                                 value="login">Login</button>
-                                            <button type="button" class="signup_btn" onclick="location.href='register.php'" name="action" value="signup">Sign
-                                                Up!</button>
+                                            <button type="button" class="signup_btn"
+                                                onclick="location.href='register.php'" name="action" value="signup">Sign
+                                                Up</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -218,15 +177,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                     </div>
 
                     <!-- Indie Box / Donation CTA -->
-                    <div class="indie-box">
-                        <p>
-                            <?= htmlspecialchars(SITE_NAME); ?> is an open source social network. Check out the code and
-                            host your own instance!
-                        </p>
-                        <p>
-                            <a href="https://github.com" class="more-details">[more details]</a>
-                        </p>
-                    </div>
+                    <?php include("../core/components/section_indie_box.php") ?>
+
                 </div>
             </div>
 

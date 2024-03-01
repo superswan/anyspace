@@ -127,7 +127,7 @@ function printPerson($userId) {
 
     echo "<div class='person'>";
     echo "<a href='{$profileLink}'><p>{$username}</p></a>";
-    echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='aspect-ratio: 1/1;'></a>";
+    echo "<a href='{$profileLink}'><img class='pfp-fallback' src='{$profilePicPath}' alt='Profile Picture' loading='lazy' style='width: 100%; max-height: 95px; aspect-ratio: 1/1;'></a>";
     echo "</div>";
 }
 

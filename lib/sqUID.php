@@ -1,5 +1,5 @@
 <?php
-//sqUID for php
+// sqUID for php
 // based on https://raw.githubusercontent.com/argosback/sqUID/master/sqUID.js
 $idIncrementor = 999999;
 
@@ -31,4 +31,3 @@ function generateUniqueId($prefix = '', $strlen = 25) {
     return $prefix ? $prefix . '-' . $lastEight : $lastEight;
 }
 
-?>

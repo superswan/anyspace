@@ -17,9 +17,6 @@ $userId = $userInfo['id'];
 // Fetch blogs and friends using the user's username
 $blogs = fetchUserBlogs($conn, $user);
 
-// Fetch users for the users list
-$users = fetchUsers($conn);
-
 // FRIENDS
 $pendingRequests = fetchFriends($conn, 'PENDING', 'receiver', $userId);
 
@@ -49,9 +46,7 @@ $bulletins = fetchAllFriendBulletins($userId, 5);
 
 <head>
     <title>Home | <?= SITE_NAME ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/css/normalize.css">
-    <link rel="stylesheet" href="static/css/header.css">
     <link rel="stylesheet" href="static/css/base.css">
     <link rel="stylesheet" href="static/css/my.css">
 
@@ -60,7 +55,7 @@ $bulletins = fetchAllFriendBulletins($userId, 5);
 <body>
     <div class="master-container">
         <?php
-        require("navbar.php");
+        require("../core/components/navbar.php");
         ?>
         <main>
             <!-- Profile Box -->
@@ -102,37 +97,9 @@ $bulletins = fetchAllFriendBulletins($userId, 5);
 
 
                     <!-- sidebar -->
-                    <div class="indie-box">
-                        <p>
-                            <?= htmlspecialchars(SITE_NAME); ?> is an open source social network. Check out the code and
-                            host your own instance!
-                        </p>
-                        <p>
-                            <a href="https://github.com" class="more-details">[more details]</a>
-                        </p>
-                    </div>
-                    <div class="specials">
-                        <div class="heading">
-                            <h4>
-                                <?= htmlspecialchars(SITE_NAME); ?> Announcements
-                            </h4>
-                        </div>
-                        <div class="inner">
-                            <div class="image">
-                                <a href="https://store.remilia.org/">
-                                    <img src="https://store.remilia.org/cdn/shop/files/2_1_180x.gif"
-                                        alt="Merchandise Photo" loading="lazy">
-                                </a>
-                            </div>
-                            <div class="details" lang="en">
-                                <h4><a href="https://store.remilia.org/">REMILIA Merchandise</a></h4>
-                                <p><i>Now available!</i> Support REMILIA by buying a high-quality Shirt, Hoodie,
-                                    or hat! <span class="m-hide">Check out the full Collection on <a
-                                            href="https://store.remilia.org">store.remilia.org</a>!</span></p>
-                                <p><b>&raquo; <a href="https://store.remilia.org/">Shop Now!</a></b></p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php include("../core/components/section_indie_box.php") ?>
+                    <?php include("../core/components/section_announcements.php") ?>
+
                 </div>
                 
                 <!-- Stats & Blog -->

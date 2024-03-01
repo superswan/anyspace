@@ -48,13 +48,9 @@ system.
   - [x] Registration
   - [ ] Password Reset
   - [ ] Email Verification
-- [ ] Blog
-  - [x] Posting/Editing
-  - [x] Comments
-  - [ ] Categories
+- [x] Blog
 - [x] Bulletins
 - [x] Comment System
-  - [ ] Comment replies
 - [x] Favorite Users
 - [ ] Forum
 - [x] Friend System
@@ -66,8 +62,7 @@ system.
 - [x] User Browser
 - [x] User Search
 - [x] User Profiles
-  - [x] Profile Editing 
-  - [x] Custom CSS 
+- [x] Custom HTML/CSS Profile Layouts
 
 ## Screenshot
 
@@ -112,10 +107,12 @@ project-root/
 
 ## Quirks
 - Developed with PHP 5.3 compatibility in mind due to limitations of developer hardware
+- Database schema will change frequently at this stage of development. If you receive a "PDO exception" you most likely need to create the appropriate  table or column.
 
 ## Credits
 
 [MySpace](myspace.com) <br>
 [SpaceHey](spacehey.com) <br>
 [This spacemy.xyz codebase](https://github.com/Ahe4d/spacemy.xyz) <br>
-[Trumbowyg](https://github.com/Alex-D/Trumbowyg) 
+[Trumbowyg](https://github.com/Alex-D/Trumbowyg)<br>
+[@wittenbrock](https://github.com/wittenbrock/toms-myspace-page) 
