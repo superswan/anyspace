@@ -5,11 +5,11 @@ Global
 */
 /*
 html {
-    box-sizing: border-box;
+  box-sizing: border-box;
   }
   
   *, *:before, *:after {
-    box-sizing: inherit;
+  box-sizing: inherit;
   }
  */ 
 :root{
@@ -710,83 +710,83 @@ footer small {
 */
 /** breaks homepage columns
 .left {
-    float: left;
-    width: calc(40% - 20px);
+  float: left;
+  width: calc(40% - 20px);
 }
 
 .right {
-    float: right;
-    width: calc(60% - 20px);
+  float: right;
+  width: calc(60% - 20px);
 }
 **/
 
 audio {
-    width: 190px;
+  width: 190px;
 }
 
 .info {
-    background-color: #6699cc;
-    color: white;
+  background-color: #6699cc;
+  color: white;
 }
 
 .commentLeft {
-    background-color: #fc9;
+  background-color: #fc9;
 }
 
 .commentRight {
-    background-color: #f93;
-    margin-bottom: 1px;
+  background-color: #f93;
+  margin-bottom: 1px;
 }
 
 .commentRight img{
-    width: 100px;
+  width: 100px;
 }
 
 .commentRight .commentPictures{
-    width: 80px;
+  width: 80px;
 }
 
 .contactInfo {
-    padding: 5px;
-    border: 1px solid black;
+  padding: 5px;
+  border: 1px solid black;
 }
 
 .contactInfoTop {
-    background-color: #6699cc;
+  background-color: #6699cc;
 }
 
 .friendsGrid {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    padding: 5px;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  padding: 5px;
 }
 
 .friendsGridItem {
-    border: 1px solid black;
-    padding: 10px;
+  border: 1px solid black;
+  padding: 10px;
 }
 
 .banner {
-    color: white;
-    border: 1px solid black;
+  color: white;
+  border: 1px solid black;
 }
 
 .commentRight span { 
-    font-size:medium!important; 
+  font-size:medium!important; 
 }
 
 .friendRequestAlert {
-    color: yellow;
+  color: yellow;
 }
 
 .topBarWithItemsThing {
-    background-color: #f1f6f2;
-    border: 1px solid #e7e8e2;
-    border-radius: 5px;
-    padding: 5px;
-    color: #838d96;
+  background-color: #f1f6f2;
+  border: 1px solid #e7e8e2;
+  border-radius: 5px;
+  padding: 5px;
+  color: #838d96;
 }
 
 .topBarWithItemsThing a {
-    color: #838d96;
+  color: #838d96;
 }
