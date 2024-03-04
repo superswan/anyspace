@@ -58,9 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <head>
     <title>Register</title>
-    <link rel="stylesheet" href="static/css/header.css">
-    <link rel="stylesheet" href="static/css/base.css">
-    <link rel="stylesheet" href="static/css/my.css">
+    <link rel="stylesheet" href="/static/css/normalize.min.css">
+    <link rel="stylesheet" href="/static/css/style.min.css">
 </head>
 
 <body>
@@ -73,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="center-container">
                 <div class="contactInfo">
                     <div class="contactInfoTop">
+                        <!-- This is long deprecated - remove asap -->
                         <center>Benefits</center>
                     </div>
                     - Make new friends!<br>
