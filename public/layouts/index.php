@@ -9,10 +9,8 @@ require_once("../../core/settings.php");
 
 <head>
     <title>Bulletin Board | <?= SITE_NAME ?></title>
-    <link rel="stylesheet" href="../static/css/normalize.css">
-    <link rel="stylesheet" href="../static/css/header.css">
-    <link rel="stylesheet" href="../static/css/base.css">
-    <link rel="stylesheet" href="../static/css/my.css">
+    <link rel="stylesheet" href="/static/css/normalize.min.css">
+    <link rel="stylesheet" href="/static/css/style.min.css">
 </head>
 
 <body>

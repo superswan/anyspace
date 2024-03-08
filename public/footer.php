@@ -9,6 +9,7 @@
                 <li><a href="about.php">About</a></li>
                 <li><a href="rules.php">Rules</a></li>
                 <li><a href="https://github.com/superswan/anyspace">Source Code</a></li>
+                <li><a href="https://www.gnu.org/licenses/gpl-3.0.en.html">License</a></li>
         </ul>
         <p class="copyright">
                 <a href="https://github.com/superswan/anyspace/">&copy;2024 Copyleft</a>
