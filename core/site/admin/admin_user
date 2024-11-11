@@ -1,0 +1,15 @@
+<?php
+require_once(__DIR__ . "/../../conn.php");
+
+function banUser($userId) {
+    global $conn;
+    
+    $stmt = $conn->prepare("UPDATE users SET is_banned = 1 WHERE id = ?");
+    $stmt->bind_param("i", $userId);
+    
+    if ($stmt->execute()) {
+        return true;
+    } else {
+        return false;
+    }
+}

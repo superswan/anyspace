@@ -17,10 +17,8 @@ Designed to be lightweight, user-friendly, and customizable, allowing users to e
 
 ## Install
 
-1. Clone repo and transfer files to webserver. Webserver should serve files in `public` directory.
-2. Create database and update settings in `config.php` to connect to the database.
-3. Set site and domain name in `config.php`
-4. Navigate to `http://<DOMAIN-NAME>/install.php` to create the database tables and the admin user.
+1. Clone repo and transfer files to webserver. Webserver should serve files in `public` directory. (Example Apache and Nginx configurations are provided in the repo)
+2. Navigate to you webserver to create config.php and setup the database. The `core` directory will need to be writable by the webserver user.
 
 `pfp` and `music` folders need r/w/x permissions for the webserver user. 
 

@@ -1,0 +1,16 @@
+<VirtualHost *:80>
+    ServerName example.com
+    DocumentRoot /var/www/anyspace/public
+
+    <Directory /var/www/anyspace/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    <FilesMatch \.php$>
+        SetHandler "proxy:unix:/run/php/php8.2-fpm.sock|fcgi://localhost"
+    </FilesMatch>
+
+    ErrorLog ${APACHE_LOG_DIR}/example.com-error.log
+    CustomLog ${APACHE_LOG_DIR}/example.com-access.log combined
+</VirtualHost>

@@ -16,7 +16,41 @@ $users = fetchUsers();
 
 <?php require("header.php"); ?>
 
+<style>
+.simple-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.bulletin-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+@media screen and (max-width: 768px) {
+    .bulletin-table {
+        font-size: 14px;
+    }
+}
+</style>
+
 <div class="simple-container">
+    <?php if (isset($actionMessage)): ?>
+        <div class="alert"><?php echo $actionMessage; ?></div>
+    <?php endif; ?>
     <div class="row edit-profile">
     <!--
     <div class="col w-20 left">
@@ -43,8 +77,9 @@ $users = fetchUsers();
             $username = $user['username'];
             $email = $user['email'];
             $dateCreated = $user['date'];
+            $isBanned = isset($user['is_banned']) && $user['is_banned'] == 1;
         ?>
-              <tr>
+              <tr<?php echo $isBanned ? ' class="banned"' : ''; ?>>
          <!-- USED ID -->
           <td>
               <p><?= $userId ?></p>
@@ -65,8 +100,17 @@ $users = fetchUsers();
             <time class="ago"><?= time_elapsed_string($user['date']) ?></time>
           </td>
           <td> 
-            <button type="button">Ban</button>
-            <button type="button">Change Password</button>
+            <form method="post" action="">
+                <input type="hidden" name="user_id" value="<?php echo $userId; ?>">
+                <?php if (!$isBanned): ?>
+                    <button type="submit" name="ban_user">Ban</button>
+                <?php else: ?>
+                    <button type="submit" name="unban_user">Unban</button>
+                <?php endif; ?>
+            </form>
+            <a href="modify_user.php?id=<?php echo $userId; ?>">
+              <button type="button">Modify</button>
+            </a>
           </td>
 
         </tr>

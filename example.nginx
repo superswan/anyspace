@@ -1,0 +1,25 @@
+server {
+    listen 80;
+    server_name example.com;
+
+    root /var/www/anyspace/public;
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    error_log /var/log/nginx/example.com-error.log;
+    access_log /var/log/nginx/example.com-access.log;
+}
