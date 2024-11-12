@@ -163,8 +163,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     `session_id` varchar(16) NOT NULL,
                     `user_id` int(11) NOT NULL,
                     `user` varchar(50) NOT NULL,
-                    `last_logon` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    `last_activity` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+                    `last_logon` datetime NULL DEFAULT NULL,
+                    `last_activity` datetime NULL DEFAULT NULL,
                     `active` tinyint(1) NOT NULL,
                     PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
@@ -176,8 +176,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     `email` varchar(255) NOT NULL,
                     `password` varchar(255) NOT NULL,
                     `date` datetime NOT NULL,
-                    `lastactive` datetime DEFAULT NULL,
-                    `lastlogon` datetime DEFAULT NULL,
+                    `lastactive` datetime NULL DEFAULT NULL,
+                    `lastlogon` datetime NULL DEFAULT NULL,
                     `bio` varchar(500) NOT NULL DEFAULT '',
                     `interests` varchar(500) NOT NULL DEFAULT ' ',
                     `css` blob NOT NULL,
@@ -208,8 +208,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $password = generateRandomPassword();
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $sqlInsertUser = "INSERT INTO `users` (`id`, `rank`, `username`, `email`, `password`, `date`, `bio`, `interests`, `css`, `music`, `pfp`, `currentgroup`, `status`) 
-            VALUES (1, 1, ?, ?, ?, NOW(), '', '', '', 'default.mp3', 'default.jpg', 'None', '');";
+            $sqlInsertUser = "INSERT INTO `users` (`id`, `rank`, `username`, `email`, `password`, `date`, `lastactive`, `lastlogon`, `bio`, `interests`, `css`, `music`, `pfp`, `currentgroup`, `status`, `private`, `views`) 
+            VALUES (1, 1, ?, ?, ?, NOW(), NULL, NULL, '', '', '', 'default.mp3', 'default.jpg', 'None', '', 0, 0);";
 
             $stmt = $conn->prepare($sqlInsertUser);
             $stmt->execute(array($_POST['adminUsername'], $_POST['adminEmail'], $hashedPassword));
